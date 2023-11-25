@@ -33,17 +33,12 @@ def create_slug_code():
 
 
 
-
-
 today = datetime.date.today()
 month = today.month
 
 
 def home(request):
     from django.contrib.auth import authenticate
-    user = authenticate(username="admin", password="12345")
-    print("*"* 100)
-    print(user)
 
     items = models.Item.objects.all().order_by('-date')
 
@@ -270,68 +265,6 @@ def shop(request):
     
     
 
-
-# This function used to set the item to the cart in addition update the product quantity in the store...
-# Done perfectly.....
-# def add_to_cart(request, slug):
-#     # get the item
-#     item = get_object_or_404(models.Item, slug=slug)
-
-#     # create an order item or that order or get it if it exists
-#     order_item, created = models.OrderItem.objects.get_or_create(
-#         item=item,
-#         user=request.user,
-#         ordered=False
-#         )
-    
-#     order_qs = models.Order.objects.filter(user=request.user, ordered=False)
-#     if order_qs.exists():
-#         order = order_qs[0]
-#         # check if the orderitem is in the order
-#         if order.items.filter(item__slug = item.slug).exists():
-#             if item.quantity > 0:
-#                 order_item.quantity += 1
-#                 order_item.save()
-
-#                 # Update the quantity for the item in the cart
-#                 models.Item.objects.filter(slug=slug).update(quantity = (item.quantity - 1))
-
-#                 messages.success(request, "تم تعديل الكمية لهذا المنتج بنجاح")
-#                 return redirect("order_summary")
-#             else:
-#                 messages.warning(request, "هذا المنتج خارج المخزن")
-#                 return redirect("shop")
-#         else:
-#             if item.quantity > 0:
-#                 order.items.add(order_item)
-#                 # Update the quantity for the item in the cart
-#                 models.Item.objects.filter(slug=slug).update(quantity = (item.quantity - 1))
-#                 messages.success(request, "تمت اضافة هذا المنتج الى السلة بنجاح" )
-#                 return redirect("order_summary")
-#             else:
-#                 messages.warning(request, "هذا المنتج خارج المخزن")
-#                 return redirect("shop")
-
-
-
-#     else: 
-#         if item.quantity > 0:
-
-#             # Update the quantity for the item in the cart
-#             models.Item.objects.filter(slug=slug).update(quantity = (item.quantity - 1))
-
-#             ordered_date = timezone.now()
-#             order = models.Order.objects.create(user=request.user, ordered_date=ordered_date)
-#             order.items.add(order_item)
-#             messages.success(request, "تمت اضافة هذا المنتج الى السلة بنجاح")
-#             redirect("shop")
-
-#             return redirect("order_summary")
-#         else:
-#             messages.warning(request, "هذا المنتج خارج المخزن")
-#             return redirect("shop")
-
-
 @login_required(login_url='user-login')
 def add_to_cart(request, slug):
     # get the item
@@ -486,55 +419,7 @@ def order_summary(request):
 
 
 
-
-
-# class bill(CreateView):
-    
-#     model = models.Billl
-#     form_class = forms.BillForm
-#     template_name = 'core/bill.html'
-#     success_url = reverse_lazy('chart_view')
-    
-
-#     def form_valid(self, form):
-#         order = models.Order.objects.get(user=self.request.user, ordered=False)
-#         # order_item = models.OrderItem.objects.get(user=self.request.user, ordered=False)
-
-#         seller_phone_number = form.cleaned_data.get("seller_phone_number")
-        
-
-#         phone = models.PhoneNumber.objects.get(phone = str(seller_phone_number))
-#         account = models.Account.objects.get(phone_number = phone)
-        
-
-#         num = order.get_total_items()
-
-
-#         form.instance.seller = self.request.user
-#         form.instance.pieces_num = num
-#         form.instance.account_name = account.account_name
-
-
-#         # order_item.ordered = True
-#         order.ordered = True
-
-#         # order_item.save()
-#         order.save()
-
-
-
-#         messages.success(self.request, ".تم حفظ الفاتورة بنجاح")
-#         return super(bill,self).form_valid(form)    
-
-#     def get_form_kwargs(self):
-#         """ Passes the request object to the form class.
-#          This is necessary to only display members that belong to a given user"""
-
-#         kwargs = super(bill, self).get_form_kwargs()
-#         kwargs['request'] = self.request
-#         return kwargs
-    
-    
+   
 
 
 from django.contrib.auth.decorators import login_required
@@ -731,41 +616,6 @@ def show_bills(request):
 
     return render(request, 'core/show_bills.html', context)
 
-
-
-
-
-
-
-
-# class show_bills(CreateView):
-    
-#     model = models.Bill2
-#     form_class = forms.BillForm2
-#     template_name = 'core/show_bills.html'
-#     success_url = reverse_lazy('all_bills')
-
-
-#     def get_form_kwargs(self):
-#         kwargs = super(show_bills, self).get_form_kwargs()
-#         kwargs['request'] = self.request
-#         return kwargs
-
-
-#     def get_context_data(self):
-#         context = super(show_bills, self).get_context_data()
-        
-
-#         data = models.Bill2.objects.all()
-
-#         paginator = Paginator(data, 1)
-#         page_number = self.request.GET.get('page')
-#         page_obj = paginator.get_page(page_number)
-        
-#         context = {
-#             'page_obj' : page_obj,
-#         }
-#         return context
 
 
 
