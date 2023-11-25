@@ -1,0 +1,244 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+
+
+
+
+{% block content %}
+  
+    <!-- slider section -->
+
+
+    <section class="slider_section">
+      <div class="slider_container">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="detail-box">
+                      <h1>
+                        أهلا بكم <br>
+                        LuxBeauty
+                      </h1>
+                      <p style="font-size:large">
+                         هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
+                      </p>
+                      <a href="{% url 'chart_view' %}">
+                        عرض احصائياتى
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-md-5 ">
+                    <div class="img-box">
+                      <img src="{% static 'images/slider-img.png' %}" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item ">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="detail-box">
+                      <h1>
+                        أهلا بكم <br>
+                        LuxBeauty
+                      </h1>
+                      <p style="font-size:large">
+                         هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
+                      </p>
+                      <a href="{% url 'chart_view' %}">
+                        عرض احصائياتى
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-md-5 ">
+                    <div class="img-box">
+                      <img src="{% static 'images/slider-img.png' %}" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item ">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="detail-box">
+                      <h1>
+                        أهلا بكم <br>
+                        LuxBeauty
+                      </h1>
+                      <p style="font-size:large">
+                         هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
+                      </p>
+                      <a href="{% url 'chart_view' %}">
+                        عرض احصائياتى
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-md-5 ">
+                    <div class="img-box">
+                      <img src="{% static 'images/slider-img.png' %}" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel_btn-box">
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              <span class="sr-only">Previous</span>
+            </a>
+            <img src="images/line.png" alt="" />
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <i class="fa fa-arrow-right" aria-hidden="true"></i>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- end slider section -->
+
+
+
+  <!-- shop section -->
+
+
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 1400px;">
+      <div class="heading_container heading_center">
+        <h2>
+           المنتجات المُضافه حديثاََ
+        </h2>
+      </div>
+      <div class="row">
+
+        {% for item in items.all %}
+            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+              <div class="box">
+                
+                  <div class="img-box">
+                    <img src="{% static 'images/wig2.jpeg' %}" alt="">
+                  </div>
+
+                  <div style="text-align: center;">
+                    <p class="lead">
+                      {% if item.discount_price %}
+                        <span class="mr-1"> <del>${{ item.price }}</del> </span>
+                        <span>${{ item.price|sub:item.discount_price }}</span>                        
+                      {% else %}
+                        <span>${{item.price}} </span>
+                      {% endif %}
+                    </p>
+                  </div>
+
+                  <div style="text-align: center; margin-top: 15px;">
+                    <p>{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
+                  </div>
+
+                  <div class="add_to_cart_per_product">
+                    <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
+                  </div>
+
+
+                  
+                  {% if item in new_arrived_items %}
+                  <div class="new" style="text-align: center;">
+                    <span> وصل حديثاََ </span>
+                  </div>                    
+                  {% endif %}
+
+
+                  
+                  {% if item.discount_price  %}
+                  <div class="have_discount" style="text-align: center;">
+                    <!-- <span>خصم ${{item.discount_price}}</span> -->
+                    <span>خصم %{{item.discount_price|div:item.price|mul:100|floatformat:0}}</span>
+
+                  </div>                    
+                  {% endif %}
+                    
+
+                
+              </div>
+            </div>
+        {% endfor %}
+
+
+
+
+        
+      </div>
+
+      <div class="btn-box">
+        <a href="{% url 'shop' %}">
+          عرض جميع المنتجات 
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- end shop section -->
+
+
+
+  <!-- gift section -->
+
+    {% include 'core/gift.html' %}
+
+  <!-- end gift section -->
+
+
+  
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 1400px;">
+      
+      <div class="row">
+            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+              <div class="box">
+                  <div style="text-align: center; margin-top: 15px;">
+                    <p>This is div This is div This is div This is div This is div This is div</p>
+                  </div>
+              </div>
+            </div>
+      
+
+      <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+        <div class="box">
+            <div style="text-align: center; margin-top: 15px;">
+              <p>This is div This is div This is div This is div This is div This is div</p>
+            </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+        <div class="box">
+            <div style="text-align: center; margin-top: 15px;">
+              <p>This is div This is div This is div This is div This is div This is div</p>
+            </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+        <div class="box">
+            <div style="text-align: center; margin-top: 15px;">
+              <p>This is div This is div This is div This is div This is div This is div</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+
+{% endblock content %}
+  

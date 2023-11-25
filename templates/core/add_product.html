@@ -1,0 +1,99 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+<!-- add products section -->
+
+
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">اضافة منتج جديد الى المخزن</h1>
+        <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+            
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade show p-0 active">
+
+
+                    <form method="POST" action="." enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.name}}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.wig_type}}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.wig_long}} 
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.scalp_type}}
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.wig_color}}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.density}}
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.price}}
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.quantity}}
+                                </div>
+                            </div>
+
+                            <div class="btn_bill_product_add col-12">
+                                <input type="submit" value="اضافة المنتج" class="btn_bill_finish" style="font-size:large">
+                            </div>
+
+
+
+
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- end add products section -->
+
+
+
+
+
+{% endblock content %}
+  

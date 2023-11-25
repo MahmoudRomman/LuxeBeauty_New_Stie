@@ -1,0 +1,43 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+  <!-- shop section -->
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+            كل الخصومات لديك
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col"> التفاصيل</th>
+                <th scope="col">تاريخ الاضافة</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for penality in my_penalities.all %}
+                <tr>
+                    <th style="width: 150px;" scope="row">{{ forloop.counter }}</th>
+                    <td>{{penality.message}}</td>
+                    <td style="width: 150px;">{{penality.date|date}} {{penality.date|time}}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='8' style="font-size:large">لا يوجد لديك أى خصومات</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <!-- end shop section -->
+{% endblock content %}
+  

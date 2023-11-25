@@ -1,0 +1,27 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="border bg-white p-3">
+                <h3 style="text-align: center;">ازالة رقم</h3>
+                <hr>
+                <div class="alert alert-danger">
+                    <h4>!! أنت على وشك ازالة هذا الرقم نهائياََ من ملفك الشخصى</h4>
+
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{form}}
+                    <a  class="back_to_store" href="{% url 'user-profile' %}">التراجع</a>
+                    <input  class="btn_item_delete" type="submit" value="تأكيد الازالة">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,53 @@
+
+{% extends 'partials/base.html' %}
+{% block title %}Login Page{% endblock title %}
+{% load bootstrap4 %}
+
+
+
+{% block content %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="border p-3 bg-white">
+                    <h3>Login Page</h3>
+                    <hr>
+                    
+                    <form method="post" action="{% url 'user-login' %}" class="form-signin">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+
+                        <label for="{{ form.username.id_for_label }}">Username:</label>
+                        {{ form.username }}
+                        {{ form.username.errors }}
+                        <br>
+
+                        <label for="{{ form.password.id_for_label }}">Password:</label>
+                        {{ form.password }}
+                        {{ form.password.errors }}
+                        <br>
+
+                        <div class="login_button" style="font-size: larger;">
+                             <input type="submit" value="تسجيل الدخول">
+                        </div>
+
+                        <div style="margin-left: 165px; margin-top: 20px;">
+                            <a class="mx-4"  href="{% url 'password_reset' %}">Forget Password?</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+
+
+
+
+
+
+
+    
+

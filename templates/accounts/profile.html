@@ -1,0 +1,137 @@
+{% extends 'partials/base.html' %} 
+{% load bootstrap4 %} 
+{% load static %}
+
+
+
+
+
+{% block content %}
+
+<div class="container" dir="rtl">
+  <div class="row my-4" style="display: grid">
+    <div class="col-md-4"></div>
+    <div class="col-12" style="margin: auto">
+      <div class="card">
+        <div class="card-header text-white" style="background-color: #db4f66;">
+          <h3 style="text-align: center;">الملف الشخصى</h3>
+        </div>
+        <div class="card-body">
+          <div class="row" style="display: grid; place-items: center">
+            {% if user.profile.image %}
+            <div style="margin: auto;">
+              <img
+                class="img-thumbnail"
+                style="border-radius: 50%; height: 250px; width: 250px;"
+                src="{{ user.profile.image.url }}"
+                alt=""
+              />
+            </div>
+            {% else %}
+            <div class="col-md-4">
+              <img
+                class="img-thumbnail"
+                src="{% static 'avatar.png' %}"
+                alt=""
+              />
+            </div>
+            {% endif %}
+
+            <div
+              class="col-12 mt-3"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <h3 class="h3" style="margin: 0">الملف الشخصى</h3>
+              <div class="profile_edit_button" style="margin: 0">
+                <a href="{% url 'user-profile-update' %}">تعديل</a>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <hr />
+              <table class="table bg-white table-borderless">
+                <tbody dir="rtl">
+                  <tr>
+                    <th
+                      scope="row"
+                      style="font-size: larger; text-align: start"
+                    >
+                      الاسم:
+                    </th>
+                    <td style="text-align: center">{{user.username}}</td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                      style="font-size: larger; text-align: start"
+                    >
+                      الايميل:
+                    </th>
+                    <td style="text-align: center">{{user.email}}</td>
+                  </tr>
+
+                  <tr>
+                    <th
+                      scope="row"
+                      style="font-size: larger; text-align: start"
+                    >
+                      العنوان:
+                    </th>
+                    <td style="text-align: center">{{user.profile.address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <table class="table table-striped px-3" dir="rtl">
+              <thead style="text-align: center">
+                <tr style="text-align: center">
+                  <th scope="col">الترتيب</th>
+                  <th scope="col">أرقام الهواتف الخاصة بك</th>
+                  <th scope="col">حذف؟</th>
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                {% for p in my_phones.all %}
+                <tr>
+                  <th scope="row" class="mt-1">{{forloop.counter}}</th>
+                  <td>{{p.phone}}</td>
+                  <td>
+                    <a href="{% url 'user-phone-delete' p.phone %}">
+                      <img
+                        width="25"
+                        height="25"
+                        src="https://img.icons8.com/dusk/25/filled-trash.png"
+                        alt="filled-trash"
+                      />
+                    </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="10" style="font-size: large; text-align: center">
+                    ليس لديك اى أرقام هواتف
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <div class="phone_edit_button mx-auto">
+              <a href="{% url 'user-phone-update' %}">
+                اضافة المزيد من الارقام
+                <!-- <img width="30" height="30" src="https://img.icons8.com/cute-clipart/30/phone.png" alt="phone" style="margin-right: 5px;"/> -->
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

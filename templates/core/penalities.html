@@ -1,0 +1,92 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+  <!-- shop section -->
+
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+            كل الخصومات التى تم عملها
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">الاسم</th>
+                <th scope="col"> التفاصيل</th>
+                <th scope="col">تاريخ الاضافة</th>
+
+                
+                {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                <th scope="col">حذف؟</th>                
+                {% endif %}
+                  
+              </tr>
+            </thead>
+            <tbody>
+
+
+
+
+                {% for penality in penalities.all %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ penality.name }}</td>
+                    <td>{{penality.message}}</td>
+                    <td style="width: 150px;">{{penality.date|date}} {{penality.date|time}}</td>
+
+                    {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                    <td style="width: 150px;">
+                      <a href="{% url 'delete_penality' penality.slug_link %}">
+                        <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/>
+                      </a>
+                    </td>             
+                    {% endif %}
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='8' style="font-size:large">لا يوجد اى خصومات</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6">
+
+                        <div class="penality_btn">
+                            <a href="{% url 'add_penality' %}">
+                              عمل نموذج خصم    
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+    
+    {% if penalities %}
+        <div class="penality_btn">
+            <a href="{% url 'add_penality' %}">
+                عمل نموذج خصم 
+            </a>
+        </div> 
+    {% endif %}
+    
+
+    </div>
+  </section>
+
+  <!-- end shop section -->
+
+
+{% endblock content %}
+  

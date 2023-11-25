@@ -1,0 +1,138 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+  <!-- shop section -->
+
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+            الطرق المتاحة للدفع
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">الاسم</th>
+                <th scope="col">القيمة</th>
+                <th scope="col">تاريخ الاضافة</th>
+                <th scope="col">رابط الدفع بالدرهم الاماراتى</th>
+                <th scope="col">رابط الدفع بالريال السعودى</th>
+
+                
+                {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                <th scope="col">حذف؟</th>                
+                {% endif %}
+                  
+              </tr>
+            </thead>
+            <tbody>
+
+
+
+
+                {% for link_data in links_data.all %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ link_data.link_name }}</td>
+                    <td>{{ link_data.amount }}</td>
+                    <td>{{ link_data.date|date }}</td>
+                    <td>
+
+                      <button class="btn_payment_button copy-btn" id="btn_after" data-container="{{link_data.AED_link}}">نسخ الرابط</button>
+
+                    </td>
+                    <td>
+
+                      <button class="btn_payment_button copy-btn" id="btn_after" data-container="{{link_data.SAR_link}}">نسخ الرابط</button>
+
+                    </td>
+                    {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                    <td>
+                      <a href="{% url 'delete_payment_link' link_data.slug_link %}">
+                        <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/>
+                      </a>
+                    </td>             
+                    {% endif %}
+
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='8' style="font-size:large">ليس لديك اى روابط دفع</td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+
+                        <div class="btn">
+                            <a href="{% url 'add_new_payment_link' %}">
+                              اضافة المزيد من الروابط 
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+    
+    {% if links_data %}
+        <div class="btn">
+            <a href="{% url 'add_new_payment_link' %}">
+            اضافة المزيد من الروابط 
+            </a>
+        </div> 
+    {% endif %}
+        
+
+
+    <script>
+      const copyBtns_AED = [...document.getElementsByClassName('copy-btn')]
+      
+      let previous_AED = null 
+      copyBtns_AED.forEach(btn=> btn.addEventListener('click', ()=>{
+        const AED_text = btn.getAttribute('data-container')
+        navigator.clipboard.writeText(AED_text)
+        btn.textContent = "تم النسخ"
+
+
+
+
+        if (previous_AED) {
+          previous_AED.textContent = "نسخ الرابط"
+
+        }
+        previous_AED = btn
+      }))
+
+
+      // to change the color of the button after copy it
+      const btn_after = document.getElementById('btn_after');
+
+      btn_after.addEventListener('click', function onClick() {
+        btn_after.style.backgroundColor = '#27AE60';
+        btn_after.style.color = 'white';
+      });
+
+
+
+
+    </script>
+
+
+    </div>
+  </section>
+
+  <!-- end shop section -->
+
+
+{% endblock content %}
+  

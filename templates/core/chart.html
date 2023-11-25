@@ -1,0 +1,191 @@
+{% extends 'partials/base.html' %}
+
+
+
+
+{% block content %}
+
+
+
+<h1 class="text-center mb-5 wow fadeInUp mt-5" data-wow-delay="0.1s">احصائياتك هذا الشهر حتى الان</h1>
+
+
+<div style="width: 50%; margin: 0 auto; margin-bottom: 8%;">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/chart-data/')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('myChart').getContext('2d');
+                
+                new Chart(ctx, {
+                    type: data.chart_type,
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: data.label,
+                            data: data.values,
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+    });
+</script>
+
+
+
+
+
+
+<section class="shop_section layout_padding" style="margin-top: -8%;">
+    <div class="container" style="max-width: 85%;">
+      <div class="row">
+
+
+        <h2 style="margin: auto; margin-bottom: 20px;">
+            تفصيل بيانات الفواتير الخاصة بك خلال هذا الشهر
+        </h2>
+        <table class="table table-striped" dir='rtl'>
+            <thead style="text-align: center;">
+              <tr style="text-align: center; font-size: large;">
+                <th scope="col">الترتيب</th>
+                <th scope="col">اسم البائع</th>
+                <th scope="col">رقم الهاتف </th>
+                <th scope="col">الدولة</th>
+                <th scope="col">العنوان</th>
+                <th scope="col">اسم العميل</th>
+                <th scope="col">رقم هاتف العميل</th>
+                <th scope="col">اسم الحساب</th>
+                <th scope="col">  التاريخ</th>
+    
+                <th scope="col">نوع الباروكه</th>
+                <th scope="col">الطول</th>
+                <th scope="col">نوع الفروة</th>
+                <th scope="col">اللون</th>
+                <th scope="col">الكثافة</th>
+    
+    
+                <th scope="col">عدد القطع</th>
+                <th scope="col">سعر القطعة</th>
+                <th scope="col">السعر الكلى</th>
+    
+              </tr>
+            </thead>
+            <tbody style="text-align: center;">
+    
+              
+              {% for bill in my_bills %}
+              <tr style="font-size: large;">
+                <th scope="row" class="mt-1">{{forloop.counter}}</th>
+                <td>{{bill.seller}}</td>
+                <td>{{bill.seller_phone_number}}</td>
+                <td>{{bill.country}}</td>
+                <td>{{bill.address}}</td>
+                <td>{{bill.customer_name}}</td>
+                <td>{{bill.customer_phone}}</td>
+                <td>{{bill.account_name}}</td>
+                <td>{{bill.date|date}}</td>
+    
+    
+                <td>{{bill.wig_type}}</td>
+                <td>{{bill.wig_long}}</td>
+                <td>{{bill.scalp_type}}</td>
+                <td>{{bill.wig_color}}</td>
+                <td>{{bill.density}}</td>
+                <td>{{bill.pieces_num}}</td>
+                <td>{{bill.price}}</td>
+                <td>{{bill.total_price}}</td>
+                
+    
+    
+              </tr>
+    
+              {% empty %}
+              <tr>
+
+                <td colspan='18' style="font-size:large">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                    <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
+                </td>
+              </tr>
+              {% endfor %}
+
+              {% if my_bills %}
+              <tr>
+                  <td colspan="16"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام</b></td>
+                  <td><b>{{total_bills}}</b></td>
+              </tr>
+              {% endif %} 
+    
+            </tbody>
+        </table>
+
+
+
+
+
+
+        <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
+            اجمالى عدد الفواتير الخاصة بكل رقم
+        </h2>
+        <table class="table table-striped" dir='rtl'>
+            <thead style="text-align: center;">
+              <tr style="text-align: center; font-size: large;">
+                <th scope="col">الترتيب</th>
+                <th scope="col">الرقم</th>
+                <th scope="col">عدد الفواتير</th>
+                <th scope="col">الراتب</th>
+
+              </tr>
+            </thead>
+            <tbody style="text-align: center;">
+    
+              
+              {% for key, value in bills_dict.items %}
+              
+              <tr style="font-size: large;">
+                <th scope="row" class="mt-1">{{forloop.counter}}</th>
+                <td>{{key}}</td>
+                <td>{{value}}</td>
+                
+                {% if value < 10 %}
+                   <td>0 EGP</td>
+                {% elif value == 10 and value < 20 %}
+                  <td>{% widthratio value 1 100 %} EGP</td>
+                {% elif value == 20 and value < 30 %}
+                  <td>{% widthratio value 1 150 %} EGP</td>
+                {% elif value == 30 and value > 300 %}
+                  <td>{% widthratio value 1 200 %} EGP</td>
+                {% endif %}
+              </tr>
+              {% empty %}
+              <tr>
+
+                <td colspan='18' style="font-size:large">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                    <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
+                </td>
+              </tr>
+              {% endfor %}
+
+              <tr>
+                <td colspan="3"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
+                <td><b>{{final_salary}}</b></td>
+            </tr>
+            </tbody>
+        </table>
+
+    
+  </section>
+
+
+{% endblock content %}
+    

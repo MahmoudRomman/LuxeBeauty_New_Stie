@@ -1,0 +1,46 @@
+{% load static %}
+
+
+<section class="gift_section layout_padding-bottom">
+    <div class="box">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-5">
+            <div class="img_container">
+              <div class="img-box">
+                <img src="{% static 'images/gifts.png' %}" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="detail-box">
+              <div class="heading_container" style="margin-top: 5%;">
+                <h1>
+                  عروض اليوم من <br>
+                  LuxBeauty
+                </h1>
+              </div>
+              
+              {% if offers %}
+              <hr>
+              
+              {% for offer in offers %}
+                <h5>{{offer}}</h5>
+                <hr>
+              {% endfor %}
+                
+              {% else %}
+              <h5>لا يوجد عروض اليوم</h5>
+              {% endif %}
+
+              <div class="btn-box">
+                <a href="{% url 'shop' %}" class="btn1">
+                  عرض جميع المنتجات
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

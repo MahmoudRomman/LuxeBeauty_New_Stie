@@ -1,0 +1,259 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+
+
+
+
+
+{% block content %}
+  
+
+
+
+  
+<div class="container-xxl py-5">
+  <div class="container" style="max-width: 85%;">
+      <!-- <h1 class="text-center mb-4 wow fadeInUp" data-wow-delay="0.1s">اضافة منتج جديد الى المخزن</h1> -->
+      <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+          
+          <div class="tab-content">
+              <div id="tab-1" class="tab-pane fade show p-0 active">
+
+
+                  <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
+                      {% csrf_token %}
+                      <div class="row g-3">
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.wig_type}}
+                              </div>
+                          </div>
+
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.wig_long}} 
+                              </div>
+                          </div>
+
+
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.scalp_type}}
+                              </div>
+                          </div>
+
+
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.wig_color}}
+                              </div>
+                          </div>
+
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.density}}
+                              </div>
+                          </div>
+
+
+
+                          <div class="btn_store_search col-12 col-sm-6">
+                              <input type="submit" value="بحث"  style="margin-right: 270%; height: 30pt; width: 30%; margin-top: -7.1%;">
+                          </div>
+
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+<section class="shop_section layout_padding" style="margin-top: -5%;">
+  <div class="container" style="max-width: 85%;">
+    <div class="heading_container heading_center">
+      <h2>
+        المنتجات المتاحة
+      </h2>
+    </div>
+    <div class="row">
+
+
+      <table class="table table-striped" dir='rtl'>
+        <thead style="text-align: center;">
+          <tr style="text-align: center">
+            <th scope="col">الترتيب</th>
+            <th scope="col">اسم الصنف</th>
+            <th scope="col">نوع الباروكه</th>
+            <th scope="col">الطول</th>
+            <th scope="col">نوع الفروة</th>
+            <th scope="col">اللون</th>
+            <th scope="col">الكثافة</th>
+            <th scope="col">السعر</th>
+            <th scope="col">العدد المُتاح</th>
+            <th scope="col">تريد البيع؟</th>
+          </tr>
+        </thead>
+        <tbody style="text-align: center;">
+
+          
+          {% for item in page_obj %}
+          <tr>
+            <th scope="row" class="mt-1">{{forloop.counter}}</th>
+            <td>{{item.name}}</td>
+            <td>{{item.wig_type}}</td>
+            <td>{{item.wig_long}}</td>
+            <td>{{item.scalp_type}}</td>
+            <td>{{item.wig_color}}</td>
+            <td>{{item.density}}</td>
+            <td>{{item.price}}</td>
+            <td>{{item.quantity}}</td>
+            <td>
+                <a href="{% url 'add-to-cart' item.slug %}"> 
+                  <img width="30" height="30" src="https://img.icons8.com/external-vectorslab-outline-color-vectorslab/25/external-add-to-cart-shopping-and-ecommerce-vectorslab-outline-color-vectorslab.png" alt="external-add-to-cart-shopping-and-ecommerce-vectorslab-outline-color-vectorslab"/>
+                  <!-- <i class="fa-thin fa-cart-shopping" aria-hidden="true"></i> -->
+                  <!-- <i class="fa fa-sign-in" aria-hidden="true"></i> -->
+                  <!-- <i class="fas fa-shopping-cart" aria-hidden="true"></i> -->
+                                
+                </a>
+
+              
+            </td>
+
+          </tr>
+
+          {% empty %}
+          <tr>
+              <td colspan='10' style="font-size:large; text-align: center;">ليس لديك اى منتجات برجاء التواصل مع أحد اعضاء الادارة</td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+    </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<nav aria-label="Page navigation example" style="margin: auto; margin-top: 10px;">
+  <ul class="pagination justify-content-center" style="text-align: center;">
+
+
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.previous_page_number }}">
+          Previous
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a  class="page-link" href="">
+          Previous
+        </a>
+      </li>
+    {% endif %}
+
+
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="#">
+          {{page_obj.number}}:{{page_obj.paginator.num_pages}}
+        </a>
+      </li>
+
+
+
+  
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.next_page_number }}">
+          Next
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="">
+          Next
+        </a>
+      </li>
+      {% endif %}
+
+
+  </ul>
+</nav>
+
+
+
+{% endblock content %}
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

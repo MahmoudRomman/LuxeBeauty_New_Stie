@@ -1,0 +1,47 @@
+{% extends 'partials/base.html' %}
+{% block title %} Home Page {% endblock title %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="container">
+    <div class="row my-4">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-8 offset-md-2">
+            <div class="card pb-3">
+                <div class="card-header text-white" style="text-align: center; background: #468B97;">
+                    <h2 style="text-align: center;">اضافة رقم جديد</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="h4" style="text-align: end;">الارقام المتاحة حالياً</p>
+                            <hr>
+                            <form method="POST" enctype="multipart/form-data" dir="rtl">
+                                {% csrf_token %}
+
+                                <div class="row" style="text-align: start;">
+                                    <div class="col-12">
+                                    {{phone_update_form.new_phone}}
+                                </div>
+                                </div>
+                                <div class="btn_save_link mt-3" style="font-size:large;">
+                                <input class="btn btn-info" type="submit" value="حفظ التغيرات" style="width: 250px; text-align: center; font-size:large;">
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn_bill_complete col-md-12">
+                    <a href="{% url 'user-profile' %}" style="text-align: center; font-size:large; margin-bottom: 5px;">التراجع</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+    

@@ -1,0 +1,49 @@
+{% extends 'partials/base.html' %}
+
+
+
+
+
+{% block content %}
+<!-- add penality section -->
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">عمل نموذج خصم جديد</h1>
+        <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+            
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade show p-0 active">
+
+
+                    <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
+                        {% csrf_token %}
+                        <div class="row g-3" style="row-gap: 13px;">
+                            <div class="col-12 col-sm-12">
+                                <div class="form-group">
+                                    {{form.name}}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-12">
+                                <div class="form-group">
+                                    {{form.message}}
+                                </div>
+                            </div>
+
+                            <div class="btn_penality_add">
+                                <input type="submit" value="تأكيد الخصم" style="font-size:large">
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- end add penality section -->
+{% endblock content %}
+  

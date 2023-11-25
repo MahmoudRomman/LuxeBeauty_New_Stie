@@ -1,0 +1,213 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+  <!-- shop section -->
+
+
+
+  
+<div class="container-xxl py-5">
+  <div class="container" style="max-width: 85%;">
+      <!-- <h1 class="text-center mb-4 wow fadeInUp" data-wow-delay="0.1s">اضافة منتج جديد الى المخزن</h1> -->
+      <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+          
+          <div class="tab-content">
+              <div id="tab-1" class="tab-pane fade show p-0 active">
+
+
+                  <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
+                      {% csrf_token %}
+                      <div class="row g-3">
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.wig_type}}
+                              </div>
+                          </div>
+
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.wig_long}} 
+                              </div>
+                          </div>
+
+
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.scalp_type}}
+                              </div>
+                          </div>
+
+
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.wig_color}}
+                              </div>
+                          </div>
+
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.density}}
+                              </div>
+                          </div>
+
+
+
+                          <div class="btn_store_search col-12 col-sm-6">
+                              <input type="submit" value="بحث"  style="margin-right: 270%; height: 30pt; width: 30%; margin-top: -7.1%;">
+                          </div>
+
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+
+  <section class="shop_section layout_padding" style="margin-top: -5%;">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+          المنتجات المتاحة بالمخزن
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl'>
+            <thead style="text-align: center;">
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">اسم الصنف</th>
+                <th scope="col">نوع الباروكه</th>
+                <th scope="col">الطول</th>
+                <th scope="col">نوع الفروة</th>
+                <th scope="col">اللون</th>
+                <th scope="col">الكثافة</th>
+                <th scope="col">السعر</th>
+                <th scope="col">العدد المُتاح</th>
+                <th scope="col">تاريخ الاضافة</th>
+                <th scope="col">تعديل؟</th>
+                <th scope="col">حذف؟</th>                
+              </tr>
+            </thead>
+            <tbody style="text-align: center;">
+            {% for item in page_obj %}
+
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{item.name}}</td>
+                <td>{{item.wig_type}}</td>
+                <td>{{item.wig_long}}</td>
+                <td>{{item.scalp_type}}</td>
+                <td>{{item.wig_color}}</td>
+                <td>{{item.density}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.date|date}}</td>
+                <td>
+                      <a href="{% url 'edit_item_in_store' item.slug %}">  
+                        <img width="25" height="25" src="https://img.icons8.com/cotton/64/edit--v1.png" alt="edit--v1"/> 
+                      </a>
+                </td>
+                <td>
+                    <a href="{% url 'delete_from_store' item.slug %}">
+                      <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/>
+                    </a>
+              </td>
+              </tr>
+              {% empty %}
+              <tr>
+                  <td colspan='15' style="font-size:large; text-align: center;">ليس لديك اى منتجات</td>
+              </tr>
+              <tr>
+                  <td colspan="15">
+
+                      <div class="btn">
+                          <a href="{% url 'add_item' %}">
+                               اضافة منتجات 
+                          </a>
+                      </div>
+
+                  </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+              
+        <nav aria-label="Page navigation example" style="margin: auto; margin-top: 10px;">
+          <ul class="pagination justify-content-center" style="text-align: center;">
+    
+    
+              {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                  Previous
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a  class="page-link" href="">
+                  Previous
+                </a>
+              </li>
+            {% endif %}
+    
+    
+              <li class="page-item">
+                <a style="color:#F67280;" class="page-link" href="#">
+                  {{page_obj.number}}:{{page_obj.paginator.num_pages}}
+                </a>
+              </li>
+    
+    
+    
+          
+              {% if page_obj.has_next %}
+              <li class="page-item">
+                <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.next_page_number }}">
+                  Next
+                </a>
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" href="">
+                  Next
+                </a>
+              </li>
+              {% endif %}
+    
+    
+          </ul>
+      </nav>
+
+
+      </div>
+
+      {% if page_obj %}
+          <div class="btn" style="font-size: large;">
+              <a href="{% url 'add_item' %}">
+              اضافة المزيد من المنتجات 
+              </a>
+          </div> 
+     {% endif %}
+
+    </div>
+
+  </section>
+
+  <!-- end shop section -->
+
+
+
+{% endblock content %}
+  
+
