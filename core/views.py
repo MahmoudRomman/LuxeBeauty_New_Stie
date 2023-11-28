@@ -37,24 +37,104 @@ today = datetime.date.today()
 month = today.month
 
 
-def home(request):
-    from django.contrib.auth import authenticate
+# def home(request):
+#     items = models.Item.objects.all().order_by('-date')[:8]
 
-    items = models.Item.objects.all().order_by('-date')
+#     offers = models.Offer.objects.all().order_by('-date')[:3]
 
-    offers = models.Offer.objects.all().order_by('-date')[:3]
+#     new_arrived_items = models.Item.objects.all().order_by('-date')[:3]
 
-    new_arrived_items = models.Item.objects.all().order_by('-date')[:3]
-
-    context = {
-        'items' : items,
-        'offers' : offers,
-        'new_arrived_items' : new_arrived_items,
-    }
+#     context = {
+#         'items' : items,
+#         'offers' : offers,
+#         'new_arrived_items' : new_arrived_items,
+#         'have_offer' : True,
+#         'new_arrived' : True,
+#     }
 
 
     
+#     return render(request, 'core/index.html', context)
+
+
+
+
+from . import tasks
+
+
+def home(request):
+    items = models.Item.objects.all().order_by('-date')[:8]
+    today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+
+    context = {
+        'items' : items,
+
+        'have_offer' : False,
+        'new_arrived' : False,
+        'today_gift' : today_gift,
+
+    }
+
     return render(request, 'core/index.html', context)
+
+
+
+
+
+def have_offer(request):
+    limit = 0.00
+    items = models.Item.objects.filter(discount_price__gt =limit).values()
+    today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+
+    context = {
+        'items' : items,
+        'have_offer' : True,
+        'new_arrived' : False,
+        'today_gift' : today_gift,
+    }
+    
+    return render(request, 'core/index.html', context)
+
+
+
+
+def new_arrived(request):
+    items = models.Item.objects.all().order_by('-date')[:4]
+    new_arrived_items = models.Item.objects.all().order_by('-date')[:4]
+
+    today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+    context = {
+        'items' : items,
+        'new_arrived_items' : new_arrived_items,
+        'have_offer' : False,
+        'new_arrived' : True,
+        'today_gift' : today_gift,
+
+    }
+    
+    return render(request, 'core/index.html', context)
+
+
+
+def best_seller(request):
+    items = models.Item.objects.all().order_by('-num_of_sales')[:4]
+    today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+
+    context = {
+        'items' : items,
+        'have_offer' : False,
+        'new_arrived' : False,
+        'today_gift' : today_gift,
+    }
+    
+    return render(request, 'core/index.html', context)
+
+
+
+
+
+
+
 
 
 
@@ -212,6 +292,7 @@ def delete_from_store(request, slug):
         return redirect("store")
     
     return render(request, 'core/delete_item_confirm.html')
+
 
 
 
@@ -421,7 +502,7 @@ def order_summary(request):
 
    
 
-
+from . import tasks
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
@@ -463,12 +544,17 @@ class bill2(CreateView, LoginRequiredMixin):
         
 
         phone = models.PhoneNumber.objects.get(phone = str(seller_phone_number))
-
-        try:
-            # to edit this if the marketing have no account....
-            account = models.Account.objects.get(phone_number = phone)
+        account = models.Account.objects.get(phone_number = phone)
 
 
+        account_qs = models.Account.objects.filter(phone_number = phone)
+        # bill_info = []
+        bill_info = {}
+
+
+
+
+        if account_qs.exists():
             form.instance.seller = self.request.user
             form.instance.account_name = account.account_name
 
@@ -488,6 +574,22 @@ class bill2(CreateView, LoginRequiredMixin):
             customer_phone = form.cleaned_data.get("customer_phone")
             customer_name = form.cleaned_data.get("customer_name")
             orders_num = orders_num[1:]
+            
+
+
+            bill_info["seller"] = str(self.request.user)
+            bill_info["seller_phone_number"] = str(seller_phone_number)
+            bill_info["account_name"] = str(account.account_name)
+
+
+            bill_info["country"] = str(country)
+            bill_info["address"] = str(address)
+            bill_info["customer_name"] = str(customer_name)
+            bill_info["customer_phone"] = str(customer_phone)
+
+
+
+
             for other_orders in orders_num:
                 new_bill2 = models.Bill2.objects.create(
                     seller = self.request.user,
@@ -516,50 +618,35 @@ class bill2(CreateView, LoginRequiredMixin):
                 item.save()
 
 
+
+            # To increment the number of sales per item...
+            for order_item in order.items.all():
+                order_item.item.num_of_sales = order_item.item.num_of_sales + order_item.quantity
+                order_item.item.save()
+
+
+            # Change the status of the ordered query to True because the ordered is done successfully...
             order.ordered = True
             order.save()
 
 
+            ## Sending mail using celery...
+            
             from datetime import datetime
+            merge_data = {
+                "bill_user" : self.request.user,
+                "date" : datetime.now(),
+                "order" : order,
+                "bill" : bill_info,
+            }
 
-            now = datetime.now()
-            dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-
-
-            # # Sending mail
-            email = EmailMessage(
-            subject=f"New Bill From The LuxeBeauty Site Version_2 Which Made By {self.request.user} at {dt_string}",
-            body="This one", 
-            from_email= settings.EMAIL_HOST_USER,
-            to=(settings.EMAIL_HOST_USER,),
-            reply_to=(settings.EMAIL_HOST_USER,),
-            )
-
-            email.send()
-
-
-            # New mail to be edited...
-            # data = {
-            #     "fname" : self.request.user,
-            #     "date" : dt_string,
-            # }
-
-            # message = get_template('doctor/email.html').render(data)
-            # email = EmailMessage(
-            #     "About your appointment with Med-Care Center.",
-            #     message,
-            #     settings.EMAIL_HOST_USER,
-            #     [settings.EMAIL_HOST_USER],
-            # )
-
-            # email.content_subtype = "html"
-            # email.send()
-
+            email = self.request.user.email
+            tasks.send_bill_mail(merge_data, email)
 
 
             messages.success(self.request, ".تم حفظ الفاتورة بنجاح")
             return super(bill2,self).form_valid(form)
-        except:
+        else:
             messages.warning(self.request, ".عفواً, لا يوجد مُسوق للرقم الذى قٌمت باختياره")
             return redirect("bill2")
 

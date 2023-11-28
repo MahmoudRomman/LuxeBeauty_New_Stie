@@ -70,7 +70,12 @@
                   المزيد
                 </a>
                 <div class="dropdown-menu">
+
+                  {% if user.is_authenticated and user.is_superuser and user.is_staff %}
+
+                  {% else %}
                   <a class="dropdown-item" href="{% url 'chart_view' %}">فواتيرى</a>
+                  {% endif %}
 
                   {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                   <a class="dropdown-item" href="{% url 'all_bills' %}">كل الفواتير</a>    
@@ -81,7 +86,6 @@
                   <div class="dropdown-divider"></div>
 
                   {% if user.is_authenticated and user.is_superuser and user.is_staff %}
-                  <a class="dropdown-item" href="{% url 'my_penalities' %}">خصوماتى</a>  
 
                   {% else %}
                   <a class="dropdown-item" href="{% url 'my_penalities' %}">خصوماتى</a>  

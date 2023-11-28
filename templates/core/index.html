@@ -24,7 +24,7 @@
                         أهلا بكم <br>
                         LuxBeauty
                       </h1>
-                      <p style="font-size:large">
+                      <p style="font-size:x-large">
                          هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
                       </p>
                       <a href="{% url 'chart_view' %}">
@@ -49,7 +49,7 @@
                         أهلا بكم <br>
                         LuxBeauty
                       </h1>
-                      <p style="font-size:large">
+                      <p style="font-size:x-large">
                          هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
                       </p>
                       <a href="{% url 'chart_view' %}">
@@ -74,7 +74,7 @@
                         أهلا بكم <br>
                         LuxBeauty
                       </h1>
-                      <p style="font-size:large">
+                      <p style="font-size:x-large">
                          هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
                       </p>
                       <a href="{% url 'chart_view' %}">
@@ -110,18 +110,39 @@
 
 
 
-  <!-- shop section -->
 
+
+
+
+
+
+
+
+  <!-- shop section -->
 
   <section class="shop_section layout_padding">
     <div class="container" style="max-width: 1400px;">
-      <div class="heading_container heading_center">
-        <h2>
+
+
+      <!-- <div class="heading_container heading_center">
+        <h2 style="text-align: center;">
            المنتجات المُضافه حديثاََ
         </h2>
+      </div> -->
+
+      <div class="center_buttons">
+        
+        <a name="shop_section" href="{%  url 'new_arrived' %}#shop_section">المُضافة حديثأ</a>
+        <a name="shop_section" href="{%  url 'have_offer' %}#shop_section">لديها خَصم</a>
+        <a name="shop_section" href="{%  url 'best_seller' %}#shop_section">الأكثر مبيعاً</a>
+        <!-- <a name="shop_section" href="{%  url 'home' %}#shop_section">كل المنتجات</a> -->
+
       </div>
+
+
       <div class="row">
 
+      
         {% for item in items.all %}
             <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
               <div class="box">
@@ -132,12 +153,14 @@
 
                   <div style="text-align: center;">
                     <p class="lead">
-                      {% if item.discount_price %}
-                        <span class="mr-1"> <del>${{ item.price }}</del> </span>
-                        <span>${{ item.price|sub:item.discount_price }}</span>                        
-                      {% else %}
-                        <span>${{item.price}} </span>
-                      {% endif %}
+                      
+                    {% if item.discount_price %}
+                      <span class="mr-1"> <del>${{ item.price }}</del> </span>
+                      <span>${{ item.price|sub:item.discount_price }}</span>                        
+                    {% else %}
+                      <span>${{item.price}} </span>
+                    {% endif %}
+
                     </p>
                   </div>
 
@@ -151,21 +174,25 @@
 
 
                   
-                  {% if item in new_arrived_items %}
-                  <div class="new" style="text-align: center;">
-                    <span> وصل حديثاََ </span>
-                  </div>                    
+                  {% if new_arrived %}
+                    {% if item in new_arrived_items %}
+                      <div class="new" style="text-align: center;">
+                        <span> وصل حديثاََ </span>
+                      </div>                    
+                    {% endif %}
                   {% endif %}
+
 
 
                   
+                  {% if have_offer %}                    
                   {% if item.discount_price  %}
                   <div class="have_discount" style="text-align: center;">
-                    <!-- <span>خصم ${{item.discount_price}}</span> -->
                     <span>خصم %{{item.discount_price|div:item.price|mul:100|floatformat:0}}</span>
-
                   </div>                    
                   {% endif %}
+                  {% endif %}
+
                     
 
                 
@@ -174,9 +201,6 @@
         {% endfor %}
 
 
-
-
-        
       </div>
 
       <div class="btn-box">
@@ -198,43 +222,47 @@
   <!-- end gift section -->
 
 
-  
   <section class="shop_section layout_padding">
-    <div class="container" style="max-width: 1400px;">
+    <div class="container" style="max-width: 1400px; margin-top: -50px;">
+      <div class="heading_container heading_center">
+        <h2 style="text-align: center;">الطٌرق المٌتاحة للدفع</h2>
+      </div>
       
       <div class="row">
+
             <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-              <div class="box">
+              <div class="box" style="border-radius: 10px;">
                   <div style="text-align: center; margin-top: 15px;">
-                    <p>This is div This is div This is div This is div This is div This is div</p>
+                    <img src="{% static 'images/apple.png' %}" style="height:90px;">
                   </div>
               </div>
             </div>
       
 
-      <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-        <div class="box">
-            <div style="text-align: center; margin-top: 15px;">
-              <p>This is div This is div This is div This is div This is div This is div</p>
+            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+              <div class="box" style="border-radius: 10px;">
+                  <div style="text-align: center; margin-top: 15px;">
+                    <img src="{% static 'images/tamara.png' %}" style="height:90px; text-align: center;">
+                  </div>
+              </div>
             </div>
-        </div>
-      </div>
 
-      <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-        <div class="box">
-            <div style="text-align: center; margin-top: 15px;">
-              <p>This is div This is div This is div This is div This is div This is div</p>
+            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+              <div class="box" style="border-radius: 10px;">
+                  <div style="text-align: center; margin-top: 15px;">
+                    <img src="{% static 'images/tabby.png' %}" style="height:90px;">
+                  </div>
+              </div>
             </div>
-        </div>
-      </div>
 
-      <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-        <div class="box">
-            <div style="text-align: center; margin-top: 15px;">
-              <p>This is div This is div This is div This is div This is div This is div</p>
+            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px; ">
+              <div class="box" style="border-radius: 10px;">
+                  <div style="text-align: center; margin-top: 15px;">
+                    <img src="{% static 'images/stripe.jpg' %}" style="height:90px; text-align: center;">
+                  </div>
+              </div>
             </div>
-        </div>
-      </div>
+
     </div>
   </div>
   </section>

@@ -72,7 +72,12 @@ def profile_update(request):
 
 @login_required(login_url='user-login')
 def phone_update(request):
+
+    # Calling the function of the phones in the forms.py file to check if there are any phone exists or not...
+    not_taken_phones = forms.phones_func()
+
     phone_update_form = forms.PhoneUpdate()
+
     if request.method == "POST":
         phone_update_form = forms.PhoneUpdate(request.POST or None)
         if phone_update_form.is_valid():
@@ -103,10 +108,9 @@ def phone_update(request):
         phone_update_form = forms.PhoneUpdate()
 
 
-
-
     context = {
         'phone_update_form' : phone_update_form,
+        'not_taken_phones' : not_taken_phones,
     }
 
     return render(request, 'accounts/phone_update.html', context)

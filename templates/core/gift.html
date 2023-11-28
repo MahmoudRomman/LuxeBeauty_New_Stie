@@ -14,27 +14,36 @@
           </div>
           <div class="col-md-7">
             <div class="detail-box">
-              <div class="heading_container" style="margin-top: 5%;">
-                <h1>
+              <div class="heading_container" style="text-align: center;">
+                <h1 style="font-size: 400%;">
                   عروض اليوم من <br>
                   LuxBeauty
                 </h1>
+                <br>
+                <br>
+                <br>
               </div>
               
-              {% if offers %}
-              <hr>
-              
-              {% for offer in offers %}
-                <h5>{{offer}}</h5>
-                <hr>
-              {% endfor %}
-                
+              {% if today_gift %}
+                  {% for offer in today_gift %}
+                      <div style="text-align: center;">
+                        <h5 style="font-size: 150%;">{{offer.Offer}}</h5>
+                      </div>
+                      <br>
+                      <br>
+                      <br>
+                  {% endfor %}
               {% else %}
-              <h5>لا يوجد عروض اليوم</h5>
+                  <div style="text-align: center;">
+                    <h5>لا يوجد عروض اليوم</h5>
+                  </div>
+                  <br>
+                  <br>
+                  <br>
               {% endif %}
 
-              <div class="btn-box">
-                <a href="{% url 'shop' %}" class="btn1">
+              <div class="gift_button">
+                <a href="{% url 'shop' %}">
                   عرض جميع المنتجات
                 </a>
               </div>

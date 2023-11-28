@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template</title>
+    <style>
+        /* Add your custom styles here */
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        table {
+            width: 60%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="text-align: center;">New Bill From, {{bill_user}}</h1>
+    </header>
+
+    <div>
+        <p>Dear LuxeBeauty Owner,</p>
+
+        <p>This is a new bill from the LuxeBeauty site which done by {{bill_user}}.</p>
+        <p>This bill made in {{date|date}} at {{date|time}}</p>
+
+
+        
+
+
+            
+
+
+        <table class="table table-bordered" dir='rtl'>
+            <thead class="thead-dark" style="text-align: center;">
+            <tr style="text-align: center">
+                <th scope="col" style="text-align: center">الترتيب</th>
+                <th scope="col" style="text-align: center">المنتج</th>
+                <th scope="col" style="text-align: center">الكمية</th>
+                <th scope="col" style="text-align: center">اجمالى السعر</th>
+            </tr>
+            </thead>
+            <tbody style="text-align: center;">
+
+            {% for orderitem in order.items.all %}                    
+            <tr style="text-align: center;">
+                <th scope="row" class="mt-1" style="text-align: center">{{forloop.counter}}</th>
+                <td style="text-align: center">{{orderitem.item.name}} - {{orderitem.item.wig_type}} - طول {{orderitem.item.wig_long}} - فروة {{orderitem.item.scalp_type}} - لون {{orderitem.item.wig_color}} - كثافة {{orderitem.item.density}} </td>
+                <td style="text-align: center">{{orderitem.quantity}}</td>
+                <td style="text-align: center">{{orderitem.get_final_price}} ريال</td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        <br>
+        <h3 style="text-align: center;">تفاصيل الفاتورة</h3>
+        <br>
+
+        <table class="table" dir='rtl'>
+        <thead class="thead-light" style="text-align: center">
+            <tr style="text-align: center">
+                <th scope="col" style="text-align: center">اسم البائع</th>
+                <th scope="col" style="text-align: center">رقم هاتف البائع</th>
+                <th scope="col" style="text-align: center">اسم حساب المُسوق</th>
+
+                <th scope="col" style="text-align: center">الدولة</th>
+                <th scope="col" style="text-align: center">العنوان</th>
+                <th scope="col" style="text-align: center">اسم العميل</th>
+                <th scope="col" style="text-align: center">رقم هاتف العميل</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center">
+            <tr style="text-align: center">
+                <td style="text-align: center">{{bill.seller}}</td>
+                <td style="text-align: center">{{bill.seller_phone_number}}</td>
+                <td style="text-align: center">{{bill.account_name}}</td>
+
+                <td style="text-align: center">{{bill.country}}</td>
+                <td style="text-align: center">{{bill.address}}</td>
+                <td style="text-align: center">{{bill.customer_name}}</td>
+                <td style="text-align: center">{{bill.customer_phone}}</td>
+            </tr>
+        </tbody>
+        </table>
+    
+
+
+
+
+
+        <p style="text-align: center;">Thank you for reading!</p>
+
+        <p style="text-align: center;">Best regards,<br>LuxeBeauty Site</p>
+    </div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

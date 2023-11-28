@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <p class="h4" style="text-align: end;">الارقام المتاحة حالياً</p>
+                            <p class="h3" style="text-align: end;">الارقام المتاحة حالياً</p>
                             <hr>
                             <form method="POST" enctype="multipart/form-data" dir="rtl">
                                 {% csrf_token %}
@@ -26,7 +26,13 @@
                                 </div>
                                 </div>
                                 <div class="btn_save_link mt-3" style="font-size:large;">
+                                
+                                {% if not_taken_phones %}
                                 <input class="btn btn-info" type="submit" value="حفظ التغيرات" style="width: 250px; text-align: center; font-size:large;">
+                                {% else %}
+                                 <p class="h5" style="text-align:center;">لا يوجد أى أرقام متاحة فى الوقت الحالى.</p>
+                                {% endif %}
+                                    
 
                                 </div>
                             </form>

@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'bootstrap4',
     'mathfilters',
     'crispy_forms',
+    'django_celery_results',
+    'django_celery_beat',
 
     
 
@@ -170,4 +172,20 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = '587'
 
 
+
+
+
+
+# SETTINGS FOR CELERY
+
+CELERY_BROKER_URL='redis://localhost:6379'
+CELERY_ACCEPT_CONTENT=['application/json']
+CELERY_RESULT_SERIALIZER='json'
+CELERY_TASK_SERIALIZER='json'
+
+# celery beat settings
+CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
+
+# for storing result
+CELERY_RESULT_BACKEND = 'django-db'
 

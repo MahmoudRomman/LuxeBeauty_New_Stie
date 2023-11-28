@@ -100,6 +100,8 @@ class Item(models.Model):
     date = models.DateTimeField(auto_now_add=True, blank=True)
     discount_price = models.FloatField(default=0.00, blank=True, null=True)
     slug = models.SlugField()
+
+    num_of_sales = models.PositiveIntegerField(default=0)
     
 
 

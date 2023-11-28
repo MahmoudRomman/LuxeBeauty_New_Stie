@@ -30,8 +30,14 @@
                     </div>
                     <div class="card-body text-center">
                         <h4 style="margin-top: 20px;">.لقد قمت بتسجيل الخروج من الموقع</h4>
-                        <a href="{% url 'user-login' %}" class="btn btn-primary" style="margin-top: 50px; font-size: large;">تسجيل الدخول</a>
-                        <a href="{% url 'user-register' %}" class="btn btn-success" style="margin-top: 10px; font-size: large;">انشاء حساب</a>
+                        <div class="login_again_button">
+                            <a href="{% url 'user-login' %}"  style="margin-top: 50px; font-size: large;">تسجيل الدخول</a>
+                        </div>
+
+                        <div class="create_account_button">
+                            <a href="{% url 'user-register' %}" class="btn btn-success" style="margin-top: 10px; font-size: large;">انشاء حساب</a>
+                        </div>
+
                     </div>
                 </div>
             </div>
