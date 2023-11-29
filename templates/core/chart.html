@@ -85,7 +85,7 @@
     
               
               {% for bill in my_bills %}
-              <tr style="font-size: large;">
+              <tr style="font-size: small;">
                 <th scope="row" class="mt-1">{{forloop.counter}}</th>
                 <td>{{bill.seller}}</td>
                 <td>{{bill.seller_phone_number}}</td>
@@ -113,7 +113,7 @@
               {% empty %}
               <tr>
 
-                <td colspan='18' style="font-size:large">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
                     <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
                 </td>
               </tr>
@@ -159,18 +159,18 @@
                 
                 {% if value < 10 %}
                    <td>0 EGP</td>
-                {% elif value == 10 and value < 20 %}
+                {% elif value >= 10 and value < 20 %}
                   <td>{% widthratio value 1 100 %} EGP</td>
-                {% elif value == 20 and value < 30 %}
+                {% elif value >= 20 and value < 30 %}
                   <td>{% widthratio value 1 150 %} EGP</td>
-                {% elif value == 30 and value > 300 %}
+                {% elif value >= 30 %}
                   <td>{% widthratio value 1 200 %} EGP</td>
                 {% endif %}
               </tr>
               {% empty %}
               <tr>
 
-                <td colspan='18' style="font-size:large">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
                     <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
                 </td>
               </tr>

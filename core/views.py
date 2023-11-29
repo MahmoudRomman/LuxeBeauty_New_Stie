@@ -59,12 +59,26 @@ month = today.month
 
 
 
-from . import tasks
+from core.tasks import print_func
 
 
 def home(request):
     items = models.Item.objects.all().order_by('-date')[:8]
     today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+
+
+    # print_func.delay()
+
+
+    # queryset = models.Order.objects.get(user=request.user, ordered=False)
+
+    # for orderitem in queryset.items.all():
+    #     slug = orderitem.item.slug
+    #     orderitem_in_database = models.Item.objects.get(slug=slug)
+    #     print("*" * 100)
+    #     print(orderitem_in_database.quantity)
+
+
 
     context = {
         'items' : items,
@@ -150,7 +164,7 @@ def store(request):
         density = request.POST.get("density")
 
         if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
-            data = models.Item.objects.all()
+            data = models.Item.objects.all().order_by('-date')
             paginator = Paginator(data, 7)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
@@ -158,7 +172,7 @@ def store(request):
         else:
             data = models.Item.objects.filter(wig_type = wig_type, wig_long = wig_long,
                                                 scalp_type = scalp_type, wig_color = wig_color,
-                                                density = density)
+                                                density = density).order_by('-date')
             
             paginator = Paginator(data, 7)
             page_number = request.GET.get('page')
@@ -173,7 +187,7 @@ def store(request):
 
     else:
         form = forms.ItemForm()
-        data = models.Item.objects.all()
+        data = models.Item.objects.all().order_by('-date')
         paginator = Paginator(data, 7)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -308,7 +322,7 @@ def shop(request):
         density = request.POST.get("density")
 
         if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
-            data = models.Item.objects.all()
+            data = models.Item.objects.all().order_by('-date')
             paginator = Paginator(data, 7)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
@@ -316,7 +330,7 @@ def shop(request):
         else:
             data = models.Item.objects.filter(wig_type = wig_type, wig_long = wig_long,
                                                 scalp_type = scalp_type, wig_color = wig_color,
-                                                density = density)
+                                                density = density).order_by('-date')
             
             paginator = Paginator(data, 7)
             page_number = request.GET.get('page')
@@ -332,7 +346,7 @@ def shop(request):
 
     else:
         form = forms.ItemForm()
-        data = models.Item.objects.all()
+        data = models.Item.objects.all().order_by('-date')
         paginator = Paginator(data, 7)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -493,7 +507,34 @@ def order_summary(request):
             # 'DISPLAY_COUPON_FORM' : True,
         }
 
-        return render(request, 'core/order_summary.html', context)
+
+
+        # To create a flag time ---> after 30 mins delete the order from the cart...
+        from datetime import timedelta
+        start_time = timezone.now() - timedelta(minutes=30)
+
+        try:
+            queryset = models.Order.objects.get(user=request.user, ordered=False, start_date__lte=start_time)
+
+            # To restore the quantity of the items in the database again
+            for orderitem in queryset.items.all():
+                slug = orderitem.item.slug
+                item_in_database = models.Item.objects.get(slug=slug)
+
+                item_in_database.quantity += orderitem.quantity
+                item_in_database.save()
+
+
+            # To delete all the orderitems in the order
+            for orderitem in queryset.items.all():
+                orderitem.delete()
+
+            # To delete the current order for the current user that is added to the cart but not done yet
+            queryset.delete()
+            messages.warning(request, ".لقد انتهت مدة الطلب المُحددة لديك, لعمل طلب شراء أضف أحد المنتجات الى السله مرة اخرى")
+            return redirect("shop")
+        except ObjectDoesNotExist:
+            return render(request, 'core/order_summary.html', context)
     except ObjectDoesNotExist:
         messages.warning(request, ".ليس لديك طلب شراء مٌفعل, من فضلك أضف أحد المنتجات الى السلة أولاً")
         return redirect("shop")
@@ -502,7 +543,7 @@ def order_summary(request):
 
    
 
-from . import tasks
+from core.tasks import send_bill_mail
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
@@ -633,6 +674,34 @@ class bill2(CreateView, LoginRequiredMixin):
             ## Sending mail using celery...
             
             from datetime import datetime
+            # from django.forms.models import model_to_dict
+
+            # order_item_lst = []
+            # for order_item in order.items.all():
+            #     order_item_lst.append(model_to_dict(order_item))
+
+            # for one in order_item_lst:
+            #     print("*" * 100)
+            #     print(one)
+
+            # merge_data = {
+            #     "bill_user" : model_to_dict(self.request.user),
+            #     "date" : datetime.now(),
+            #     "order" : order_item_lst,
+            #     "bill" : bill_info,
+            # }
+
+            # # email = self.request.user.email
+            # # email = str(email)
+            # send_bill_mail.delay(merge_data, 'mahmoud.sayyedahmed900@gmail.com')
+            # # send_bill_mail.apply_async(args=[merge_data, email])
+
+
+            ## To send the bill_mail
+            from django.core.mail import EmailMultiAlternatives
+            from django.template.loader import render_to_string
+
+
             merge_data = {
                 "bill_user" : self.request.user,
                 "date" : datetime.now(),
@@ -640,8 +709,21 @@ class bill2(CreateView, LoginRequiredMixin):
                 "bill" : bill_info,
             }
 
+            html_body = render_to_string("core/bill_mail.html", merge_data)
+            subject = "Bill From LuxeBeauty Site"
+            
             email = self.request.user.email
-            tasks.send_bill_mail(merge_data, email)
+            
+
+            msg = EmailMultiAlternatives(
+                subject = subject,
+                from_email= settings.EMAIL_HOST_USER,
+                to=(email,),
+                reply_to=(settings.EMAIL_HOST_USER,),
+                )
+            
+            msg.attach_alternative(html_body, "text/html")
+            msg.send()
 
 
             messages.success(self.request, ".تم حفظ الفاتورة بنجاح")
@@ -664,7 +746,7 @@ def show_bills(request):
     month = today.month
 
     # my_bills = models.Bill2.objects.filter(seller=request.user, date__month=month, date__day=str(f"{bills_per_day+1}"))
-    data = models.Bill2.objects.filter(date__year = year, date__month = month)
+    data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
     bills_num_this_month = 0
     for bill in data:
         bills_num_this_month += bill.pieces_num
@@ -675,7 +757,7 @@ def show_bills(request):
         today_day = request.POST.get("today_day")
 
         if today_day == "كل الايام":
-            data = models.Bill2.objects.filter(date__year = year, date__month = month)  
+            data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
             paginator = Paginator(data, 7)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)

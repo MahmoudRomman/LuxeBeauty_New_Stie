@@ -101,9 +101,13 @@
         <tbody style="text-align: center;">
 
           
+
+
+
+
           {% for item in page_obj %}
           <tr>
-            <th scope="row" class="mt-1">{{forloop.counter}}</th>
+            <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
             <td>{{item.name}}</td>
             <td>{{item.wig_type}}</td>
             <td>{{item.wig_long}}</td>

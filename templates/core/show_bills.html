@@ -118,8 +118,8 @@
               {% endfor %}
           {% elif page_obj %}
               {% for bill in page_obj %}
-              <tr style="font-size: large;">
-                <th scope="row" class="mt-1">{{forloop.counter}}</th>
+              <tr style="font-size: small;">
+                <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
                 <td>{{bill.seller}}</td>
                 <td>{{bill.seller_phone_number}}</td>
                 <td>{{bill.country}}</td>

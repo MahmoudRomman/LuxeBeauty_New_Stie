@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'mathfilters',
     'crispy_forms',
+    
     'django_celery_results',
     'django_celery_beat',
 

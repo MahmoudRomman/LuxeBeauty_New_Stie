@@ -102,7 +102,7 @@
             {% for item in page_obj %}
 
               <tr>
-                <th scope="row">{{forloop.counter}}</th>
+                <th scope="row">{{page_obj.start_index|add:forloop.counter0}}</th>
                 <td>{{item.name}}</td>
                 <td>{{item.wig_type}}</td>
                 <td>{{item.wig_long}}</td>

@@ -155,8 +155,8 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(OrderItem)
     start_date = models.DateTimeField(auto_now_add=True)
-    ordered_date = models.DateTimeField(default=timezone.now())
-    done_ordered_time = models.DateTimeField(default=timezone.now())
+    ordered_date = models.DateTimeField(auto_now_add=True)
+    done_ordered_time = models.DateTimeField(auto_now_add=True)
     ordered = models.BooleanField(default=False)
     billing_address = models.ForeignKey('Bill2', on_delete=models.SET_NULL, blank=True, null=True)
     coupon = models.ForeignKey('Coupon', on_delete=models.SET_NULL, blank=True, null=True)
@@ -191,7 +191,7 @@ class Bill2(models.Model):
     address = models.CharField(max_length=200)
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=31)
-    date = models.DateTimeField(default=timezone.now())
+    date = models.DateTimeField(auto_now_add=True)
     account_name = models.CharField(max_length=150, null=True, blank=True)
 
     #Item details

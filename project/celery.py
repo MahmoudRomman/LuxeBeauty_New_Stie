@@ -1,6 +1,7 @@
 from __future__ import absolute_import,unicode_literals
 import os
 from celery import Celery
+from celery.schedules import crontab
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings") # your project name to get the settings file
 app = Celery("project") # celery application name
@@ -20,5 +21,13 @@ def debug_task(self):
 
 #celery beat settings
 app.conf.beat_schedule={
-
+ 
 }
+
+
+
+
+
+
+
+
