@@ -1144,6 +1144,40 @@ button {
 
 
 
+.btn_online_bill_finish {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+}
+
+
+.btn_online_bill_finish input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #27AE60;
+  color: #ffffff;
+  border: 1px solid #27AE60;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+
+
+  width: 300px;
+}
+
+
+
+.btn_online_bill_finish input:hover {
+  background-color: transparent;
+  color: #27AE60;
+}
+
+
+
 
 
 .btn_bill_product_add{
@@ -1309,7 +1343,7 @@ margin-top: 0px;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
-  width: 250px;
+  width: 300px;
   
 }
 

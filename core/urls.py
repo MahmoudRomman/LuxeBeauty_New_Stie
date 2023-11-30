@@ -52,4 +52,7 @@ urlpatterns = [
     path('my_penalities/', views.user_penality, name='my_penalities'),
     path('delete_penality/<slug>/', views.delete_penality, name='delete_penality'),
 
+
+    path('online_order/', views.OnlineOrder.as_view(), name='online_order'),
+
 ]

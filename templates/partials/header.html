@@ -74,9 +74,13 @@
                 <div class="dropdown-menu">
 
                   {% if user.is_authenticated and user.is_superuser and user.is_staff %}
+                  <a class="dropdown-item" href="{% url 'online_order' %}">طلب اونلاين</a>
+                  <a class="dropdown-item" href="{% url 'chart_view' %}">فواتيرى</a>
+
 
                   {% else %}
                   <a class="dropdown-item" href="{% url 'chart_view' %}">فواتيرى</a>
+                  <a class="dropdown-item" href="{% url 'online_order' %}">طلب اونلاين</a>
                   {% endif %}
 
                   {% if user.is_authenticated and user.is_superuser and user.is_staff %}

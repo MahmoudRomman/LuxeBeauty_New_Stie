@@ -18,45 +18,38 @@
                             {% csrf_token %}
                             <div class="row g-3">
                                 
-                                <div class="col-12 col-sm-8" style="margin-left: auto; margin-right: auto; margin-bottom: -15px;">
+                                <div class="col-12 col-sm-12" dir="rtl" style="margin-left: auto; margin-right: auto; margin-bottom: -15px;">
                                     <div class="form-group">{{form.country}}</div>    
                                 </div>
     
-                                
-                                <div class="col-12 col-sm-8" style="margin-left: auto; margin-right: auto">
-                                    <div class="form-group">
-                                        {{form.address}}
-                                    </div>
-                                </div>
-    
-                                <div class="col-12 col-sm-8" style="margin-left: auto; margin-right: auto;">
-                                    <div class="form-group">
-                                        {{form.customer_phone}}
-                                    </div>
-                                </div>
-    
 
-                                <div class="col-12 col-sm-8" style="margin-left: auto; margin-right: auto;">
+                                <div class="col-12 col-sm-6" dir="rtl" style="margin-left: auto; margin-right: auto;">
                                     <div class="form-group">
                                         {{form.customer_name}}
                                     </div>
                                 </div>
 
-
+                                <div class="col-12 col-sm-6" dir="rtl" style="margin-left: auto; margin-right: auto">
+                                    <div class="form-group">
+                                        {{form.address}}
+                                    </div>
+                                </div>
     
-                                <div class="col-12 col-sm-8" style="margin-left: auto; margin-right: auto;">
+                                <div class="col-12 col-sm-6" dir="rtl" style="margin-left: auto; margin-right: auto;">
+                                    <div class="form-group">
+                                        {{form.customer_phone}}
+                                    </div>
+                                </div>
+    
+                                <div class="col-12 col-sm-6" dir="rtl" style="margin-left: auto; margin-right: auto;">
                                     <div class="form-group">
                                         {{form.seller_phone_number}}
                                     </div>
                                 </div>
 
-
                                 <div class="btn_bill_finish col-12">
-                                    <input type="submit" value="حفظ الفاتورة" style="font-size:large; width: 250px; margin-bottom: 5px;">
+                                    <input type="submit" value="حفظ الفاتورة" style="font-size:large; width: 300px; margin-bottom: 5px; margin-top: 15px;">
                                 </div>
-
-
-                                
 
                             </div>
                         </form>

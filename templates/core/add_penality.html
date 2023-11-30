@@ -19,9 +19,15 @@
                     <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
                         {% csrf_token %}
                         <div class="row g-3" style="row-gap: 13px;">
-                            <div class="col-12 col-sm-12">
+                            <div class="col-12 col-sm-6">
                                 <div class="form-group">
                                     {{form.name}}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    {{form.days}}
                                 </div>
                             </div>
 

@@ -40,7 +40,7 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ penality.name }}</td>
                     <td>{{penality.message}}</td>
-                    <td style="width: 150px;">{{penality.date|date}} {{penality.date|time}}</td>
+                    <td style="width: 150px;">{{penality.date|date}} -- {{penality.date|time}}</td>
 
                     {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
                     <td style="width: 150px;">

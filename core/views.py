@@ -992,3 +992,112 @@ def delete_penality(request, slug):
     penality.delete()
     messages.success(request, ".تم ازالة الخَصم لهذا المستخدم بنجاح")
     return redirect("show_all_penalities")
+
+
+
+
+class OnlineOrder(CreateView, LoginRequiredMixin):
+    model = models.Bill2
+    form_class = forms.OnlineOrder
+    template_name = 'core/online_order.html'
+    success_url = reverse_lazy('chart_view')
+
+    def get_form_kwargs(self):
+        """ Passes the request object to the form class.
+         This is necessary to only display members that belong to a given user"""
+
+        kwargs = super(OnlineOrder, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
+
+    def form_valid(self, form):
+        country = form.cleaned_data.get("country")
+        address = form.cleaned_data.get("address")
+        customer_phone = form.cleaned_data.get("customer_phone")
+        customer_name = form.cleaned_data.get("customer_name")
+        seller_phone_number = form.cleaned_data.get("seller_phone_number")
+
+
+        wig_name = form.cleaned_data.get("wig_name")
+        wig_type = form.cleaned_data.get("wig_type")
+        wig_long = form.cleaned_data.get("wig_long")
+        scalp_type = form.cleaned_data.get("scalp_type")
+        wig_color = form.cleaned_data.get("wig_color")
+        density = form.cleaned_data.get("density")
+        price = form.cleaned_data.get("price")
+        pieces_num = form.cleaned_data.get("pieces_num")
+
+        
+
+        phone = models.PhoneNumber.objects.get(phone = str(seller_phone_number))
+        account = models.Account.objects.get(phone_number = phone)
+
+
+        account_qs = models.Account.objects.filter(phone_number = phone)
+        # bill_info = []
+        bill_info = {}
+
+
+
+        if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
+            messages.warning(self.request, ".عفواً ,لديك بعض المُدخلات الخاطئة, أعد مرة أخرى")
+            # return to the same page ---> online_order page to make the bill again...
+            return redirect("online_order")
+        else:
+            if account_qs.exists():
+                form.instance.seller = self.request.user
+                form.instance.account_name = account.account_name
+
+        
+
+                ## To send the bill_mail
+                from django.core.mail import EmailMultiAlternatives
+                from django.template.loader import render_to_string
+                from datetime import datetime
+
+                merge_data = {
+                    "bill_user" : self.request.user,
+                    "date" : datetime.now(),
+                    "wig_name" : wig_name,
+                    "wig_type" : wig_type,
+                    "wig_long" : wig_long,
+                    "scalp_type" : scalp_type,
+                    "wig_color" : wig_color,
+                    "density" : density,
+                    "pieces_num" : pieces_num,
+                    "price" : price,
+
+                    "seller" : str(self.request.user),
+                    "seller_phone_number" : seller_phone_number,
+                    "account_name" : str(account.account_name),
+                    "country" : country,
+                    "address" : address,
+                    "customer_name" : customer_name,
+                    "customer_phone" : customer_phone,
+                }
+
+                html_body = render_to_string("core/bill_mail.html", merge_data)
+                subject = "Bill From LuxeBeauty Site"
+                
+                email = self.request.user.email
+                
+
+                msg = EmailMultiAlternatives(
+                    subject = subject,
+                    from_email= settings.EMAIL_HOST_USER,
+                    to=(email,),
+                    reply_to=(settings.EMAIL_HOST_USER,),
+                    )
+                
+                msg.attach_alternative(html_body, "text/html")
+                msg.send()
+
+
+                messages.success(self.request, ".تم حفظ الفاتورة بنجاح")
+                # return to the success page that exists in this view in the top...
+                return super(OnlineOrder, self).form_valid(form)
+            else:
+                messages.warning(self.request, ".عفواً, لا يوجد مُسوق للرقم الذى قٌمت باختياره")
+                # return to the same page ---> online_order page to make the bill again...
+                return redirect("online_order")

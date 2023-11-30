@@ -42,14 +42,27 @@
 <body>
 
     <header>
-        <h1 style="text-align: center;">New Bill From, {{bill_user}}</h1>
+        {% if order %}
+            <h1 style="text-align: center;">New Bill From Store Which Made By, {{bill_user}}</h1>
+        {% else %}
+            <h1 style="text-align: center;">New Online Bill Outside The Store Which Made By, {{bill_user}}</h1>
+        {% endif %}
+            
     </header>
 
     <div>
         <p>Dear LuxeBeauty Owner,</p>
 
-        <p>This is a new bill from the LuxeBeauty site which done by {{bill_user}}.</p>
-        <p>This bill made in {{date|date}} at {{date|time}}</p>
+        
+        {% if order %}
+            <p>This is a new bill from the LuxeBeauty site which done from store and done by, {{bill_user}}.</p>
+            <p>This bill made in {{date|date}} at {{date|time}}</p>
+        {% else %}
+            <p>This is a new bill from the LuxeBeauty site which done online and done by, {{bill_user}}.</p>
+            <p>This bill made in {{date|date}} at {{date|time}}</p>
+        {% endif %}
+            
+
 
 
         
@@ -68,7 +81,9 @@
             </tr>
             </thead>
             <tbody style="text-align: center;">
-
+            
+            
+            {% if order %}
             {% for orderitem in order.items.all %}                    
             <tr style="text-align: center;">
                 <th scope="row" class="mt-1" style="text-align: center">{{forloop.counter}}</th>
@@ -77,6 +92,15 @@
                 <td style="text-align: center">{{orderitem.get_final_price}} ريال</td>
             </tr>
             {% endfor %}
+            {% else %}
+                <tr style="text-align: center;">
+                    <th scope="row" class="mt-1" style="text-align: center">1</th>
+                    <td style="text-align: center">{{wig_name}} - {{wig_type}} - طول {{wig_long}} - فروة {{scalp_type}} - لون {{wig_color}} - كثافة {{density}} </td>
+                    <td style="text-align: center">{{pieces_num}}</td>
+                    <td style="text-align: center">{{price}} ريال</td>
+                </tr>
+            {% endif %}
+
 
             </tbody>
         </table>
@@ -98,18 +122,36 @@
                 <th scope="col" style="text-align: center">رقم هاتف العميل</th>
             </tr>
         </thead>
-        <tbody style="text-align: center">
-            <tr style="text-align: center">
-                <td style="text-align: center">{{bill.seller}}</td>
-                <td style="text-align: center">{{bill.seller_phone_number}}</td>
-                <td style="text-align: center">{{bill.account_name}}</td>
 
-                <td style="text-align: center">{{bill.country}}</td>
-                <td style="text-align: center">{{bill.address}}</td>
-                <td style="text-align: center">{{bill.customer_name}}</td>
-                <td style="text-align: center">{{bill.customer_phone}}</td>
-            </tr>
-        </tbody>
+        
+        {% if bill %}            
+            <tbody style="text-align: center">
+                <tr style="text-align: center">
+                    <td style="text-align: center">{{bill.seller}}</td>
+                    <td style="text-align: center">{{bill.seller_phone_number}}</td>
+                    <td style="text-align: center">{{bill.account_name}}</td>
+
+                    <td style="text-align: center">{{bill.country}}</td>
+                    <td style="text-align: center">{{bill.address}}</td>
+                    <td style="text-align: center">{{bill.customer_name}}</td>
+                    <td style="text-align: center">{{bill.customer_phone}}</td>
+                </tr>
+            </tbody>
+        {% else %}
+            <tbody style="text-align: center">
+                <tr style="text-align: center">
+                    <td style="text-align: center">{{seller}}</td>
+                    <td style="text-align: center">{{seller_phone_number}}</td>
+                    <td style="text-align: center">{{account_name}}</td>
+
+                    <td style="text-align: center">{{country}}</td>
+                    <td style="text-align: center">{{address}}</td>
+                    <td style="text-align: center">{{customer_name}}</td>
+                    <td style="text-align: center">{{customer_phone}}</td>
+                </tr>
+            </tbody>
+        {% endif %}
+
         </table>
     
 
