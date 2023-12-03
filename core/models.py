@@ -95,6 +95,8 @@ class Item(models.Model):
     density = models.CharField(max_length=150, choices=density, null=False)
     
     price = models.IntegerField(default=1500, validators=[MaxValueValidator(7000), MinValueValidator(400)])
+    # image = models.ImageField(default="no_product_img.png", upload_to="core_images", null=True, blank=True)
+
     
     quantity = models.PositiveIntegerField(null=False)
     date = models.DateTimeField(auto_now_add=True, blank=True)
@@ -211,7 +213,6 @@ class Bill2(models.Model):
         total = self.price * self.pieces_num
         return total
 
-
     
 
 
@@ -293,6 +294,22 @@ class AddLink(models.Model):
 class Penality(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField(max_length=500)
+    days_num = models.IntegerField(default=0, validators=[MaxValueValidator(31), MinValueValidator(0)])
+    slug_link = models.SlugField()
+    date = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.name} -- {self.date}"
+    
+
+
+
+
+class Reward(models.Model):
+    name = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField(max_length=500)
+    price = models.IntegerField(default=50, validators=[MaxValueValidator(5000), MinValueValidator(50)])
     slug_link = models.SlugField()
     date = models.DateTimeField(auto_now_add=True)
 

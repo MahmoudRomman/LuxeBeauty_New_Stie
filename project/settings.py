@@ -84,6 +84,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # Get the functions that return the notifications of the context_processors.py file in the core app...
+                'core.context_processors.penality_notification',  
+                'core.context_processors.mybills_notification',
+                'core.context_processors.cart_notification',
+                'core.context_processors.reward_notification',
+
             ],
         },
     },

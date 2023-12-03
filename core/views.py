@@ -513,6 +513,7 @@ def order_summary(request):
         from datetime import timedelta
         start_time = timezone.now() - timedelta(minutes=30)
 
+
         try:
             queryset = models.Order.objects.get(user=request.user, ordered=False, start_date__lte=start_time)
 
@@ -956,12 +957,14 @@ def penality(request):
         if form.is_valid():
             name = form.cleaned_data.get("name")
             message = form.cleaned_data.get("message")
+            days_num = form.cleaned_data.get("days_num")
 
             create_slug = create_slug_code()
 
             new_user_penality = models.Penality.objects.create(
                 name = name,
                 message = message,
+                days_num = days_num,
                 slug_link = create_slug,
             )
 
@@ -993,6 +996,86 @@ def delete_penality(request, slug):
     messages.success(request, ".تم ازالة الخَصم لهذا المستخدم بنجاح")
     return redirect("show_all_penalities")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def show_all_rewards(request):
+    rewards = models.Reward.objects.all().order_by('-date')
+
+    context = {
+        'rewards' : rewards,
+    }
+    return render(request, 'core/rewards.html', context)
+
+
+
+
+def reward(request):
+    form = forms.RewardForm()
+
+    if request.method == "POST":
+        form = forms.RewardForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data.get("name")
+            message = form.cleaned_data.get("message")
+            price = form.cleaned_data.get("price")
+
+            create_slug = create_slug_code()
+
+            new_user_penality = models.Reward.objects.create(
+                name = name,
+                message = message,
+                price = price,
+                slug_link = create_slug,
+            )
+
+            new_user_penality.save()
+            messages.success(request, ".تم اضافة المكافأة لهذا المستخدم بنجاح")
+            return redirect("show_all_rewards")
+
+    context = {
+        'form' : form,
+    }
+    return render(request, 'core/add_reward.html', context)
+
+
+def user_reward(request):
+    my_rewards = models.Reward.objects.filter(name=request.user).order_by('-date')
+
+
+    context = {
+        'my_rewards' : my_rewards,
+    }
+
+    return render(request, 'core/user_reward.html', context)
+
+
+
+def delete_reward(request, slug):
+    reward = models.Reward.objects.filter(slug_link=slug)
+    reward.delete()
+    messages.success(request, ".تم ازالة المكافأة لهذا المستخدم بنجاح")
+    return redirect("show_all_rewards")
 
 
 

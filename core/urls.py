@@ -53,6 +53,12 @@ urlpatterns = [
     path('delete_penality/<slug>/', views.delete_penality, name='delete_penality'),
 
 
+    path('show_all_rewards/', views.show_all_rewards, name='show_all_rewards'),
+    path('add_reward/', views.reward, name='add_reward'),
+    path('delete_reward/<slug>/', views.delete_reward, name='delete_reward'),
+    path('my_rewards/', views.user_reward, name='my_rewards'),
+
+
     path('online_order/', views.OnlineOrder.as_view(), name='online_order'),
 
 ]

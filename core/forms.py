@@ -91,7 +91,7 @@ class ItemForm(forms.Form):
         'class': 'form-control',
         'type' : 'number',
         'placeholder': "ادخل السعر",
-        'min' : '500',
+        'min' : '400',
         'max' : '7000',
         'style': 'border-color:wightblack; border-radius: 10px;'
 
@@ -186,7 +186,7 @@ class EditItemForm(forms.ModelForm):
         'class': 'form-control',
         'type' : 'number',
         'placeholder': "ادخل السعر",
-        'min' : '500',
+        'min' : '400',
         'max' : '7000',
         }))
     
@@ -373,8 +373,6 @@ users_tuple = tuple(users_list)
 
 
 
-# from ckeditor.widgets import CKEditorWidget
-
 class PenalityForm(forms.Form):
     name = forms.ModelChoiceField(
          queryset=User.objects.all(), 
@@ -392,15 +390,51 @@ class PenalityForm(forms.Form):
     'style': 'border-color:wightblack; border-radius: 10px;',  
     }))
 
-    days = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+    days_num = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
     'class': 'form-control',
     'type' : 'number',
     'placeholder': "ادخل عدد أيام الخصم",
+    'min' : '0',
+    'max' : '31',
+    'style': 'border-color:wightblack; border-radius: 10px;'
+
+    }))
+
+    
+    
+
+
+
+
+class RewardForm(forms.Form):
+    name = forms.ModelChoiceField(
+         queryset=User.objects.all(), 
+         empty_label="اختر أحد المستخدمين ...", 
+         widget=forms.Select(attrs={
+            'class': 'form-control',
+            'style': 'border-color:wightblack; border-radius: 10px;',  
+              }))
+    
+    message = forms.CharField(widget=forms.Textarea(attrs={
+    'class' : 'form-control',
+    'required' : True,
+    'cols' : 6,
+    'placeholder' : 'اكتب هنا نص المكافأة الذى تريد...',
+    'style': 'border-color:wightblack; border-radius: 10px;',  
+    }))
+
+    price = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+    'class': 'form-control',
+    'type' : 'number',
+    'placeholder': "ادخل قيمة المكافأة",
+    'min' : '50',
+    'max' : '5000',
     'style': 'border-color:wightblack; border-radius: 10px;'
     }))
 
     
     
+
 
 class OnlineOrder(forms.ModelForm):
     def __init__(self, *args, **kwargs):

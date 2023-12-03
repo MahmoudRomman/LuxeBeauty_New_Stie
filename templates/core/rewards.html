@@ -21,7 +21,7 @@
                 <th scope="col">الترتيب</th>
                 <th scope="col">الاسم</th>
                 <th scope="col"> التفاصيل</th>
-                <th scope="col"> عدد أيام الخَصم</th>
+                <th scope="col">قيمة المكافأة</th>
                 <th scope="col">تاريخ الاضافة</th>
 
                 
@@ -32,17 +32,17 @@
               </tr>
             </thead>
             <tbody>
-                {% for penality in penalities.all %}
+                {% for reward in rewards.all %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ penality.name }}</td>
-                    <td>{{penality.message}}</td>
-                    <td>{{penality.days_num}}</td>
-                    <td style="width: 150px;">{{penality.date|date}} -- {{penality.date|time}}</td>
+                    <td>{{reward.name}}</td>
+                    <td>{{reward.message}}</td>
+                    <td>{{reward.price}} جنية</td>
+                    <td style="width: 150px;">{{reward.date|date}} -- {{reward.date|time}}</td>
 
                     {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
                     <td style="width: 150px;">
-                      <a href="{% url 'delete_penality' penality.slug_link %}">
+                      <a href="{% url 'delete_reward' reward.slug_link %}">
                         <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/>
                       </a>
                     </td>             
@@ -51,15 +51,15 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan='8' style="font-size:large">لا يوجد اى خصومات</td>
+                    <td colspan='8' style="font-size:large">لا يوجد اى مكافأت</td>
                 </tr>
 
                 <tr>
                     <td colspan="6">
 
                         <div class="penality_btn">
-                            <a href="{% url 'add_penality' %}">
-                              عمل نموذج خصم    
+                            <a href="{% url 'add_reward' %}">
+                              عمل نموذج مكافأة    
                             </a>
                         </div>
 
@@ -71,10 +71,10 @@
       </div>
 
     
-    {% if penalities %}
+    {% if rewards %}
         <div class="penality_btn">
-            <a href="{% url 'add_penality' %}">
-                عمل نموذج خصم 
+            <a href="{% url 'add_reward' %}">
+                عمل نموذج مكافأة 
             </a>
         </div> 
     {% endif %}

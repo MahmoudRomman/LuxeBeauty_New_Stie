@@ -8,31 +8,31 @@
     <div class="container" style="max-width: 85%;">
       <div class="heading_container heading_center">
         <h2>
-            كل الخصومات لديك
+            كل المكافأت لديك
         </h2>
       </div>
       <div class="row">
 
         <table class="table table-striped" dir='rtl' style="text-align: center;">
-            <thead>
+            <thead style="text-align: center;">
               <tr>
                 <th scope="col">الترتيب</th>
                 <th scope="col"> التفاصيل</th>
-                <th scope="col"> عدد أيام الخَصم</th>
+                <th scope="col">قيمة المكافأة</th>
                 <th scope="col">تاريخ الاضافة</th>
               </tr>
             </thead>
-            <tbody>
-                {% for penality in my_penalities.all %}
+            <tbody style="text-align: center;">
+                {% for reward in my_rewards.all %}
                 <tr>
-                    <th style="width: 150px;" scope="row">{{ forloop.counter }}</th>
-                    <td>{{penality.message}}</td>
-                    <td>{{penality.days_num}}</td>
-                    <td style="width: 150px;">{{penality.date|date}} {{penality.date|time}}</td>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{reward.message}}</td>
+                    <td>{{reward.price}} جنية</td>
+                    <td style="width: 150px;">{{reward.date|date}} -- {{reward.date|time}}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan='12' style="font-size:large">لا يوجد لديك أى خصومات</td>
+                    <td colspan='12' style="font-size:large">لا يوجد لديك أى مكافأت</td>
                 </tr>
                 {% endfor %}
             </tbody>
