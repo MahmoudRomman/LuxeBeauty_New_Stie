@@ -10,8 +10,6 @@ def penality_notification(request):
     today = timezone.now().date()
     penality_count = models.Penality.objects.filter(name=request.user, date__month=today.month).count()
 
-    # penality_count = 0
-    
     context = {
         "penality_count" : penality_count,
     }

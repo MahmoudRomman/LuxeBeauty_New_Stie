@@ -95,7 +95,7 @@ class Item(models.Model):
     density = models.CharField(max_length=150, choices=density, null=False)
     
     price = models.IntegerField(default=1500, validators=[MaxValueValidator(7000), MinValueValidator(400)])
-    # image = models.ImageField(default="no_product_img.png", upload_to="core_images", null=True, blank=True)
+    image = models.ImageField(default="no_product_img.png", upload_to="core_images", null=True, blank=True)
 
     
     quantity = models.PositiveIntegerField(null=False)

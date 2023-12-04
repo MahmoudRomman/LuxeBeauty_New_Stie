@@ -376,6 +376,74 @@ a:focus {
 
 
 
+
+
+/* .center_buttons {
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 10px;
+  border-radius: 20px;
+  width: 150px;
+}
+ */
+
+
+
+
+.center_buttons{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  color: white;
+
+
+}
+
+
+.center_buttons a {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #db4566;
+  color: #ffffff;
+  border: 1px solid #db4566;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+
+
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 10px;
+  border-radius: 20px;
+  width: 150px;
+  font-size: large;
+
+
+}
+
+
+
+.center_buttons a:hover {
+  background-color: transparent;
+  color: #db4566;
+} 
+
+
+
+
+
+
+
+
 .shop_section .box .new {
   width: 50px;
   height: 50px;
@@ -468,9 +536,9 @@ a:focus {
 .profile_edit_button a {
   display: inline-block;
   padding: 7px 30px;
-  background-color: #2471A3;
+  background-color: #db4f66;
   color: #ffffff;
-  border: 1px solid #2471A3;
+  border: 1px solid #db4f66;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
@@ -481,7 +549,7 @@ a:focus {
 
 .profile_edit_button a:hover {
   background-color: transparent;
-  color: #2471A3;
+  color: #db4f66;
 }
 
 
@@ -508,9 +576,9 @@ a:focus {
 .phone_edit_button a {
   display: inline-block;
   padding: 7px 30px;
-  background-color: #2471A3;
+  background-color: #db4f66;
   color: #ffffff;
-  border: 1px solid #2471A3;
+  border: 1px solid #db4f66;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
@@ -521,7 +589,7 @@ a:focus {
 
 .phone_edit_button a:hover {
   background-color: transparent;
-  color: #2471A3;
+  color: #db4f66;
 }
 
 
@@ -533,7 +601,7 @@ a:focus {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  
+  font-size: large;
 }
 
 
@@ -546,6 +614,7 @@ a:focus {
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
+  width: 300px;
 
 }
 
@@ -554,6 +623,102 @@ a:focus {
 .login_button input:hover {
   background-color: transparent;
   color: #2471A3;
+}
+
+
+
+.login_again_button{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+}
+
+
+.login_again_button a {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+}
+
+
+
+.login_again_button a:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
+
+
+.create_account_button{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+}
+
+
+.create_account_button a {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #27AE60;
+  color: #ffffff;
+  border: 1px solid #27AE60;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+}
+
+
+
+.create_account_button a:hover {
+  background-color: transparent;
+  color: #27AE60;
+}
+
+
+
+.register_button{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+  font-size: large;
+}
+
+
+.register_button input{
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #27AE60;
+  color: #ffffff;
+  border: 1px solid #27AE60;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+}
+
+
+
+.register_button input:hover {
+  background-color: transparent;
+  color: #27AE60;
 }
 
 
@@ -979,6 +1144,40 @@ a:focus {
 
 
 
+.btn_online_bill_finish {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+}
+
+
+.btn_online_bill_finish input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #27AE60;
+  color: #ffffff;
+  border: 1px solid #27AE60;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+
+
+  width: 300px;
+}
+
+
+
+.btn_online_bill_finish input:hover {
+  background-color: transparent;
+  color: #27AE60;
+}
+
+
+
 
 
 .btn_bill_product_add{
@@ -1144,7 +1343,7 @@ margin-top: 0px;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
-  width: 250px;
+  width: 300px;
   
 }
 
@@ -1266,12 +1465,15 @@ margin-top: 0px;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   margin: 35px -5px 0;
+  text-align: center;
 }
 
 .saving_section .detail-box .btn-box a {
   width: 165px;
   text-align: center;
   margin: 5px;
+  text-align: center;
+
 }
 
 .saving_section .detail-box .btn-box .btn1 {
@@ -1283,12 +1485,51 @@ margin-top: 0px;
   border-radius: 0;
   -webkit-transition: all .3s;
   transition: all .3s;
+  text-align: center;
+
 }
 
 .saving_section .detail-box .btn-box .btn1:hover {
   background-color: transparent;
   color: #109dbd;
 }
+
+
+
+
+.gift_button{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+  text-align: center;
+}
+
+
+.gift_button a {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #ffffff;
+  color: #2471A3;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+}
+
+
+
+.gift_button a:hover {
+  background-color: transparent;
+  color: #ffffff;
+}
+
+
+
 
 .saving_section .detail-box .btn-box .btn2 {
   display: inline-block;
@@ -1667,16 +1908,38 @@ margin-top: 0px;
 
 
 
-
-
 /* end footer section*/
 /*# sourceMappingURL=style.css.map */
 
 
 
+/* styles.css */
 
-.shop_section {
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
+/* Custom styles for the file input container */
+.file-input-container {
+  position: relative;
+  width: 200px;  /* Set the width according to your design */
+}
+
+/* Styles for hiding the default file input */
+.file-input-container input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Styles for the image preview */
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;  /* Set the maximum height according to your design */
+  border: 1px solid #ddd;  /* Border color */
+}
+
+/* Styles for the label (optional) */
+.label {
+  margin-top: 10px;  /* Set the margin according to your design */
 }

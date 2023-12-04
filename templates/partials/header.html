@@ -65,28 +65,42 @@
 
               
               {% if user.is_authenticated %}
-                  <li class="nav-item dropdown" dir="ltr">
+                
+                  <li class="nav-item dropdown" dir="ltr" style="border-radius: 10px;">
+
+                
                       <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-                        المزيد
+                          {% if penality_count or reward_count or mybills_count %}
+                              {% with result=penality_count|add:reward_count|add:mybills_count %}
+                              <span class="badge badge-danger" style="font-size: small; border-radius: 100%;">{{result}}</span>
+                              {% endwith %}
+                          {% endif %}
+
+                          المزيد
                       </a>
 
-                      <div class="dropdown-menu">
+
+
+
+
+                      <div class="dropdown-menu" style="text-align: right;">
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                         <a class="dropdown-item" href="{% url 'online_order' %}">طلب اونلاين</a>
-                        <a class="dropdown-item" href="{% url 'chart_view' %}">فواتيرى
+                        <a class="dropdown-item" href="{% url 'chart_view' %}">
                           {% if mybills_count > 0 %}
                           <span class="badge badge-danger">{{mybills_count}}</span>
                           {% endif %}
+                          فواتيرى
                         </a>
 
 
                         {% else %}
-                        <a class="dropdown-item" href="{% url 'chart_view' %}">فواتيرى
+                        <a class="dropdown-item" href="{% url 'chart_view' %}">
 
                           {% if mybills_count > 0 %}
                           <span class="badge badge-danger">{{mybills_count}}</span>
                           {% endif %}
-
+                          فواتيرى
                         </a>
                         <a class="dropdown-item" href="{% url 'online_order' %}">طلب اونلاين</a>
                         {% endif %}
@@ -101,28 +115,32 @@
                         <div class="dropdown-divider"></div>
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
-                            <a class="dropdown-item" href="{% url 'my_penalities' %}">خصوماتى
+                            <a class="dropdown-item" href="{% url 'my_penalities' %}">
                               {% if penality_count > 0 %}
                                   <span class="badge badge-danger">{{penality_count}}</span>
                               {% endif %}
+                              خصوماتى
                             </a>  
 
-                            <a class="dropdown-item" href="{% url 'my_rewards' %}">مكافأتى
+                            <a class="dropdown-item" href="{% url 'my_rewards' %}">
                               {% if reward_count > 0 %}
                                   <span class="badge badge-danger">{{reward_count}}</span>
                               {% endif %}
+                              مكافأتى
                             </a>  
                         {% else %}
-                            <a class="dropdown-item" href="{% url 'my_penalities' %}">خصوماتى
+                            <a class="dropdown-item" href="{% url 'my_penalities' %}">
                               {% if penality_count > 0 %}
                                   <span class="badge badge-danger">{{penality_count}}</span>
                               {% endif %}
+                              خصوماتى
                             </a>  
 
-                            <a class="dropdown-item" href="{% url 'my_rewards' %}">مكافأتى
+                            <a class="dropdown-item" href="{% url 'my_rewards' %}">
                               {% if reward_count > 0 %}
                                   <span class="badge badge-danger">{{reward_count}}</span>
                               {% endif %}
+                              مكافأتى
                             </a>  
                         {% endif %}
 

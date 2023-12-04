@@ -70,7 +70,7 @@
     {% if messages %}
         {% for message in messages %}
         
-            <div class="message alert alert-{{ message.tags }} alert-dismissible fade show  mt-3">
+            <div class="message alert alert-{{ message.tags }} alert-dismissible fade show  mt-3" style="font-size: large; text-align: right; margin-left: 5%; margin-right: 2%; border-radius: 10px;">
                 <a class="close" href="#" data-dismiss="alert">×</a>
                   <div style="text-align: right;">
                     {{ message }}
@@ -82,11 +82,8 @@
 
         {% endfor %}
     {% endif %} 
-
   </div>
   <!-- end hero area -->
-
-
 
 
 {% block content %}

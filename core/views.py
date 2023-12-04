@@ -206,6 +206,7 @@ def add_item(request):
 
     form = forms.ItemForm(request.POST or None, request.FILES or None)
 
+
     if request.method == "POST":
         if form.is_valid():
             name = form.cleaned_data.get("name")

@@ -1913,12 +1913,33 @@ margin-top: 0px;
 
 
 
+/* styles.css */
 
-/* .shop_section {
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
-} */
+/* Custom styles for the file input container */
+.file-input-container {
+  position: relative;
+  width: 200px;  /* Set the width according to your design */
+}
 
+/* Styles for hiding the default file input */
+.file-input-container input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
 
+/* Styles for the image preview */
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;  /* Set the maximum height according to your design */
+  border: 1px solid #ddd;  /* Border color */
+}
 
+/* Styles for the label (optional) */
+.label {
+  margin-top: 10px;  /* Set the margin according to your design */
+}

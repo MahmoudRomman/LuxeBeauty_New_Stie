@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
 
-    
 
     'core',
     'accounts',
@@ -196,4 +195,19 @@ CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
 
 # for storing result
 CELERY_RESULT_BACKEND = 'django-db'
+
+
+
+
+
+
+# from django.contrib.messages import constants as messages
+
+# MESSAGE_TAGS = {
+#         messages.DEBUG: 'alert-secondary',
+#         messages.INFO: 'alert-info',
+#         messages.SUCCESS: 'alert-success',
+#         messages.WARNING: 'alert-warning',
+#         messages.ERROR: 'alert-danger',
+# }
 

@@ -87,6 +87,14 @@ class ItemForm(forms.Form):
 
 
 
+    image = forms.ImageField(label_suffix="sdfsdf", widget=forms.FileInput(attrs={
+        'class': 'form-control',
+        'label_suffix': "Image",
+        'style': 'border-color:wightblack; border-radius: 10px; height: 45px;'
+
+    }))
+
+
     price = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
         'class': 'form-control',
         'type' : 'number',
@@ -96,6 +104,7 @@ class ItemForm(forms.Form):
         'style': 'border-color:wightblack; border-radius: 10px;'
 
         }))
+
     
     discount_price = forms.FloatField(required=False, widget=forms.NumberInput(attrs={
         'class': 'form-control',
