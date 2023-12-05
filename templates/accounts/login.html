@@ -10,36 +10,57 @@
         <div class="row mt-5">
             <div class="col-md-6 offset-md-3">
                 <div class="border p-3 bg-white">
-                    <h3>Login Page</h3>
+                    <h1 class="has-text-centered mb-5 is-size-3">تسجيل الدخول</h1>
                     <hr>
-                    
-                    <form method="post" action="{% url 'user-login' %}" class="form-signin">
+                    <form method="POST" action=".">
                         {% csrf_token %}
-                        {{ form.non_field_errors }}
+                        <span class="badge badge-danger">{{ form.non_field_errors }}</span>
 
-                        <label for="{{ form.username.id_for_label }}">Username:</label>
-                        {{ form.username }}
-                        {{ form.username.errors }}
+                        <div class="field">
+                          <label for="" class="label">Username</label>
+                          <div class="control has-icons-left">
+                            {{ form.username }}
+                            <span class="badge badge-danger">{{ form.username.errors }}</span>
+                            <span class="icon is-small is-left">
+                              <i class="fa fa-user"></i>
+                            </span>
+                          </div>
+                        </div>
+        
+                        <div class="field">
+                          <label for="" class="label">Password</label>
+                          <div class="control has-icons-left">
+                            {{ form.password }}
+                            <span class="badge badge-danger">{{ form.password.errors }}</span>
+                            <span class="icon is-small is-left">
+                              <i class="fa fa-lock"></i>
+                            </span>
+                          </div>
+                        </div>  
+        
+
+
                         <br>
-
-                        <label for="{{ form.password.id_for_label }}">Password:</label>
-                        {{ form.password }}
-                        {{ form.password.errors }}
-                        <br>
-
-                        <div class="login_button" style="font-size: larger;">
-                             <input type="submit" value="تسجيل الدخول">
+                        <div class="login_button field" style="font-size: larger;">
+                            <input type="submit" value="تسجيل الدخول">
                         </div>
 
-                        <div style="margin-left: 165px; margin-top: 20px;">
-                            <a class="mx-4"  href="{% url 'password_reset' %}">Forget Password?</a>
+                        <div class="field" style="text-align: center; font-size: large;">
+                            <a href="{% url 'password_reset' %}">نسيت كلمة السر؟</a> 
                         </div>
-                    </form>
+          
+                        <div class="field" style="text-align: center; font-size: large;">
+                            ليس لديك حساب؟ 
+                            <a href="{% url 'user-register' %}">انشاء حساب</a> 
+                        </div>
+
+                      </form>
 
                 </div>
             </div>
         </div>
     </div>
+
 {% endblock content %}
 
 
@@ -50,4 +71,8 @@
 
 
     
+
+
+
+
 

@@ -1,17 +1,87 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from . import models
 from core.models import PhoneNumber, Phones
 
 
 
+
+
+
+class UserLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
+
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "input",
+        "type": "text",
+        "placeholder": "Enter your username",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
+    password = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "input",
+        "type": "password",
+        "placeholder": "Enter your password",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
+
+
+
+# class CreateUserForm(UserCreationForm):
+#     email = forms.EmailField()
+
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email', 'password1', 'password2']
+
+
+
+
+
+
+
 class CreateUserForm(UserCreationForm):
-    email = forms.EmailField()
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        "class" : "input",
+        "type" : "text",
+        "placeholder" : "Enter Your Username",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }), label="Username")
+
+
+    email = forms.CharField(widget=forms.TextInput(attrs={
+        "class" : "input",
+        "type" : "email",
+        "placeholder" : "Enter Your Email",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
+    password1 = forms.CharField(widget=forms.TextInput(attrs={
+        "class" : "input",
+        "type" : "password",
+        "placeholder" : "Enter a password",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
+
+    password2 = forms.CharField(widget=forms.TextInput(attrs={
+        "class" : "input",
+        "type" : "password",
+        "placeholder" : "Re-enter the password again",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
+
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+
+
 
 
 

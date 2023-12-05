@@ -3,27 +3,114 @@
 {% load bootstrap4 %}
 
 {% block content %}
-    <div class="container">
-        <div class="row mt-5">
-            <div class="col-md-6 offset-md-3">
-                <div class="border bg-white p-3">
-                    <h3 style="text-align: center;">تسجيل الدخول</h3>
-                    <hr>
-                    
-                    <form method="POST">
+
+
+
+
+
+        <div class="container">
+          <div class="row mt-5">
+              <div class="col-md-6 offset-md-3">
+                  <div class="border bg-white p-3">
+                      <h1 class="has-text-centered mb-5 is-size-3">انشاء حساب</h1>
+                      <hr>
+                      <form method="POST" action=".">
                         {% csrf_token %}
-                        {% bootstrap_form form %}
+                        <span class="badge badge-danger">{{ form.non_field_errors }}</span>
 
-
-                        <div class="register_button">
-                            <input type="submit" value="تسجيل">
+        
+                        <div class="field">
+                          <label for="" class="label">Username</label>
+                          <div class="control has-icons-left">
+                            {{ form.username }}
+                            <br>
+                            <span class="badge badge-danger">{{ form.username.errors }}</span>
+                            <span class="icon is-small is-left">
+                              <i class="fa fa-user"></i>
+                            </span>
+                          </div>
                         </div>
-
-                    </form>
-                </div>
-            </div>
+        
+                        <div class="field">
+                          <label for="" class="label">Email</label>
+                          <div class="control has-icons-left">
+                            {{ form.email }}
+                            <br>
+                            <span class="badge badge-danger">{{ form.email.errors }}</span>
+                            <span class="icon is-small is-left">
+                              <i class="fa fa-envelope"></i>
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div class="field">
+                          <label for="" class="label">Password</label>
+                          <div class="control has-icons-left">
+                            {{ form.password1 }}
+                            <br>
+                            <span class="badge badge-danger">{{ form.password1.errors }}</span>
+                            <span class="icon is-small is-left">
+                              <i class="fa fa-lock"></i>
+                            </span>
+                          </div>
+                        </div>
+        
+                        <div class="field">
+                          <label for="" class="label">Confirm password</label>
+                          <div class="control has-icons-left">
+                            {{ form.password2 }}
+                            <br>
+                            <span class="badge badge-danger">{{ form.password2.errors }}</span>
+                            <span class="icon is-small is-left">
+                              <i class="fa fa-lock"></i>
+                            </span>
+                          </div>
+                        </div>
+               
+                        <br>
+                        <div class="login_button field" style="font-size: larger;">
+                          <input type="submit" value="انشاء الحساب">
+                        </div>
+                        <div class="field" style="text-align: center; font-size: large;">
+                          لديك حساب؟
+                          <a href="{% url 'user-login' %}">تسجيل الدخول</a> 
+                        </div>
+        
+                      </form>
+                  </div>
+              </div>
+          </div>
         </div>
-    </div>
+
+
+
+      
 {% endblock content %}
     
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
