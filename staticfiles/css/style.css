@@ -570,10 +570,45 @@ button {
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 10px;
+  
 }
 
 
 .phone_edit_button a {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #db4f66;
+  color: #ffffff;
+  border: 1px solid #db4f66;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+}
+
+
+
+.phone_edit_button a:hover {
+  background-color: transparent;
+  color: #db4f66;
+}
+
+
+
+
+
+.password_change_button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 10px;
+}
+
+
+.password_change_button a {
   display: inline-block;
   padding: 7px 30px;
   background-color: #db4f66;
@@ -587,10 +622,11 @@ button {
 
 
 
-.phone_edit_button a:hover {
+.password_change_button a:hover {
   background-color: transparent;
   color: #db4f66;
 }
+
 
 
 

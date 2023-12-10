@@ -136,3 +136,18 @@ def remove_phone(request, phone):
 
 
 
+
+
+from django.contrib.auth.views import PasswordResetView
+from . import forms
+class CustomPasswordResetView(PasswordResetView):
+    form_class = forms.CustomPasswordResetForm
+    template_name = 'accounts/password_reset.html'  # Adjust the template name as needed
+    email_template_name = 'accounts/password_reset_done.html'  # Adjust the email template name as needed
+
+
+
+from django.contrib.auth.views import PasswordChangeView
+class CustomPasswordChangeView(PasswordChangeView):
+    form_class = forms.CustomPasswordChangeForm
+    template_name = 'accounts/password_change.html'  # Adjust the template name as needed 

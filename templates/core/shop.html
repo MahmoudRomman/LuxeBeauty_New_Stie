@@ -58,8 +58,8 @@
 
 
 
-                          <div class="btn_store_search col-12 col-sm-6">
-                              <input type="submit" value="بحث"  style="margin-right: 270%; height: 30pt; width: 30%; margin-top: -7.1%;">
+                          <div class="btn_store_search col-12 col-sm-2">
+                              <input type="submit" value="بحث">
                           </div>
 
                       </div>
@@ -117,12 +117,9 @@
             <td>{{item.price}}</td>
             <td>{{item.quantity}}</td>
             <td>
-                <a href="{% url 'add-to-cart' item.slug %}"> 
-                  <img width="30" height="30" src="https://img.icons8.com/external-vectorslab-outline-color-vectorslab/25/external-add-to-cart-shopping-and-ecommerce-vectorslab-outline-color-vectorslab.png" alt="external-add-to-cart-shopping-and-ecommerce-vectorslab-outline-color-vectorslab"/>
-                  <!-- <i class="fa-thin fa-cart-shopping" aria-hidden="true"></i> -->
-                  <!-- <i class="fa fa-sign-in" aria-hidden="true"></i> -->
-                  <!-- <i class="fas fa-shopping-cart" aria-hidden="true"></i> -->
-                                
+                <a href="{% url 'add-to-cart' item.slug %}" class="cart-link"> 
+                  <!-- <img width="30" height="30" src="https://img.icons8.com/external-vectorslab-outline-color-vectorslab/25/external-add-to-cart-shopping-and-ecommerce-vectorslab-outline-color-vectorslab.png" alt="external-add-to-cart-shopping-and-ecommerce-vectorslab-outline-color-vectorslab"/> -->
+                  <i class="fa fa-shopping-cart" style="font-size: xx-large;"></i>
                 </a>
 
               

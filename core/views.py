@@ -97,7 +97,7 @@ def home(request):
 
 def have_offer(request):
     limit = 0.00
-    items = models.Item.objects.filter(discount_price__gt =limit).values()
+    items = models.Item.objects.filter(discount_price__gt =limit)[:8]
     today_gift = models.Offer.objects.all().order_by('-date')[0:1]
 
     context = {

@@ -2,6 +2,7 @@ from django.urls import path, include
 from . import views as user_view
 from django.contrib.auth import views as auth_views
 from . import forms
+from . import views
 urlpatterns = [
       path('register/', user_view.register, name='user-register'),
       path('profile/', user_view.profile, name='user-profile'),
@@ -19,15 +20,24 @@ urlpatterns = [
       name='user-logout'),
 
 
-      # This view added newly to be edited later...
-      # To change your password...
-      path('password_change/', auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'), 
+      # To change your password using the ordinal way...
+      # path('password_change/', auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'), 
+      # name='password_change'),
+
+      # To change your password using the updated ChangePasswordForm in django auth
+      path('password_change/', views.CustomPasswordChangeView.as_view(template_name='accounts/password_change.html', form_class=forms.CustomPasswordChangeForm), 
       name='password_change'),
 
 
       # To reset your password if you forget...
-      path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html'),
+      # path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html', form_class=forms.ResetPasswordForm),
+      # name='password_reset'),
+
+
+      path('password_reset/', views.CustomPasswordResetView.as_view(template_name='accounts/password_reset.html', form_class=forms.CustomPasswordResetForm),
       name='password_reset'),
+
+
 
       path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'),
       name='password_reset_confirm'),

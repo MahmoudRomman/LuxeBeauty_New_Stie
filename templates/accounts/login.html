@@ -5,6 +5,17 @@
 
 
 
+
+
+  
+{% block auth_forms_content_style %}
+  
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+
+{% endblock auth_forms_content_style %}
+
+
 {% block content %}
     <div class="container">
         <div class="row mt-5">
@@ -12,27 +23,34 @@
                 <div class="border p-3 bg-white">
                     <h1 class="has-text-centered mb-5 is-size-3">تسجيل الدخول</h1>
                     <hr>
-                    <form method="POST" action=".">
+                    <form method="POST" action="." dir="rtl">
                         {% csrf_token %}
-                        <span class="badge badge-danger">{{ form.non_field_errors }}</span>
+
+                        <div style="text-align: center;">
+                          <span class="badge badge-danger">{{ form.non_field_errors }}</span>
+                        </div>
 
                         <div class="field">
-                          <label for="" class="label">Username</label>
-                          <div class="control has-icons-left">
+                          <label for="" class="label" style="text-align: right;">اسم المستخدم</label>
+                          <div class="control has-icons-right">
                             {{ form.username }}
-                            <span class="badge badge-danger">{{ form.username.errors }}</span>
-                            <span class="icon is-small is-left">
+                            <div style="text-align: center;">
+                              <span class="badge badge-danger">{{ form.username.errors }}</span>
+                            </div>
+                            <span class="icon is-small is-right">
                               <i class="fa fa-user"></i>
                             </span>
                           </div>
                         </div>
         
                         <div class="field">
-                          <label for="" class="label">Password</label>
-                          <div class="control has-icons-left">
+                          <label for="" class="label" style="text-align: right;">كلمة المرور</label>
+                          <div class="control has-icons-right">
                             {{ form.password }}
-                            <span class="badge badge-danger">{{ form.password.errors }}</span>
-                            <span class="icon is-small is-left">
+                            <div style="text-align: center;">
+                              <span class="badge badge-danger">{{ form.password.errors }}</span>
+                            </div>
+                            <span class="icon is-small is-right">
                               <i class="fa fa-lock"></i>
                             </span>
                           </div>

@@ -55,8 +55,8 @@
 
 
 
-                          <div class="btn_store_search col-12 col-sm-6">
-                              <input type="submit" value="بحث"  style="margin-right: 270%; height: 30pt; width: 30%; margin-top: -7.1%;">
+                          <div class="btn_store_search col-12 col-sm-2">
+                              <input type="submit" value="بحث">
                           </div>
 
                       </div>
@@ -113,13 +113,15 @@
                 <td>{{item.quantity}}</td>
                 <td>{{item.date|date}}</td>
                 <td>
-                      <a href="{% url 'edit_item_in_store' item.slug %}">  
-                        <img width="25" height="25" src="https://img.icons8.com/cotton/64/edit--v1.png" alt="edit--v1"/> 
+                      <a href="{% url 'edit_item_in_store' item.slug %}" class="edit_item_style">  
+                        <!-- <img width="25" height="25" src="https://img.icons8.com/cotton/64/edit--v1.png" alt="edit--v1"/>  -->
+                        <i class="fa fa-edit" style="font-size: xx-large;"></i>
                       </a>
                 </td>
                 <td>
-                    <a href="{% url 'delete_from_store' item.slug %}">
-                      <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/>
+                    <a href="{% url 'delete_from_store' item.slug %}" class="trash-icon-style">
+                      <!-- <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/> -->
+                      <i class="fa fa-trash" style="font-size: xx-large;"></i>
                     </a>
               </td>
               </tr>
