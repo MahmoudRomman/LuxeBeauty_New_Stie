@@ -1,6 +1,7 @@
 from collections.abc import Mapping
 from django import forms
 from . import models
+from . import views
 from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 from django_countries.fields import CountryField
@@ -135,6 +136,8 @@ class EditItemForm(forms.ModelForm):
         'class': 'form-control',
         'type' : 'radio',
         'placeholder': "اسم الباروكة",
+        'style': 'border-color:wightblack; border-radius: 10px;'
+
     }))
 
 
@@ -144,6 +147,8 @@ class EditItemForm(forms.ModelForm):
         'class': 'form-control',
         'type' : 'radio',
         'placeholder': "نوع الباروكة",
+        'style': 'border-color:wightblack; border-radius: 10px;'
+
     }))
 
 
@@ -154,6 +159,8 @@ class EditItemForm(forms.ModelForm):
         'class': 'form-control',
         'type' : 'radio',
         'placeholder': "طول الباروكة",
+        'style': 'border-color:wightblack; border-radius: 10px;'
+
     }))
 
 
@@ -165,6 +172,8 @@ class EditItemForm(forms.ModelForm):
         'class': 'form-control',
         'type' : 'radio',
         'placeholder': "نوع الفروة",
+        'style': 'border-color:wightblack; border-radius: 10px;'
+
     }))
 
 
@@ -175,6 +184,7 @@ class EditItemForm(forms.ModelForm):
         widget=forms.Select(attrs={
         'class': 'form-control',
         'type' : 'radio',
+        'style': 'border-color:wightblack; border-radius: 10px;'
 
     }))
 
@@ -186,6 +196,7 @@ class EditItemForm(forms.ModelForm):
         'class': 'form-control',
         'type' : 'radio',
         'label' : 'select one',
+        'style': 'border-color:wightblack; border-radius: 10px;'
         
     }))
 
@@ -197,6 +208,8 @@ class EditItemForm(forms.ModelForm):
         'placeholder': "ادخل السعر",
         'min' : '400',
         'max' : '7000',
+        'style': 'border-color:wightblack; border-radius: 10px;'
+
         }))
     
     discount_price = forms.FloatField(required=False, widget=forms.NumberInput(attrs={
@@ -204,6 +217,8 @@ class EditItemForm(forms.ModelForm):
         'type' : 'number',
         'placeholder': "ادخل سعر الخصم",
         'default' :  '0.00',
+        'style': 'border-color:wightblack; border-radius: 10px;'
+
         }))
     
 
@@ -211,6 +226,8 @@ class EditItemForm(forms.ModelForm):
         'class': 'form-control',
         'type' : 'number',
         'placeholder': "ادخل الكمية",
+        'style': 'border-color:wightblack; border-radius: 10px;'
+
         }))
     
 
@@ -298,9 +315,11 @@ class BillForm2(forms.ModelForm):
         self.fields["customer_name"].widget.attrs.update({
             'class': 'form-control',
             'size': "200",
-            'placeholder': "ادخل اسم العميل",
+            'placeholder': "ادخل اسم العميل ثلاثى",
             'style': 'border-color:wightblack; border-radius: 15px;',
         })
+
+
 
         
 
@@ -309,6 +328,8 @@ class BillForm2(forms.ModelForm):
         
              
         choices_list = []
+        choices_list.append(("ادخل رقم هاتف العمل الخاص بك", "ادخل رقم هاتف العمل الخاص بك"))
+
         for c in data:
             choices_list.append((str(c), str(c)))
 
@@ -318,15 +339,16 @@ class BillForm2(forms.ModelForm):
         self.fields["seller_phone_number"] = forms.ChoiceField(
             choices = choices_tuple,
             required = True,
+            # label = "SDFSDF",
+            help_text="SDFSDF",
             widget = forms.Select(attrs={
             'class': 'form-control',
             'type' : 'radio',
-            'label' : 'select one',
             'style': 'border-color:wightblack; border-radius: 15px;',            
         }))
 
 
-
+    
     class Meta:
          model = models.Bill2
          fields = ['seller', 'country', 'address', 'customer_phone', 'customer_name', 'seller_phone_number']
@@ -481,7 +503,7 @@ class OnlineOrder(forms.ModelForm):
         self.fields["customer_name"].widget.attrs.update({
             'class': 'form-control',
             'size': "200",
-            'placeholder': "ادخل اسم العميل",
+            'placeholder': "ادخل اسم العميل ثلاثى",
             'style': 'border-color:wightblack; border-radius: 15px;',
         })
 
@@ -492,6 +514,8 @@ class OnlineOrder(forms.ModelForm):
         
              
         choices_list = []
+        choices_list.append(("ادخل رقم هاتف العمل الخاص بك", "ادخل رقم هاتف العمل الخاص بك"))
+
         for c in data:
             choices_list.append((str(c), str(c)))
 
@@ -615,6 +639,16 @@ class OnlineOrder(forms.ModelForm):
 
 
 
+
+class LinkValueFilterForm(forms.Form):
+    value = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+        'class': 'form-control',
+        'type' : 'number',
+        'placeholder': "ادخل قيمة الرابط",
+        'min' : '10',
+        'max' : '7000',
+        'style': 'border-color:wightblack; border-radius: 10px;'
+        }))
 
 
 

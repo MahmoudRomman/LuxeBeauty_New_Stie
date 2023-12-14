@@ -93,6 +93,14 @@ def home(request):
 
 
 
+def item_detail(request, slug):
+    item = models.Item.objects.get(slug = slug)
+
+    context = {
+        'item' : item,
+    }
+    return render(request, 'core/item_detail.html', context)
+
 
 
 def have_offer(request):
@@ -584,20 +592,38 @@ class bill2(CreateView, LoginRequiredMixin):
         customer_phone = form.cleaned_data.get("customer_phone")
         customer_name = form.cleaned_data.get("customer_name")
 
+
+        check_customer_name = str(customer_name).split()
+
+        if len(check_customer_name) <= 2:
+            messages.warning(self.request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
+            return redirect("bill2")
+        
         
 
+        # if 'customer_name' in form.errors:
+        #     form.errors['customer_name'] = []
+
+        
+
+        if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
+            messages.warning(self.request, ".عفواً, يجب اختيار رقم العمل الخاص بك")
+            return redirect("bill2")
+        
         phone = models.PhoneNumber.objects.get(phone = str(seller_phone_number))
-        account = models.Account.objects.get(phone_number = phone)
+        # account = models.Account.objects.get(phone_number = phone)
 
 
-        account_qs = models.Account.objects.filter(phone_number = phone)
-        # bill_info = []
+        # account_qs = models.Account.objects.filter(phone_number = phone)
+        # # bill_info = []
         bill_info = {}
 
 
 
 
-        if account_qs.exists():
+        try:
+            account = models.Account.objects.get(phone_number = phone)
+
             form.instance.seller = self.request.user
             form.instance.account_name = account.account_name
 
@@ -730,8 +756,8 @@ class bill2(CreateView, LoginRequiredMixin):
 
             messages.success(self.request, ".تم حفظ الفاتورة بنجاح")
             return super(bill2,self).form_valid(form)
-        else:
-            messages.warning(self.request, ".عفواً, لا يوجد مُسوق للرقم الذى قٌمت باختياره")
+        except ObjectDoesNotExist:
+            messages.warning(self.request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
             return redirect("bill2")
 
 
@@ -794,11 +820,19 @@ def show_bills(request):
 @login_required(login_url='user-login')
 def banks(request):
 
-    links_data = models.AddLink.objects.all()
+    if request.method == "POST":
+        form = forms.LinkValueFilterForm(request.POST)
+        value = request.POST.get("value")
+
+        links_data = models.AddLink.objects.filter(amount = value)
+    else:
+        form = forms.LinkValueFilterForm()
+        links_data = models.AddLink.objects.all()
 
 
     context = {
         'links_data' : links_data,
+        'form' : form,
     }
     return render(request, 'core/banks.html', context)
 
@@ -1002,24 +1036,6 @@ def delete_penality(request, slug):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def show_all_rewards(request):
     rewards = models.Reward.objects.all().order_by('-date')
 
@@ -1095,6 +1111,11 @@ class OnlineOrder(CreateView, LoginRequiredMixin):
         return kwargs
 
 
+
+
+
+
+
     def form_valid(self, form):
         country = form.cleaned_data.get("country")
         address = form.cleaned_data.get("address")
@@ -1112,24 +1133,36 @@ class OnlineOrder(CreateView, LoginRequiredMixin):
         price = form.cleaned_data.get("price")
         pieces_num = form.cleaned_data.get("pieces_num")
 
+        check_customer_name = str(customer_name).split()
+
+        if len(check_customer_name) <= 2:
+            messages.warning(self.request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
+            return redirect("online_order")
+
         
-
+        if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
+            messages.warning(self.request, ".عفواً, يجب اختيار رقم العمل الخاص بك")
+            return redirect("online_order")
+        
         phone = models.PhoneNumber.objects.get(phone = str(seller_phone_number))
-        account = models.Account.objects.get(phone_number = phone)
+        # account = models.Account.objects.get(phone_number = phone)
 
 
-        account_qs = models.Account.objects.filter(phone_number = phone)
-        # bill_info = []
+        # account_qs = models.Account.objects.filter(phone_number = phone)
+        # # bill_info = []
         bill_info = {}
 
 
 
         if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
             messages.warning(self.request, ".عفواً ,لديك بعض المُدخلات الخاطئة, أعد مرة أخرى")
-            # return to the same page ---> online_order page to make the bill again...
+            # return to the same page ---> online_order page to make the online_bill again...
             return redirect("online_order")
         else:
-            if account_qs.exists():
+            # if account_qs.exists():
+            try:
+                account = models.Account.objects.get(phone_number = phone)
+
                 form.instance.seller = self.request.user
                 form.instance.account_name = account.account_name
 
@@ -1181,7 +1214,48 @@ class OnlineOrder(CreateView, LoginRequiredMixin):
                 messages.success(self.request, ".تم حفظ الفاتورة بنجاح")
                 # return to the success page that exists in this view in the top...
                 return super(OnlineOrder, self).form_valid(form)
-            else:
-                messages.warning(self.request, ".عفواً, لا يوجد مُسوق للرقم الذى قٌمت باختياره")
+            # else:
+            except ObjectDoesNotExist:
+                messages.warning(self.request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
                 # return to the same page ---> online_order page to make the bill again...
                 return redirect("online_order")
+            
+    # def form_invalid(self, form):
+    #     response = super().form_invalid(form)
+    #     # Process invalid form data if needed
+
+    #     customer_name = form.cleaned_data.get("customer_name")
+    #     seller_phone_number = form.cleaned_data.get("seller_phone_number")
+
+
+    #     check_customer_name = str(customer_name).split()
+
+    #     if len(check_customer_name) <= 2:
+    #         messages.warning(self.request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
+    #         return redirect("online_order")
+
+        
+    #     if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
+    #         messages.warning(self.request, ".عفواً, يجب اختيار رقم العمل الخاص بك")
+    #         return redirect("online_order")
+        
+
+
+    #     # Clear errors for fields other than the one with an error
+    #     for field in form:
+    #         if field.name != form.errors.as_data().get(field.name, [None])[0].code:
+    #             form.errors[field.name] = []
+
+    #     return response
+            
+
+
+
+
+
+
+
+
+
+
+

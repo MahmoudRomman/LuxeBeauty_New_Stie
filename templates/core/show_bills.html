@@ -9,16 +9,13 @@
 {% block content %}
   
 
-
-
-  
-<div class="container-xxl py-5" >
-  <div class="container" >
-      <!-- <h1 class="text-center mb-4 wow fadeInUp" data-wow-delay="0.1s">اضافة منتج جديد الى المخزن</h1> -->
+ 
+<div class="container-xxl py-5">
+  <div class="container" style="max-width: 85%;">
       <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
           
-          <div class="tab-content" >
-              <div id="tab-1" class="tab-pane fade show p-0 active" style="margin-bottom: -38px; margin-right: -15%;">
+          <div class="tab-content">
+              <div id="tab-1" class="tab-pane fade show p-0 active">
 
 
                   <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
@@ -30,10 +27,9 @@
                               </div>
                           </div>
 
-                          <div class="btn_store_search col-12 col-sm-6">
-                              <input type="submit" value="بحث" style="margin-right: -60%; height: 30pt; width: 30%; border-color:wightblack; border-radius: 10px; font-size: larger; text-align: center;" >
+                          <div class="btn_bill_search col-12 col-sm-2" style="font-size: large;">
+                              <input type="submit" value="بحث">
                           </div>
-                          
 
                       </div>
                   </form>
@@ -42,6 +38,10 @@
       </div>
   </div>
 </div>
+
+
+
+
 
 
 <h2 style="text-align: center;"> جميع الفواتير خلال هذا الشهر </h2>
@@ -89,7 +89,7 @@
             
           {% if data %}
               {% for bill in data %}
-              <tr style="font-size: large;">
+              <tr style="font-size: medium;">
                 <th scope="row" class="mt-1">{{forloop.counter}}</th>
                 <td>{{bill.seller}}</td>
                 <td>{{bill.seller_phone_number}}</td>
@@ -118,7 +118,7 @@
               {% endfor %}
           {% elif page_obj %}
               {% for bill in page_obj %}
-              <tr style="font-size: small;">
+              <tr style="font-size: medium;">
                 <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
                 <td>{{bill.seller}}</td>
                 <td>{{bill.seller_phone_number}}</td>

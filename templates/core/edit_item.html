@@ -20,60 +20,79 @@
                     <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
                         {% csrf_token %}
                         <div class="row g-3">
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6" style="text-align: right;">
+                                <label style="font-size: large;">اسم الباروكة:</label>
+
                                 <div class="form-group">
                                     {{form.name}}
                                 </div>
                             </div>
 
-                            <div class="col-12 col-sm-6">
+
+                            <div class="col-12 col-sm-6" style="text-align: right;">
+                                <label style="font-size: large;">نوع الباروكة:</label>
+
                                 <div class="form-group">
                                     {{form.wig_type}}
                                 </div>
                             </div>
 
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6" style="text-align: right;">
+                                <label style="font-size: large;">طول الباروكة:</label>
+
                                 <div class="form-group">
                                     {{form.wig_long}} 
                                 </div>
                             </div>
 
 
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6" style="text-align: right;">
+                                <label style="font-size: large;">نوع الفروة:</label>
+
                                 <div class="form-group">
                                     {{form.scalp_type}}
                                 </div>
                             </div>
 
 
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6" style="text-align: right;">
+                                <label style="font-size: large;">لون الباروكة:</label>
+
                                 <div class="form-group">
                                     {{form.wig_color}}
                                 </div>
                             </div>
 
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6" style="text-align: right;">
+                                <label style="font-size: large;">كثافة الباروكة:</label>
+
                                 <div class="form-group">
                                     {{form.density}}
                                 </div>
                             </div>
 
 
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6" style="text-align: right;">
+                                <label style="font-size: large;">سعر الباروكة:</label>
+
                                 <div class="form-group">
                                     {{form.price}}
                                 </div>
                             </div>
 
 
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6" style="text-align: right;">
+                                <label style="font-size: large;">سعر الخصم على الباروكة:</label>
+
                                 <div class="form-group">
                                     {{form.discount_price}}
                                 </div>
                             </div>
 
 
-                            <div class="col-12 col-sm-12">
+                            <div class="col-12 col-sm-12" style="text-align: right;">
+                                <label style="font-size: large;">الكمية داخل المخزن:</label>
+
                                 <div class="form-group">
                                     {{form.quantity}}
                                 </div>

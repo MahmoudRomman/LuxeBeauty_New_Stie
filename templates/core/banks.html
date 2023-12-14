@@ -4,9 +4,44 @@
 
 {% block content %}
 
+
+
+
+ 
+<div class="container-xxl py-5">
+  <div class="container" style="max-width: 85%;">
+      <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+          
+          <div class="tab-content">
+              <div id="tab-1" class="tab-pane fade show p-0 active">
+
+
+                  <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
+                      {% csrf_token %}
+                      <div class="row g-3">
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.value}}
+                              </div>
+                          </div>
+
+                          <div class="btn_bill_search col-12 col-sm-2" style="font-size: large;">
+                              <input type="submit" value="بحث">
+                          </div>
+
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
   <!-- shop section -->
 
-  <section class="shop_section layout_padding">
+  <section class="shop_section layout_padding" style="margin-top: -5%;">
     <div class="container" style="max-width: 85%;">
       <div class="heading_container heading_center">
         <h2>
@@ -55,9 +90,10 @@
                     </td>
                     {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
                     <td>
-                      <a href="{% url 'delete_payment_link' link_data.slug_link %}">
-                        <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/>
-                      </a>
+                        <a href="{% url 'delete_payment_link' link_data.slug_link %}" class="trash-icon-style">
+                          <!-- <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/> -->
+                          <i class="fa fa-trash" style="font-size: xx-large;"></i>
+                        </a>
                     </td>             
                     {% endif %}
 
@@ -70,7 +106,7 @@
                 <tr>
                     <td colspan="6">
 
-                        <div class="btn">
+                        <div class="btn" style="font-size: large;">
                             <a href="{% url 'add_new_payment_link' %}">
                               اضافة المزيد من الروابط 
                             </a>
@@ -85,7 +121,7 @@
 
     
     {% if links_data %}
-        <div class="btn">
+        <div class="btn" style="font-size: large;">
             <a href="{% url 'add_new_payment_link' %}">
             اضافة المزيد من الروابط 
             </a>

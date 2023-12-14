@@ -1,21 +1,14 @@
 
-  <!-- info section -->
+<!-- info section -->
 
-  <section class="info_section  layout_padding2-top">
+<section class="info_section  layout_padding2-top">
     <div class="social_container">
       <div class="social_box">
-        <a href="">
-          <i class="fa fa-facebook" aria-hidden="true"></i>
-        </a>
-        <a href="">
-          <i class="fa fa-twitter" aria-hidden="true"></i>
-        </a>
-        <a href="">
-          <i class="fa fa-instagram" aria-hidden="true"></i>
-        </a>
-        <a href="">
-          <i class="fa fa-youtube" aria-hidden="true"></i>
-        </a>
+        <a href="#" target="_blank" class="social-icon"><i class="fa fa-facebook"></i></a>
+        <a href="#" target="_blank" class="social-icon"><i class="fa fa-twitter"></i></a>
+        <a href="#" target="_blank" class="social-icon"><i class="fa fa-instagram"></i></a>
+        <a href="#" target="_blank" class="social-icon"><i class="fa fa-linkedin"></i></a>
+        <a href="#" target="_blank" class="social-icon"><i class="fa fa-tiktok"></i></a>
       </div>
     </div>
     <div class="info_container">
@@ -73,6 +66,21 @@
         </div>
       </div>
     </div>
+
+
+    
+  {% if user.is_authenticated %}
+      <div class="social_container">
+        <h4 class="mb-2" style="text-align: center;">روابط الحسابات الخاصة بى</h4>
+        <div class="social_box">
+          <a href="#" target="_blank" class="social-icon"><i class="fa fa-instagram"></i></a>
+          <a href="#" target="_blank" class="social-icon"><i class="fa fa-tiktok"></i></a>
+        </div>
+      </div>
+  {% endif %}
+
+
+
     <!-- footer section -->
     <footer class=" footer_section">
       <div class="container">
@@ -84,4 +92,4 @@
     </footer>
     <!-- footer section -->
 
-  </section>
+</section>

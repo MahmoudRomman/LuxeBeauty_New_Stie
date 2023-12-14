@@ -521,6 +521,47 @@ button {
 
 
 
+
+
+
+
+
+
+.shop_section .show_all_products_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 45px;
+}
+
+
+.shop_section .show_all_products_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 20px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  font-size: larger;
+  width: 300px;
+  text-align: center;
+
+}
+
+
+
+.shop_section .show_all_products_btn a:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
+
+
+
 .profile_edit_button {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -733,6 +774,7 @@ button {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  
 }
 
 
@@ -742,10 +784,11 @@ button {
   background-color: #2471A3;
   color: #ffffff;
   border: 1px solid #2471A3;
-  border-radius: 5px;
+  border-radius: 20px;
   -webkit-transition: all .3s;
   transition: all .3s;
   font-size: large;
+  /* height: 50px; */
 
 }
 
@@ -989,6 +1032,43 @@ button {
 
 
 .btn_store_search input:hover {
+  background-color: transparent;
+  color: #27AE60;
+}
+
+
+
+
+
+
+
+.btn_bill_search {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+
+}
+
+
+.btn_bill_search input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #27AE60;
+  color: #ffffff;
+  border: 1px solid #27AE60;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  height: 40px;
+}
+
+
+
+.btn_bill_search input:hover {
   background-color: transparent;
   color: #27AE60;
 }
@@ -1981,3 +2061,4 @@ margin-top: 0px;
 .label {
   margin-top: 10px;  /* Set the margin according to your design */
 }
+

@@ -30,12 +30,12 @@ urlpatterns = [
 
 
       # To reset your password if you forget...
-      # path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html', form_class=forms.ResetPasswordForm),
-      # name='password_reset'),
-
-
       path('password_reset/', views.CustomPasswordResetView.as_view(template_name='accounts/password_reset.html', form_class=forms.CustomPasswordResetForm),
       name='password_reset'),
+
+
+      # path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html'),
+      # name='password_reset'),
 
 
 

@@ -40,13 +40,17 @@
 
               
               <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">الرئيسية <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{% url 'home' %}">
+                  <i class="fa fa-home"></i>
+                  الرئيسية
+                  <span class="sr-only">(current)</span></a>
               </li>
 
               
               {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'shop' %}">
+                  <i class="fa fa-shop"></i>
                   المتجر
                 </a>
               </li>
@@ -56,19 +60,68 @@
               {% if user.is_authenticated and user.is_staff and user.is_superuser %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'store' %}">
+                  <i class="fa fa-store"></i>
                   المخزن
                 </a>
               </li>
+              {% endif %}
 
+
+              {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'online_order' %}">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                      طلب اونلاين
+                    </a>
+                  </li>
+                                  
+                  <li class="nav-item dropdown" dir="ltr">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                      المدفوعات
+                      </a>
+
+                      <div class="dropdown-menu" style="text-align: right;">
+                            <a class="dropdown-item" href="#">الحسابات البنكية
+                              <i class="fa fa-bank"></i>
+                            </a>  
+
+                            <a class="dropdown-item" href="{% url 'banks_and_payments' %}">روابط الدفع
+                              <i class="fa fa-link"></i>
+                            </a>
+                      
+                      </div>
+                  </li>
+              {% elif user.is_authenticated %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'online_order' %}">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                      طلب اونلاين
+                    </a>
+                  </li>
+
+                  <li class="nav-item dropdown" dir="ltr">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                      المدفوعات
+                      </a>
+
+                      <div class="dropdown-menu" style="text-align: right;">
+                            <a class="dropdown-item" href="#">الحسابات البنكية</a>  
+
+                            <a class="dropdown-item" href="{% url 'banks_and_payments' %}">روابط الدفع
+                              <i class="fa fa-money-bill"></i>
+                              
+                            </a>
+                      
+                      </div>
+                  </li>
               {% endif %}
                 
 
               
               {% if user.is_authenticated %}
                 
-                  <li class="nav-item dropdown" dir="ltr" style="border-radius: 10px;">
+                  <li class="nav-item dropdown" dir="ltr">
 
-                
                       <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
                           {% if penality_count or reward_count or mybills_count %}
                               {% with result=penality_count|add:reward_count|add:mybills_count %}
@@ -79,30 +132,25 @@
                           المزيد
                       </a>
 
-
-
-
-
                       <div class="dropdown-menu" style="text-align: right;">
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
-                        <a class="dropdown-item" href="{% url 'online_order' %}">طلب اونلاين</a>
-                        <a class="dropdown-item" href="{% url 'chart_view' %}">
-                          {% if mybills_count > 0 %}
-                          <span class="badge badge-danger">{{mybills_count}}</span>
-                          {% endif %}
-                          فواتيرى
-                        </a>
-
-
+                            <a class="dropdown-item" href="{% url 'chart_view' %}">
+                              {% if mybills_count > 0 %}
+                              <span class="badge badge-danger">{{mybills_count}}</span>
+                              {% endif %}
+                              فواتيرى
+                              <i class="fa fa-money-bill"></i>
+                            </a>
                         {% else %}
-                        <a class="dropdown-item" href="{% url 'chart_view' %}">
+                            <a class="dropdown-item" href="{% url 'chart_view' %}">
 
-                          {% if mybills_count > 0 %}
-                          <span class="badge badge-danger">{{mybills_count}}</span>
-                          {% endif %}
-                          فواتيرى
-                        </a>
-                        <a class="dropdown-item" href="{% url 'online_order' %}">طلب اونلاين</a>
+                              {% if mybills_count > 0 %}
+                              <span class="badge badge-danger">{{mybills_count}}</span>
+                              {% endif %}
+                              فواتيرى
+                              <i class="fa fa-money-bill"></i>
+                            </a>
+                            <a class="dropdown-item" href="{% url 'online_order' %}">طلب اونلاين</a>
                         {% endif %}
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
@@ -111,7 +159,6 @@
                             <a class="dropdown-item" href="{% url 'show_all_rewards' %}">المكافأت</a>  
                         {% endif %}
 
-                        <a class="dropdown-item" href="{% url 'banks_and_payments' %}">البنوك والمدفوعات</a>
                         <div class="dropdown-divider"></div>
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
@@ -120,6 +167,7 @@
                                   <span class="badge badge-danger">{{penality_count}}</span>
                               {% endif %}
                               خصوماتى
+                              <i class="fa fa-ban"></i>
                             </a>  
 
                             <a class="dropdown-item" href="{% url 'my_rewards' %}">
@@ -127,6 +175,7 @@
                                   <span class="badge badge-danger">{{reward_count}}</span>
                               {% endif %}
                               مكافأتى
+                            <i class="fa fa-award"></i>
                             </a>  
                         {% else %}
                             <a class="dropdown-item" href="{% url 'my_penalities' %}">
@@ -134,6 +183,7 @@
                                   <span class="badge badge-danger">{{penality_count}}</span>
                               {% endif %}
                               خصوماتى
+                              <i class="fa fa-ban"></i>
                             </a>  
 
                             <a class="dropdown-item" href="{% url 'my_rewards' %}">
@@ -141,12 +191,19 @@
                                   <span class="badge badge-danger">{{reward_count}}</span>
                               {% endif %}
                               مكافأتى
+                            <i class="fa-solid fa-award"></i>
                             </a>  
                         {% endif %}
 
 
-                        <a class="dropdown-item" href="{% url 'user-profile' %}">صفحتى</a>
-                        <a class="dropdown-item" href="{% url 'user-logout' %}">تسجيل الخروج</a>
+                        <a class="dropdown-item" href="{% url 'user-profile' %}">   
+                          صفحتى
+                          <i class="fa-solid fa-user"></i>
+                        </a>
+
+                        <a class="dropdown-item" href="{% url 'user-logout' %}">تسجيل الخروج
+                          <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        </a>
                       </div>
                   </li>
               {% endif %}

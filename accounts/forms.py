@@ -189,26 +189,64 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 
 
-class CustomPasswordResetForm(PasswordResetForm):
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        UserModel = get_user_model()
+# class CustomPasswordResetForm(PasswordResetForm):
+#     def clean_email(self):
+#         email = self.cleaned_data.get('email')
+#         UserModel = get_user_model()
 
-        if not UserModel.objects.filter(email__iexact=email, is_active=True).exists():
-            raise forms.ValidationError("This email address is not associated with an active account. Please check the email address or register for a new account.")
+#         if not UserModel.objects.filter(email__iexact=email, is_active=True).exists():
+#             raise forms.ValidationError("This email address is not associated with an active account. Please check the email address or register for a new account.")
         
-        return email
+#         return email
     
 
 
 
 class UserUpdateForm(forms.ModelForm):
+    error_messages = {
+        'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
+        'username_taken': "اسم المستخدم هذا موجود بالفعل",
+        # Add other error messages as needed
+    }
+
+
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        "class" : "input",
+        "type" : "text",
+        "placeholder" : "ادخل اسم المستخدم",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }), label="Username")
+
+
+    email = forms.CharField(widget=forms.TextInput(attrs={
+        "class" : "input",
+        "type" : "email",
+        "placeholder" : "ادخل البريد الالكترونى",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
     class Meta:
         model = User
         fields = ['username', 'email']
 
 
 class ProfileUpdateForm(forms.ModelForm):
+
+    address = forms.CharField(widget=forms.TextInput(attrs={
+        "class" : "input",
+        "type" : "text",
+        "placeholder" : "ادخل العنوان الشخصى",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
+    phone = forms.CharField(widget=forms.TextInput(attrs={
+        "class" : "input",
+        "type" : "text",
+        "placeholder" : "ادخل رقم الهاتف الخاص بك",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
+
     class Meta:
         model = models.Profile
         fields = ['address', 'phone', 'image']

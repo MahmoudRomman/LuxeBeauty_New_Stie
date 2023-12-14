@@ -24,7 +24,7 @@
                     <div class="detail-box">
                       <h1>
                         أهلا بكم <br>
-                        LuxBeauty
+                        LuxeBeauty
                       </h1>
                       <p style="font-size:x-large">
                          هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
@@ -49,7 +49,7 @@
                     <div class="detail-box">
                       <h1>
                         أهلا بكم <br>
-                        LuxBeauty
+                        LuxeBeauty
                       </h1>
                       <p style="font-size:x-large">
                          هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
@@ -74,7 +74,7 @@
                     <div class="detail-box">
                       <h1>
                         أهلا بكم <br>
-                        LuxBeauty
+                        LuxeBeauty
                       </h1>
                       <p style="font-size:x-large">
                          هنا يمكنك الاطلاع على جميع المنتجات والمنتجات المتوفرة وحالة المخزن وعمل فاتورة بالاضافة الى معرفة الاحصائيات الخاصه بحالة البيع لديك, أهلا بك
@@ -152,14 +152,20 @@
 
       <div class="row">
 
-      
+        <!-- padding: 20px;
+        
+         -->
+
+
+
         {% for item in items.all %}
             <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-              <div class="box">
+              <div class="box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
                 
                   <div class="img-box">
-                    <!-- <img src="{% static 'images/wig2.jpeg' %}" alt=""> -->
-                    <img src="{{item.image.url}}" alt="">
+                    <a href="{% url 'item_detail' item.slug %}">
+                      <img src="{{item.image.url}}" alt="">
+                    </a>
                   </div>
 
                   <div style="text-align: center;">
@@ -181,7 +187,16 @@
 
                   <div class="add_to_cart_per_product">
                     <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
-                  </div>
+                  </div> 
+
+
+
+                  <!-- <hr>
+                  <div class="link-container">
+                    <a href="" class="social-icon"><i class="fa fa-eye product-icon"></i></a>
+                    <a href="{% url 'add-to-cart' item.slug %}" class="social-icon"><i class="fa fa-shopping-cart"></i></a>
+                  </div> -->
+
 
 
                   
@@ -214,7 +229,7 @@
 
       </div>
 
-      <div class="btn-box">
+      <div class="show_all_products_btn">
         <a href="{% url 'shop' %}">
           عرض جميع المنتجات 
         </a>
@@ -274,9 +289,45 @@
               </div>
             </div>
 
+
+            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px; ">
+              <div class="box" style="border-radius: 10px;">
+                  <div style="text-align: center; margin-top: 15px;">
+                    <img src="{% static 'images/paytab.png' %}" style="height:90px; text-align: center;">
+                  </div>
+              </div>
+            </div>
     </div>
   </div>
-  </section>
+  </section> 
+
+
+
+<style>
+  .link-container {
+      display: flex;
+      justify-content: space-between;
+  }
+
+  .link-container a {
+    margin: 0 50px; 
+    color: #ffffff;
+    font-size: 50px;
+  }
+
+
+.link-container a:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
+
+
+</style>
+
+
+
+
+
 
 
 {% endblock content %}

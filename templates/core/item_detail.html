@@ -1,0 +1,144 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+
+
+
+
+
+{% block content %}
+
+<div class="product-container">
+
+    <div class="img-box">
+        <img src="{{item.image.url}}" alt="">
+        <!-- <img class="product-image" src="product-image.jpg" alt="صورة المنتج"> -->
+    </div>
+
+    <div class="product-details">
+        <div style="text-align: center;">
+            <p class="lead">
+                <span style="text-align: center;">السعر:</span>
+
+                {% if item.discount_price %}
+                    <span class="mr-1"> <del>${{ item.price }}</del> </span>
+                    <span>${{ item.price|sub:item.discount_price }}</span>                        
+                {% else %}
+                    <span>${{item.price}} </span>
+                {% endif %}
+    
+            </p>
+        </div>
+    
+        <div style="text-align: center; font-size: larger;">
+            <p>{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}}</p>
+            <p>فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
+        </div>
+
+        
+        {% if user.is_authenticated %}
+            <div class="add_to_cart_per_product">
+                <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
+            </div>
+        {% endif %}
+
+    </div> 
+</div>
+
+
+
+
+
+
+<style>
+    .product-container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+        margin-top: 80px;
+        margin-bottom: 80px;
+    }
+
+
+    .product-container .img-box {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
+        padding: 15px 30px;
+        height: 245px;
+        }
+
+    .product-container .img-box img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+
+
+    .product-details {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .product-details h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .product-details p {
+        color: #555;
+    }
+
+    
+
+
+
+.product-container .add_to_cart_per_product {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  
+}
+
+
+.product-container .add_to_cart_per_product a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 20px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  font-size: large;
+  /* height: 50px; */
+
+}
+
+
+
+.product-container .add_to_cart_per_product a:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
+
+
+</style>
+
+
+{% endblock content %}
+    
