@@ -2,7 +2,8 @@ from django.urls import path, include
 from . import views as user_view
 from django.contrib.auth import views as auth_views
 from . import forms
-from . import views
+
+
 urlpatterns = [
       path('register/', user_view.register, name='user-register'),
       path('profile/', user_view.profile, name='user-profile'),
@@ -25,12 +26,15 @@ urlpatterns = [
       # name='password_change'),
 
       # To change your password using the updated ChangePasswordForm in django auth
-      path('password_change/', views.CustomPasswordChangeView.as_view(template_name='accounts/password_change.html', form_class=forms.CustomPasswordChangeForm), 
+      path('password_change/', user_view.CustomPasswordChangeView.as_view(template_name='accounts/password_change.html'), 
       name='password_change'),
 
 
+      path('password_change_complete/', user_view.password_change_complete, name='password_change_complete'),
+
+
       # To reset your password if you forget...
-      path('password_reset/', views.CustomPasswordResetView.as_view(template_name='accounts/password_reset.html', form_class=forms.CustomPasswordResetForm),
+      path('password_reset/', user_view.CustomPasswordResetView.as_view(template_name='accounts/password_reset.html', form_class=forms.CustomPasswordResetForm),
       name='password_reset'),
 
 

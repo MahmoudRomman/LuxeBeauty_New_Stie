@@ -26,8 +26,8 @@ class Profile(models.Model):
     image = models.ImageField(default='avatar.png', upload_to='profile_images', null=True)
     # phones = field_one = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
 
-    class Meta:
-        verbose_name_plural = 'Profile'
+    # class Meta:
+    #     verbose_name_plural = 'Profile'
 
-    def __str__(self):
-        return f'{self.staff.username} profile'
+    # def __str__(self):
+    #     return f'{self.staff.username} profile'

@@ -53,13 +53,24 @@ def profile_update(request):
         user_form = forms.UserUpdateForm(request.POST, instance=request.user)
         profile_form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
+        if profile_form.is_valid():
+            image = profile_form.cleaned_data.get('image')
+            profile = models.Profile.objects.get(staff=request.user)
+            profile.image = image
+            profile.save()
+
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             return redirect('user-profile')
+
+
+
+        
     else:
         user_form = forms.UserUpdateForm(instance=request.user)
         profile_form = forms.ProfileUpdateForm(instance=request.user.profile)
+
 
     context = {
         'user_form': user_form,
@@ -138,6 +149,10 @@ def remove_phone(request, phone):
 
 
 
+
+
+
+
 from django.contrib.auth.views import PasswordResetView
 from . import forms
 class CustomPasswordResetView(PasswordResetView):
@@ -147,7 +162,33 @@ class CustomPasswordResetView(PasswordResetView):
 
 
 
+
+
+
+
+
+
+from django.contrib.auth import logout
 from django.contrib.auth.views import PasswordChangeView
-class CustomPasswordChangeView(PasswordChangeView):
+from django.urls import reverse_lazy
+
+
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+class LoginRequiredMixin(object):
+    def as_view(cls):
+        return login_required(super(LoginRequiredMixin, cls).as_view())
+    
+
+class CustomPasswordChangeView(PasswordChangeView, LoginRequiredMixin):
     form_class = forms.CustomPasswordChangeForm
-    template_name = 'accounts/password_change.html'  # Adjust the template name as needed 
+    success_url = reverse_lazy('user-logout')
+
+ 
+    
+@login_required(login_url='user-login')
+def password_change_complete(request):
+    return render(request, 'accounts/password_change_complete.html')
+
+
+    

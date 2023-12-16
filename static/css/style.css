@@ -577,9 +577,9 @@ button {
 .profile_edit_button a {
   display: inline-block;
   padding: 7px 30px;
-  background-color: #db4f66;
+  background-color: #2471A3;
   color: #ffffff;
-  border: 1px solid #db4f66;
+  border: 1px solid #2471A3;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
@@ -590,7 +590,51 @@ button {
 
 .profile_edit_button a:hover {
   background-color: transparent;
-  color: #db4f66;
+  color: #2471A3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.password_change_button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+
+}
+
+
+.password_change_button a {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 250px;
+
+}
+
+
+
+.password_change_button a:hover {
+  background-color: transparent;
+  color: #2471A3;
 }
 
 
@@ -611,26 +655,27 @@ button {
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 10px;
+  text-align: center;
 }
 
 
 .phone_edit_button a {
   display: inline-block;
   padding: 7px 30px;
-  background-color: #db4f66;
+  background-color: #2471A3;
   color: #ffffff;
-  border: 1px solid #db4f66;
+  border: 1px solid #2471A3;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
-
+  width: 250px;
 }
 
 
 
 .phone_edit_button a:hover {
   background-color: transparent;
-  color: #db4f66;
+  color: #2471A3;
 }
 
 
@@ -666,6 +711,47 @@ button {
   color: #2471A3;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+.profile_update_save_changes{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+}
+
+
+.profile_update_save_changes input {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+
+}
+
+
+
+.profile_update_save_changes input:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
 
 
 .login_again_button{
@@ -1474,6 +1560,79 @@ margin-top: 0px;
 
 
 
+
+
+
+
+
+.save_changes_of_phone_update {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+
+.save_changes_of_phone_update input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #468B97;
+  color: #ffffff;
+  border: 1px solid #468B97;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.save_changes_of_phone_update input:hover {
+  background-color: transparent;
+  color: #468B97;
+}
+
+
+
+
+
+.back_to_profile_update {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin-top: 0px;
+text-align: center;
+
+}
+
+
+.back_to_profile_update a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.back_to_profile_update a:hover {
+  background-color: transparent;
+  color: #f16179;
+}
 
 
 

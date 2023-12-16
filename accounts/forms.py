@@ -154,39 +154,110 @@ class CustomPasswordResetForm(PasswordResetForm):
 
 
 class CustomPasswordChangeForm(PasswordChangeForm):
-    def __init__(self, *args, **kwargs):
-        super(CustomPasswordChangeForm, self).__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super(CustomPasswordChangeForm, self).__init__(*args, **kwargs)
 
-    error_messages = {
-        'password_incorrect': "كلمة السر القديمة الخاصة بك غير صحيحة",
-        'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
-        'password_too_short': "كلمة المرور الجديدة قصيرة للغاية",
-    }
+    # error_messages = {
+    #     'password_incorrect': "كلمة السر القديمة الخاصة بك غير صحيحة",
+    #     'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
+    #     'password_too_short': "كلمة المرور الجديدة قصيرة للغاية",
+    # }
+
+    # error_messages = {
+    #     'password_incorrect': 'كلمة السر القديمة الخاصة بك غير صحيحة',
+    # }
     
 
-    password = forms.CharField(widget=forms.TextInput(attrs={
-        "class" : "input",
-        "type" : "password",
-        "placeholder" : "ادخل كلمة السر الحالية",
-        'style': 'border-color:wightblack; border-radius: 10px;',
-    }))
+
+    # old_password = forms.CharField(widget=forms.TextInput(attrs={
+    #     "class" : "input",
+    #     "type" : "password",
+    #     "placeholder" : "ادخل كلمة السر الحالية",
+    #     'style': 'border-color:wightblack; border-radius: 10px;',
+    # }),
+    # error_messages={
+    # 'required': 'من فضلك أدخل كلمة الشر الحالية الخاصه بك',
+    # }
+    # )
 
 
-    password1 = forms.CharField(widget=forms.TextInput(attrs={
-        "class" : "input",
-        "type" : "password",
-        "placeholder" : "ادخل كلمة السر الجديدة",
-        'style': 'border-color:wightblack; border-radius: 10px;',
-    }))
+    # new_password1 = forms.CharField(widget=forms.TextInput(attrs={
+    #     "class" : "input",
+    #     "type" : "password",
+    #     "placeholder" : "ادخل كلمة السر الجديدة",
+    #     'style': 'border-color:wightblack; border-radius: 10px;',
+    # }),
+    # error_messages={
+    # 'required': 'من فضلك أدخل كلمة مرور جديدة',
+    # 'password_too_short': 'تأكد من كلمة الشر الخاصة بك لا تقل عن 8 أحرف',
+    # 'password_common': 'اختر كلمة سر أقل انتشارا غير هذه',
+
+    # }
+    # )
 
 
-    password2 = forms.CharField(widget=forms.TextInput(attrs={
-        "class" : "input",
-        "type" : "password",
-        "placeholder" : "أعد ادخال كلمة السر الجديدة مرة أخرى",
-        'style': 'border-color:wightblack; border-radius: 10px;',
-    }))
+    # new_password2 = forms.CharField(widget=forms.TextInput(attrs={
+    #     "class" : "input",
+    #     "type" : "password",
+    #     "placeholder" : "أعد ادخال كلمة السر الجديدة مرة أخرى",
+    #     'style': 'border-color:wightblack; border-radius: 10px;',
+    # },),
+    # error_messages={
+    # 'required': 'من فضلك أعد أدخال كلمة السر الجديدة مرة أخرى',
+    # 'password_mismatch': 'كلمتى المرور التى قمت بادخالهما غير متشابهين',
 
+    # }
+    # )
+
+
+    old_password = forms.CharField(
+        label="Current Password",
+        widget=forms.PasswordInput(attrs={
+            "class" : "input",
+            "type" : "password",
+            "placeholder" : "ادخل كلمة السر الحالية",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+            }),
+        error_messages={
+            'required': 'من فضلك أدخل كلمة الشر الحالية الخاصه بك',
+        }
+        )
+    
+    new_password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={
+            "class" : "input",
+            "type" : "password",
+            "placeholder" : "ادخل كلمة السر الجديدة",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+            }),
+        error_messages={
+            'required': 'من فضلك أدخل كلمة مرور جديدة',
+            'password_too_short': 'تأكد من كلمة الشر الخاصة بك لا تقل عن 8 أحرف',
+            'password_common': 'اختر كلمة سر أقل انتشارا غير هذه',
+        }
+        )
+
+    new_password2 = forms.CharField(
+        label="Confirm New Password",
+        widget=forms.PasswordInput(attrs={
+            "class" : "input",
+            "type" : "password",
+            "placeholder" : "أعد ادخال كلمة السر الجديدة مرة أخرى",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+            }),
+        error_messages={
+            'required': 'من فضلك أعد أدخال كلمة السر الجديدة مرة أخرى',
+            'password_mismatch': 'كلمتى المرور التى قمت بادخالهما غير متشابهين',
+        }
+        )
+
+
+
+
+    class Meta:
+        model = User
+        fields = ("old_password", "new_password1", "new_password2")
 
 
 # class CustomPasswordResetForm(PasswordResetForm):
@@ -247,9 +318,23 @@ class ProfileUpdateForm(forms.ModelForm):
     }))
 
 
+
+    image = forms.ImageField(widget=forms.FileInput(attrs={
+        "class" : "input",
+        "type" : "file",
+        'style': 'display: none;',
+        'id' : 'image-input',
+        'name' : 'profile_image',
+        'accept' : 'image/*',
+    }))
+
+
+ 
+
     class Meta:
         model = models.Profile
         fields = ['address', 'phone', 'image']
+
 
 
 
@@ -302,26 +387,26 @@ class PhoneUpdate(forms.Form):
 
 
 
-# forms.py
-from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+# # forms.py
+# from django import forms
+# from django.contrib.auth.forms import AuthenticationForm
 
-class BootstrapAuthenticationForm(AuthenticationForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Add Bootstrap classes to form fields
-        for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+# class BootstrapAuthenticationForm(AuthenticationForm):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         # Add Bootstrap classes to form fields
+#         for field in self.fields:
+#             self.fields[field].widget.attrs['class'] = 'form-control'
 
-    def clean(self):
-        # Call the parent class's clean method
-        cleaned_data = super().clean()
+#     def clean(self):
+#         # Call the parent class's clean method
+#         cleaned_data = super().clean()
 
-        # Add custom validation logic if needed
-        if 'username' in cleaned_data and 'password' in cleaned_data:
-            username = cleaned_data['username']
-            password = cleaned_data['password']
-            # Add custom validation here if needed
-            # For example, check if the username and password meet certain criteria
+#         # Add custom validation logic if needed
+#         if 'username' in cleaned_data and 'password' in cleaned_data:
+#             username = cleaned_data['username']
+#             password = cleaned_data['password']
+#             # Add custom validation here if needed
+#             # For example, check if the username and password meet certain criteria
 
-        return cleaned_data
+#         return cleaned_data

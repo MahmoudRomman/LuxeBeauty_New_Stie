@@ -1,9 +1,159 @@
 {% extends 'partials/base.html' %}
-{% block title %} Home Page {% endblock title %}
 {% load bootstrap4 %}
 
+
+
+
+
+{% block auth_forms_content_style %}
+  
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+
+{% endblock auth_forms_content_style %}
+
+
+
+
 {% block content %}
-<div class="container">
+
+
+
+<div class="container" style="margin-top: 60px;">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="border bg-white p-3">
+                <h1 class="has-text-centered mb-5 is-size-3" style="text-align: center;">اضافة رقم جديد</h1>
+                <hr>
+
+
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="h3" style="text-align: end;">الارقام المتاحة حالياً</p>
+                            <hr>
+                            <form method="POST" enctype="multipart/form-data" dir="rtl">
+                                {% csrf_token %}
+
+                                <div class="row" style="text-align: start;">
+                                    <div class="col-12">
+                                    {{phone_update_form.new_phone}}
+                                </div>
+                                </div>
+                                <div class="save_changes_of_phone_update mt-3">
+                                    {% if not_taken_phones %}
+                                    <input class="btn btn-info" type="submit" value="حفظ التغيرات" style="font-size:large;">
+                                    {% else %}
+                                    <p class="h5" style="text-align:center;">لا يوجد أى أرقام متاحة فى الوقت الحالى.</p>
+                                    {% endif %}
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="back_to_profile_update col-md-12">
+                    <a href="{% url 'user-profile' %}" style="font-size:large;">التراجع</a>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="container">
     <div class="row my-4">
         <div class="col-md-4">
         </div>
@@ -25,29 +175,27 @@
                                     {{phone_update_form.new_phone}}
                                 </div>
                                 </div>
-                                <div class="btn_save_link mt-3" style="font-size:large;">
-                                
-                                {% if not_taken_phones %}
-                                <input class="btn btn-info" type="submit" value="حفظ التغيرات" style="width: 250px; text-align: center; font-size:large;">
-                                {% else %}
-                                 <p class="h5" style="text-align:center;">لا يوجد أى أرقام متاحة فى الوقت الحالى.</p>
-                                {% endif %}
-                                    
-
+                                <div class="save_changes_of_phone_update mt-3">
+                                    {% if not_taken_phones %}
+                                    <input class="btn btn-info" type="submit" value="حفظ التغيرات" style="font-size:large;">
+                                    {% else %}
+                                    <p class="h5" style="text-align:center;">لا يوجد أى أرقام متاحة فى الوقت الحالى.</p>
+                                    {% endif %}
                                 </div>
+
                             </form>
                         </div>
                     </div>
                 </div>
 
-                <div class="btn_bill_complete col-md-12">
-                    <a href="{% url 'user-profile' %}" style="text-align: center; font-size:large; margin-bottom: 5px;">التراجع</a>
+                <div class="back_to_profile_update col-md-12">
+                    <a href="{% url 'user-profile' %}" style="font-size:large;">التراجع</a>
                 </div>
 
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 {% endblock content %}
     

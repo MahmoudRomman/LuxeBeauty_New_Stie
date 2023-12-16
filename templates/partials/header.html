@@ -122,10 +122,10 @@
                 
                   <li class="nav-item dropdown" dir="ltr">
 
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"> 
                           {% if penality_count or reward_count or mybills_count %}
                               {% with result=penality_count|add:reward_count|add:mybills_count %}
-                              <span class="badge badge-danger" style="font-size: small; border-radius: 100%;">{{result}}</span>
+                              <span class="badge badge-danger" style="font-size: small; border-radius: 100%; ">{{result}}</span>
                               {% endwith %}
                           {% endif %}
 

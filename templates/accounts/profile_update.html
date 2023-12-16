@@ -31,28 +31,28 @@
                     <div style="margin: auto;">
                         <img class="img-thumbnail" style="border-radius: 50%; height: 250px; width: 250px;" src="{{ user.profile.image.url }}"/>
                     </div>
-                    <i class="fa-regular fa-image mt-2" style="font-size: x-large;"></i>
-
                 </div>
 
 
-                <form method="POST" action="." dir="rtl">
+                <form method="POST" action="." dir="rtl" id="upload-form" enctype="multipart/form-data">
                   {% csrf_token %}
                   
                     <div style="text-align: center;">
                         <span class="badge badge-danger">{{ user_form.non_field_errors }}</span>
                     </div>
 
-  
+                    <div class="row" style="display: grid; place-items: center">
+                      <div style="margin: auto;">
 
-                    
+                            {{profile_form.image}}
 
+                            <label for="image-input">
+                              <i class="fas fa-plus"></i>
+                              <i class="fa-regular fa-image mt-2" style="font-size: x-large;"></i>
+                            </label> 
 
-                    
-
-
-
-
+                      </div>
+                    </div>  
 
                     <div class="field">
                         <label for="" class="label" style="text-align: right;">اسم المستخدم</label>
@@ -118,7 +118,7 @@
 
 
                   <br>
-                  <div class="login_button field" style="font-size: larger;">
+                  <div class="profile_update_save_changes field" style="font-size: larger;">
                     <input type="submit" value="حفظ التغيرات">
                   </div>
                 </form>
@@ -134,42 +134,26 @@
 
 
 
+<Script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Get the form, input, and plus icon elements
+    var uploadForm = document.getElementById('upload-form');
+    var imageInput = document.getElementById('image-input');
+    // var plusIcon = document.getElementById('plus-icon');
 
+    // Add an event listener to the plus icon
+    // plusIcon.addEventListener('click', function () {
+    //     // Trigger the click event of the hidden input element
+    //     imageInput.click();
+    // });
 
- 
-<!-- <div class="container">
-    <div class="row my-4">
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    Profile Page
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <span class="h4">ملعلومات الملف الشخصى</span>
-                            <hr>
-                            <form method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                {% bootstrap_form user_form %}
-                                {% bootstrap_form profile_form %}
-
-
-                                <div class="profile_edit_button">
-                                    <input class="btn btn-info" type="submit" value="Save Update">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> 
- -->
-
+    // Add an event listener to the input element for file selection
+    imageInput.addEventListener('change', function () {
+        // Submit the form after file selection
+        uploadForm.submit();
+    });
+});
+</Script>
 {% endblock content %}
     
 
