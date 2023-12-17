@@ -154,60 +154,13 @@ class CustomPasswordResetForm(PasswordResetForm):
 
 
 class CustomPasswordChangeForm(PasswordChangeForm):
-    # def __init__(self, *args, **kwargs):
-    #     super(CustomPasswordChangeForm, self).__init__(*args, **kwargs)
 
-    # error_messages = {
-    #     'password_incorrect': "كلمة السر القديمة الخاصة بك غير صحيحة",
-    #     'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
-    #     'password_too_short': "كلمة المرور الجديدة قصيرة للغاية",
-    # }
+    error_messages = {
+        'password_incorrect': "كلمة السر القديمة الخاصة بك غير صحيحة",
+        'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
+        'password_too_short': "كلمة المرور الجديدة قصيرة للغاية",
+    }
 
-    # error_messages = {
-    #     'password_incorrect': 'كلمة السر القديمة الخاصة بك غير صحيحة',
-    # }
-    
-
-
-    # old_password = forms.CharField(widget=forms.TextInput(attrs={
-    #     "class" : "input",
-    #     "type" : "password",
-    #     "placeholder" : "ادخل كلمة السر الحالية",
-    #     'style': 'border-color:wightblack; border-radius: 10px;',
-    # }),
-    # error_messages={
-    # 'required': 'من فضلك أدخل كلمة الشر الحالية الخاصه بك',
-    # }
-    # )
-
-
-    # new_password1 = forms.CharField(widget=forms.TextInput(attrs={
-    #     "class" : "input",
-    #     "type" : "password",
-    #     "placeholder" : "ادخل كلمة السر الجديدة",
-    #     'style': 'border-color:wightblack; border-radius: 10px;',
-    # }),
-    # error_messages={
-    # 'required': 'من فضلك أدخل كلمة مرور جديدة',
-    # 'password_too_short': 'تأكد من كلمة الشر الخاصة بك لا تقل عن 8 أحرف',
-    # 'password_common': 'اختر كلمة سر أقل انتشارا غير هذه',
-
-    # }
-    # )
-
-
-    # new_password2 = forms.CharField(widget=forms.TextInput(attrs={
-    #     "class" : "input",
-    #     "type" : "password",
-    #     "placeholder" : "أعد ادخال كلمة السر الجديدة مرة أخرى",
-    #     'style': 'border-color:wightblack; border-radius: 10px;',
-    # },),
-    # error_messages={
-    # 'required': 'من فضلك أعد أدخال كلمة السر الجديدة مرة أخرى',
-    # 'password_mismatch': 'كلمتى المرور التى قمت بادخالهما غير متشابهين',
-
-    # }
-    # )
 
 
     old_password = forms.CharField(
@@ -217,11 +170,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             "type" : "password",
             "placeholder" : "ادخل كلمة السر الحالية",
             'style': 'border-color:wightblack; border-radius: 10px;',
-            }),
-        error_messages={
-            'required': 'من فضلك أدخل كلمة الشر الحالية الخاصه بك',
-        }
-        )
+            }))
     
     new_password1 = forms.CharField(
         label="New Password",
@@ -230,13 +179,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             "type" : "password",
             "placeholder" : "ادخل كلمة السر الجديدة",
             'style': 'border-color:wightblack; border-radius: 10px;',
-            }),
-        error_messages={
-            'required': 'من فضلك أدخل كلمة مرور جديدة',
-            'password_too_short': 'تأكد من كلمة الشر الخاصة بك لا تقل عن 8 أحرف',
-            'password_common': 'اختر كلمة سر أقل انتشارا غير هذه',
-        }
-        )
+            }))
 
     new_password2 = forms.CharField(
         label="Confirm New Password",
@@ -245,12 +188,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             "type" : "password",
             "placeholder" : "أعد ادخال كلمة السر الجديدة مرة أخرى",
             'style': 'border-color:wightblack; border-radius: 10px;',
-            }),
-        error_messages={
-            'required': 'من فضلك أعد أدخال كلمة السر الجديدة مرة أخرى',
-            'password_mismatch': 'كلمتى المرور التى قمت بادخالهما غير متشابهين',
-        }
-        )
+            }))
 
 
 

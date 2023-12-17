@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 class ItemForm(forms.Form):
@@ -323,17 +325,19 @@ class BillForm2(forms.ModelForm):
 
         
 
+        if self.request.user.is_authenticated:
+            data = models.PhoneNumber.objects.filter(user=self.request.user)
+            
+                
+            choices_list = []
+            choices_list.append(("ادخل رقم هاتف العمل الخاص بك", "ادخل رقم هاتف العمل الخاص بك"))
 
-        data = models.PhoneNumber.objects.filter(user=self.request.user)
-        
-             
-        choices_list = []
-        choices_list.append(("ادخل رقم هاتف العمل الخاص بك", "ادخل رقم هاتف العمل الخاص بك"))
+            for c in data:
+                choices_list.append((str(c), str(c)))
 
-        for c in data:
-            choices_list.append((str(c), str(c)))
-
-        choices_tuple = tuple(choices_list)
+            choices_tuple = tuple(choices_list)
+        else:
+            choices_tuple = {}
 
              
         self.fields["seller_phone_number"] = forms.ChoiceField(
@@ -510,16 +514,22 @@ class OnlineOrder(forms.ModelForm):
         
 
 
-        data = models.PhoneNumber.objects.filter(user=self.request.user)
+        if self.request.user.is_authenticated:
         
-             
-        choices_list = []
-        choices_list.append(("ادخل رقم هاتف العمل الخاص بك", "ادخل رقم هاتف العمل الخاص بك"))
+            data = models.PhoneNumber.objects.filter(user=self.request.user)
+            
+                
+            choices_list = []
+            choices_list.append(("ادخل رقم هاتف العمل الخاص بك", "ادخل رقم هاتف العمل الخاص بك"))
 
-        for c in data:
-            choices_list.append((str(c), str(c)))
+            for c in data:
+                choices_list.append((str(c), str(c)))
 
-        choices_tuple = tuple(choices_list)
+            choices_tuple = tuple(choices_list)
+        else:
+            choices_tuple = {}
+
+
 
              
         self.fields["seller_phone_number"] = forms.ChoiceField(

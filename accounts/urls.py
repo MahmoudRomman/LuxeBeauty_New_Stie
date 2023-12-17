@@ -17,8 +17,15 @@ urlpatterns = [
       path('', auth_views.LoginView.as_view(template_name='accounts/login.html', 
       authentication_form=forms.UserLoginForm), name='user-login'),
 
-      path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'),
+      # path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'),
+      # name='user-logout'),
+
+
+      # here i use the custom logoutview which i inherit and override it from the logoutview in django auth
+      # and i make this to prevent the user to back and enter the content of the website after he logged out
+      path('logout/', user_view.CustomLogoutView.as_view(template_name='accounts/logout.html'),
       name='user-logout'),
+
 
 
       # To change your password using the ordinal way...

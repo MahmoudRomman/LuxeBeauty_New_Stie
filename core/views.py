@@ -1,6 +1,7 @@
 from typing import Any
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
 from django.core.mail import send_mail
 from django.template import context
@@ -553,16 +554,9 @@ def order_summary(request):
 
    
 
-from core.tasks import send_bill_mail
-from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
 
-class LoginRequiredMixin(object):
-    def as_view(cls):
-        return login_required(super(LoginRequiredMixin, cls).as_view())
-    
 
-class bill2(CreateView, LoginRequiredMixin):
+class bill2(LoginRequiredMixin, CreateView):
     model = models.Bill2
     form_class = forms.BillForm2
     template_name = 'core/bill.html'
@@ -972,7 +966,7 @@ def chart_view(request):
 
 
 
-
+@login_required(login_url='user-login')
 def show_all_penalities(request):
     penalities = models.Penality.objects.all().order_by('-date')
 
@@ -983,7 +977,7 @@ def show_all_penalities(request):
 
 
 
-
+@login_required(login_url='user-login')
 def penality(request):
     form = forms.PenalityForm()
 
@@ -1013,6 +1007,7 @@ def penality(request):
     return render(request, 'core/add_penality.html', context)
 
 
+@login_required(login_url='user-login')
 def user_penality(request):
     my_penalities = models.Penality.objects.filter(name=request.user).order_by('-date')
 
@@ -1024,7 +1019,7 @@ def user_penality(request):
     return render(request, 'core/user_penality.html', context)
 
 
-
+@login_required(login_url='user-login')
 def delete_penality(request, slug):
     penality = models.Penality.objects.filter(slug_link=slug)
     penality.delete()
@@ -1035,7 +1030,7 @@ def delete_penality(request, slug):
 
 
 
-
+@login_required(login_url='user-login')
 def show_all_rewards(request):
     rewards = models.Reward.objects.all().order_by('-date')
 
@@ -1046,7 +1041,7 @@ def show_all_rewards(request):
 
 
 
-
+@login_required(login_url='user-login')
 def reward(request):
     form = forms.RewardForm()
 
@@ -1076,6 +1071,8 @@ def reward(request):
     return render(request, 'core/add_reward.html', context)
 
 
+
+@login_required(login_url='user-login')
 def user_reward(request):
     my_rewards = models.Reward.objects.filter(name=request.user).order_by('-date')
 
@@ -1088,6 +1085,8 @@ def user_reward(request):
 
 
 
+
+@login_required(login_url='user-login')
 def delete_reward(request, slug):
     reward = models.Reward.objects.filter(slug_link=slug)
     reward.delete()
@@ -1096,7 +1095,9 @@ def delete_reward(request, slug):
 
 
 
-class OnlineOrder(CreateView, LoginRequiredMixin):
+
+
+class OnlineOrder(LoginRequiredMixin, CreateView):
     model = models.Bill2
     form_class = forms.OnlineOrder
     template_name = 'core/online_order.html'

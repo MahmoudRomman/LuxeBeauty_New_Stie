@@ -1,12 +1,38 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.contrib.auth.models import User
 import importlib
 from . import forms
 from . import models
 from core.models import PhoneNumber
 from django.contrib import messages
+
+
+from django.views.decorators.cache import never_cache
+from django.views.decorators.clickjacking import xframe_options_deny
+from django.utils.decorators import method_decorator
+
+from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordChangeView
+from django.urls import reverse_lazy
+
+
+
+
 # Create your views here.
+
+
+@method_decorator(never_cache, name='dispatch')
+@method_decorator(xframe_options_deny, name='dispatch')
+class CustomLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response['Pragma'] = 'no-cache'
+        return response
+    
+
 
 
 
@@ -153,36 +179,31 @@ def remove_phone(request, phone):
 
 
 
-from django.contrib.auth.views import PasswordResetView
-from . import forms
+
 class CustomPasswordResetView(PasswordResetView):
     form_class = forms.CustomPasswordResetForm
-    template_name = 'accounts/password_reset.html'  # Adjust the template name as needed
-    email_template_name = 'accounts/password_reset_done.html'  # Adjust the email template name as needed
-
-
-
-
+    template_name = 'accounts/password_reset.html' 
+    email_template_name = 'accounts/password_reset_done.html'  
 
 
 
 
 
 from django.contrib.auth import logout
-from django.contrib.auth.views import PasswordChangeView
-from django.urls import reverse_lazy
+from django.shortcuts import redirect
 
-
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-class LoginRequiredMixin(object):
-    def as_view(cls):
-        return login_required(super(LoginRequiredMixin, cls).as_view())
-    
-
-class CustomPasswordChangeView(PasswordChangeView, LoginRequiredMixin):
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     form_class = forms.CustomPasswordChangeForm
     success_url = reverse_lazy('user-logout')
+    # success_url = '/password_change_complete/'
+
+
+    # def post_change_redirect(self, request, user):
+    #     # Log the user out to invalidate the session
+    #     logout(user)
+    #     return redirect(self.success_url)
+
+
 
  
     

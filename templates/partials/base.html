@@ -71,11 +71,15 @@
 
 
 
-  <script type="text/javascript">
+
+  <!-- The old way to prevent the user to enter the website again after he logged out  -->
+  <!-- I just use a new way to make this by override the LogoutView from the django auth views, you will find it in the views.py for the accounts app  -->
+
+  <!-- <script type="text/javascript">
     function btn(){window.history.replace('user-logout')};
     setTimeout("btn()", 0);
     window.onunload=function(){null}; 
-  </script>
+  </script> -->
 
 
 </head>
