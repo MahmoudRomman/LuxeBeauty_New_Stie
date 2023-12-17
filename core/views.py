@@ -224,6 +224,8 @@ def add_item(request):
             scalp_type = form.cleaned_data.get("scalp_type")
             wig_color = form.cleaned_data.get("wig_color")
             density = form.cleaned_data.get("density")
+            image = form.cleaned_data.get("image")
+
             price = form.cleaned_data.get("price")
             discount_price = form.cleaned_data.get("discount_price")
             quantity = form.cleaned_data.get("quantity")
@@ -246,6 +248,7 @@ def add_item(request):
                         scalp_type = scalp_type,
                         wig_color = wig_color,
                         density = density,
+                        image = image,
                         price = price,
                         discount_price = discount_price,
                         quantity = quantity,
@@ -273,7 +276,7 @@ def edit_item_in_store(request, slug):
     item = models.Item.objects.get(slug=slug)
 
     if request.method == "POST":
-        form = forms.EditItemForm(request.POST, instance=item)
+        form = forms.EditItemForm(request.POST, request.FILES, instance=item)
         if form.is_valid():
             name = form.cleaned_data.get("name")
             wig_type = form.cleaned_data.get("wig_type")
@@ -281,18 +284,43 @@ def edit_item_in_store(request, slug):
             scalp_type = form.cleaned_data.get("scalp_type")
             wig_color = form.cleaned_data.get("wig_color")
             density = form.cleaned_data.get("density")
+            image = form.cleaned_data.get("image")
             price = form.cleaned_data.get("price")
             discount_price = form.cleaned_data.get("discount_price")
             quantity = form.cleaned_data.get("quantity")
+
             if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
                  messages.warning(request, "هناك خطأ من فضلك راجع المدخلات مره أخرى")
             else:
-                models.Item.objects.filter(slug=slug).update(
-                    name = name, wig_type = wig_type,
-                    wig_long = wig_long, scalp_type = scalp_type,
-                    wig_color = wig_color, density = density,
-                    price=price, discount_price = discount_price,
-                    quantity = quantity)
+
+                print('*' * 100)
+                print(image)
+                # models.Item.objects.filter(slug=slug).update(
+                #     name = name, 
+                #     wig_type = wig_type,
+                #     wig_long = wig_long,
+                #     scalp_type = scalp_type,
+                #     wig_color = wig_color,
+                #     density = density,
+                #     image = image,
+                #     price = price, 
+                #     discount_price = discount_price,
+                #     quantity = quantity
+                #     )
+                
+
+                item = models.Item.objects.get(slug=slug)
+                item.name = name
+                item.wig_type = wig_type
+                item.wig_long = wig_long
+                item.scalp_type = scalp_type
+                item.wig_color = wig_color
+                item.density = density
+                item.image = image
+                item.price = price
+                item.discount_price = discount_price
+                item.quantity = quantity
+                item.save()
                 
                 messages.success(request, "تم تعديل هذا المنتج بنجاح")
                 return redirect("store")
@@ -301,6 +329,7 @@ def edit_item_in_store(request, slug):
 
     context = {
         'form' : form,
+        'item' : item,
     }
     return render(request, 'core/edit_item.html', context)
 

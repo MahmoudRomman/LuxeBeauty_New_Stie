@@ -20,10 +20,6 @@ class ItemForm(forms.Form):
         'placeholder': "اسم الباروكة",
         'style': 'border-color:wightblack; border-radius: 10px;'
 
-#         width: 100%;
-#   padding:10px;
-#   border-radius:10px;
-
     }))
 
 
@@ -202,6 +198,15 @@ class EditItemForm(forms.ModelForm):
         
     }))
 
+    image = forms.ImageField(widget=forms.FileInput(attrs={
+        "class" : "input",
+        "type" : "file",
+        'style': 'display: none;',
+        'id' : 'image-input',
+        'name' : 'profile_image',
+        'accept' : 'image/*',
+        }))
+
 
 
     price = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
@@ -211,7 +216,6 @@ class EditItemForm(forms.ModelForm):
         'min' : '400',
         'max' : '7000',
         'style': 'border-color:wightblack; border-radius: 10px;'
-
         }))
     
     discount_price = forms.FloatField(required=False, widget=forms.NumberInput(attrs={
@@ -235,7 +239,7 @@ class EditItemForm(forms.ModelForm):
 
     class Meta:
          model = models.Item
-         fields = ['name', 'wig_type', 'wig_long', 'scalp_type', 'wig_color', 'density', 'price', 'discount_price', 'quantity']
+         fields = ['name', 'wig_type', 'wig_long', 'scalp_type', 'wig_color', 'density', 'image', 'price', 'discount_price', 'quantity']
 
 
 

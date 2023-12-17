@@ -17,9 +17,26 @@
                 <div id="tab-1" class="tab-pane fade show p-0 active">
 
 
+                    <div style="margin: auto; margin-bottom: 20px;">
+                        <img class="img-thumbnail" style="border-radius: 0%; height: 250px; width: 300px;" src="{{ item.image.url }}" />
+                    </div>
+
                     <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
                         {% csrf_token %}
-                        <div class="row g-3">
+
+                        <div class="row" style="display: grid; place-items: center">
+                            <div style="margin: auto;">
+                                  {{form.image}}
+                                  <label for="image-input">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fa-regular fa-image mt-2" style="font-size: x-large;"></i>
+                                  </label> 
+                            </div>
+                        </div>  
+
+
+                        <div class="row g-3 mt-3">
+
                             <div class="col-12 col-sm-6" style="text-align: right;">
                                 <label style="font-size: large;">اسم الباروكة:</label>
 

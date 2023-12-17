@@ -93,6 +93,7 @@
             <th scope="col">نوع الفروة</th>
             <th scope="col">اللون</th>
             <th scope="col">الكثافة</th>
+            <th scope="col">صورة المنتج</th>
             <th scope="col">السعر</th>
             <th scope="col">العدد المُتاح</th>
             <th scope="col">تريد البيع؟</th>
@@ -114,11 +115,27 @@
             <td>{{item.scalp_type}}</td>
             <td>{{item.wig_color}}</td>
             <td>{{item.density}}</td>
+
+            <td>
+              <div class="dropdown">
+                <a href="{% url 'item_detail' item.slug %}">
+                  <img src="{{item.image.url}}" alt="Cinque Terre" width="100" height="50">
+                </a>
+                <div class="dropdown-content">
+                    <a href="{% url 'item_detail' item.slug %}">
+                      <img src="{{item.image.url}}" alt="Cinque Terre" width="300" height="200">
+                    </a>
+                    <div class="desc">
+                      <p>{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
+                    </div>
+                </div>
+              </div>
+            </td>
+
             <td>{{item.price}}</td>
             <td>{{item.quantity}}</td>
             <td>
                 <a href="{% url 'add-to-cart' item.slug %}" class="cart-link"> 
-                  <!-- <img width="30" height="30" src="https://img.icons8.com/external-vectorslab-outline-color-vectorslab/25/external-add-to-cart-shopping-and-ecommerce-vectorslab-outline-color-vectorslab.png" alt="external-add-to-cart-shopping-and-ecommerce-vectorslab-outline-color-vectorslab"/> -->
                   <i class="fa fa-shopping-cart" style="font-size: xx-large;"></i>
                 </a>
 
@@ -189,6 +206,40 @@
 </nav>
 
 
+
+
+
+
+
+
+
+
+
+
+<style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .desc {
+    padding: 15px;
+    text-align: center;
+  }
+  </style>
 
 {% endblock content %}
   
