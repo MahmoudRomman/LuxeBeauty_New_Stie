@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from . import models
 from core.models import PhoneNumber, Phones
 
@@ -37,14 +37,6 @@ class UserLoginForm(AuthenticationForm):
 
 
 
-# class CreateUserForm(UserCreationForm):
-#     email = forms.EmailField()
-
-#     class Meta:
-#         model = User
-#         fields = ['username', 'email', 'password1', 'password2']
-
-
 
 
 class CreateUserForm(UserCreationForm):
@@ -52,7 +44,6 @@ class CreateUserForm(UserCreationForm):
     error_messages = {
         'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
         'username_taken': "اسم المستخدم هذا موجود بالفعل",
-        # Add other error messages as needed
     }
 
 
@@ -95,27 +86,6 @@ class CreateUserForm(UserCreationForm):
 
 
 
-# class ResetPasswordForm(PasswordResetForm):
-#     def __init__(self, *args, **kwargs):
-#         super(ResetPasswordForm, self).__init__(*args, **kwargs)
-
-#     error_messages = {
-#         'invalid_login': (
-#             "من فضلك ادخل اسم مستخدم وكلمة مرور صحيحة "
-#             "انتبه الى ان اسم المستخدم وكلمة السر حساسة للحروف والارقام."
-#         ),
-#         'inactive': "هذا الحساب غير فعال",
-#         }
-
-#     email = forms.CharField(widget=forms.TextInput(attrs={
-#         "class": "input",
-#         "type": "email",
-#         "placeholder": "ادخل عنوان البريد الالكترونى",
-#         'style': 'border-color:wightblack; border-radius: 10px;',
-#     }))
-
-
-
 
 
 
@@ -124,23 +94,17 @@ from django.contrib.auth import get_user_model
 
 
 class CustomPasswordResetForm(PasswordResetForm):
-    def __init__(self, *args, **kwargs):
-        super(CustomPasswordResetForm, self).__init__(*args, **kwargs)
-
-    error_messages = {
-        'invalid_login': (
-            "من فضلك ادخل اسم مستخدم وكلمة مرور صحيحة "
-            "انتبه الى ان اسم المستخدم وكلمة السر حساسة للحروف والارقام."
-        ),
-        'inactive': "هذا الحساب غير فعال",
-        }
-
-    email = forms.CharField(widget=forms.TextInput(attrs={
-        "class": "input",
-        "type": "email",
-        "placeholder": "ادخل عنوان البريد الالكترونى",
-        'style': 'border-color:wightblack; border-radius: 10px;',
-    }))
+    email = forms.EmailField(
+        label="Custom Email Label",
+        max_length=254,
+        widget=forms.EmailInput(attrs={
+            'autocomplete': 'email',
+            "class": "input",
+            "type": "email",
+            "placeholder": "ادخل عنوان البريد الالكترونى",
+            'style': 'border-color:wightblack; border-radius: 10px;'
+            }),
+    )
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -150,6 +114,47 @@ class CustomPasswordResetForm(PasswordResetForm):
             raise forms.ValidationError("لا يوجد حساب مُفعل لهذا البريد الالكترونى , حاول مرة أخرى")
         
         return email
+
+
+
+class CustomPasswordResetConfirmForm(SetPasswordForm):
+
+    error_messages = {
+        'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
+        'password_too_short': "كلمة المرور الجديدة قصيرة للغاية",
+    }
+
+
+    new_password1 = forms.CharField(
+        label="New Custom Password Label",
+        widget=forms.PasswordInput(attrs={
+            'autocomplete': 'new-password',
+            "class" : "input",
+            "type" : "password",
+            "placeholder" : "ادخل كلمة السر الجديدة",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+            }),
+    )
+
+    new_password2 = forms.CharField(
+        label="Confirm Custom Password Label",
+        widget=forms.PasswordInput(attrs={
+            'autocomplete': 'new-password',
+            "class" : "input",
+            "type" : "password",
+            "placeholder" : "أعد ادخال كلمة السر الجديدة مرة أخرى",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+            }),
+    )
+
+
+    # class Meta:
+    #     model = User
+    #     fields = ("new_password1", "new_password2")
+
+
+
+
 
 
 
@@ -198,24 +203,12 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         fields = ("old_password", "new_password1", "new_password2")
 
 
-# class CustomPasswordResetForm(PasswordResetForm):
-#     def clean_email(self):
-#         email = self.cleaned_data.get('email')
-#         UserModel = get_user_model()
-
-#         if not UserModel.objects.filter(email__iexact=email, is_active=True).exists():
-#             raise forms.ValidationError("This email address is not associated with an active account. Please check the email address or register for a new account.")
-        
-#         return email
-    
-
 
 
 class UserUpdateForm(forms.ModelForm):
     error_messages = {
         'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
         'username_taken': "اسم المستخدم هذا موجود بالفعل",
-        # Add other error messages as needed
     }
 
 
@@ -237,6 +230,8 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
+
+
 
 
 class ProfileUpdateForm(forms.ModelForm):

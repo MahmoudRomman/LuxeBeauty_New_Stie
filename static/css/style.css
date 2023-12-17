@@ -720,6 +720,41 @@ button {
 
 
 
+.new_password_reset{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+}
+
+
+.new_password_reset input {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+
+}
+
+
+
+.new_password_reset input:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
+
+
+
+
+
 
 
 .profile_update_save_changes{

@@ -41,8 +41,10 @@ urlpatterns = [
 
 
       # To reset your password if you forget...
-      path('password_reset/', user_view.CustomPasswordResetView.as_view(template_name='accounts/password_reset.html', form_class=forms.CustomPasswordResetForm),
+      path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html', form_class=forms.CustomPasswordResetForm),
       name='password_reset'),
+
+      # path('password_reset/', auth_views.PasswordResetView.as_view(form_class=CustomPasswordResetForm), name='password_reset'),
 
 
       # path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html'),
@@ -50,8 +52,9 @@ urlpatterns = [
 
 
 
-      path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'),
-      name='password_reset_confirm'),
+      path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html', 
+            form_class=forms.CustomPasswordResetConfirmForm), name='password_reset_confirm'),
+
 
       path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'),
       name='password_reset_done'),

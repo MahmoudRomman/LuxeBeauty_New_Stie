@@ -180,10 +180,10 @@ def remove_phone(request, phone):
 
 
 
-class CustomPasswordResetView(PasswordResetView):
-    form_class = forms.CustomPasswordResetForm
-    template_name = 'accounts/password_reset.html' 
-    email_template_name = 'accounts/password_reset_done.html'  
+# class CustomPasswordResetView(PasswordResetView):
+#     form_class = forms.CustomPasswordResetForm
+#     template_name = 'accounts/password_reset.html' 
+#     email_template_name = 'accounts/password_reset_done.html'  
 
 
 
