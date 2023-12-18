@@ -89,6 +89,8 @@ TEMPLATES = [
                 'core.context_processors.mybills_notification',
                 'core.context_processors.cart_notification',
                 'core.context_processors.reward_notification',
+                'core.context_processors.ordered_task_notification',
+
 
             ],
         },

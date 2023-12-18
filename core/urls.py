@@ -60,6 +60,14 @@ urlpatterns = [
     path('my_rewards/', views.user_reward, name='my_rewards'),
 
 
+
+
+    path('show_all_tasks/', views.show_all_tasks, name='show_all_tasks'),
+    path('add_task/', views.add_task, name='add_task'),
+    path('delete_task/<slug>/', views.delete_task, name='delete_task'),
+    path('my_tasks/', views.user_task, name='my_tasks'),
+
+
     path('online_order/', views.OnlineOrder.as_view(), name='online_order'),
 
 ]

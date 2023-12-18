@@ -475,6 +475,25 @@ class RewardForm(forms.Form):
     
 
 
+class TaskForm(forms.Form):
+    name = forms.ModelChoiceField(
+         queryset=User.objects.all(), 
+         empty_label="اختر أحد المستخدمين ...", 
+         widget=forms.Select(attrs={
+            'class': 'form-control',
+            'style': 'border-color:wightblack; border-radius: 10px;',  
+              }))
+    
+    message = forms.CharField(widget=forms.Textarea(attrs={
+    'class' : 'form-control',
+    'required' : True,
+    'cols' : 6,
+    'placeholder' : 'اكتب هنا نص الخَصم الذى تريد...',
+    'style': 'border-color:wightblack; border-radius: 10px;',  
+    }))
+
+
+
 class OnlineOrder(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')

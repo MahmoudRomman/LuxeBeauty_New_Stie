@@ -27,7 +27,7 @@ admin.site.register(models.AddLink)
 
 # New registerd model to add penalites to the users
 admin.site.register(models.Penality)
-
-
+admin.site.register(models.Reward)
+admin.site.register(models.Tasks)
 
 

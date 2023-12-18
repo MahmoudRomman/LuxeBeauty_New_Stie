@@ -156,12 +156,34 @@
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                             <a class="dropdown-item" href="{% url 'all_bills' %}">كل الفواتير</a>    
                             <a class="dropdown-item" href="{% url 'show_all_penalities' %}">الخصومات</a>  
-                            <a class="dropdown-item" href="{% url 'show_all_rewards' %}">المكافأت</a>  
+                            <a class="dropdown-item" href="{% url 'show_all_rewards' %}">المكافأت</a>
+                            
+                            
+                            <a class="dropdown-item" href="{% url 'show_all_tasks' %}">
+                              {% if ordered_task_count > 0 %}
+                                 <span class="badge badge-danger">{{ordered_task_count}}</span>
+                              {% endif %}
+                              المهام المطلوبة
+                              <i class="fa fa-tasks"></i>
+                            </a>  
+
+                            
+                            <a class="dropdown-item" href="#">المهام المُنفذه</a>  
+
                         {% endif %}
 
                         <div class="dropdown-divider"></div>
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
+                        
+                            <a class="dropdown-item" href="{% url 'my_tasks' %}">
+                              <!-- {% if penality_count > 0 %}
+                                  <span class="badge badge-danger">{{penality_count}}</span>
+                              {% endif %} -->
+                              مهامى
+                              <i class="fa fa-tasks"></i>
+                            </a>  
+
                             <a class="dropdown-item" href="{% url 'my_penalities' %}">
                               {% if penality_count > 0 %}
                                   <span class="badge badge-danger">{{penality_count}}</span>
@@ -178,6 +200,14 @@
                             <i class="fa fa-award"></i>
                             </a>  
                         {% else %}
+
+                          <a class="dropdown-item" href="{% url 'my_tasks' %}">
+                            <!-- {% if penality_count > 0 %}
+                                <span class="badge badge-danger">{{penality_count}}</span>
+                            {% endif %} -->
+                            مهامى
+                            <i class="fa fa-tasks"></i>
+                          </a>  
                             <a class="dropdown-item" href="{% url 'my_penalities' %}">
                               {% if penality_count > 0 %}
                                   <span class="badge badge-danger">{{penality_count}}</span>
@@ -285,7 +315,7 @@
     /* Links inside the dropdown */
     .dropdown-menu a {
       color: black;
-      padding: 8px 15px;
+      padding: 5px 15px;
       text-decoration: none;
       display: block;
     }

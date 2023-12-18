@@ -326,6 +326,8 @@ class Tasks(models.Model):
     message = models.TextField(max_length=500)
     ordered_date = models.DateTimeField(auto_now_add=True)
     done_date = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=False)
+    slug_link = models.SlugField()
 
 
     def __str__(self):

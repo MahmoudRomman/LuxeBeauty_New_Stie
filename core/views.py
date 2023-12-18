@@ -1126,6 +1126,100 @@ def delete_reward(request, slug):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required(login_url='user-login')
+def show_all_tasks(request):
+    try:
+        tasks = models.Tasks.objects.filter(status=False).order_by('-ordered_date')
+    except ObjectDoesNotExist:
+        tasks = {}
+
+    context = {
+        'tasks' : tasks,
+    }
+    return render(request, 'core/tasks.html', context)
+
+
+
+@login_required(login_url='user-login')
+def add_task(request):
+    form = forms.TaskForm()
+
+    if request.method == "POST":
+        form = forms.TaskForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data.get("name")
+            message = form.cleaned_data.get("message")
+
+            create_slug = create_slug_code()
+
+            new_user_task = models.Tasks.objects.create(
+                name = name,
+                message = message,
+                status = False,
+                slug_link = create_slug,
+            )
+
+            new_user_task.save()
+            messages.success(request, ".تم اضافة وارسال المهمة لهذا المستخدم بنجاح")
+            return redirect("show_all_tasks")
+
+    context = {
+        'form' : form,
+    }
+    return render(request, 'core/add_task.html', context)
+
+
+@login_required(login_url='user-login')
+def user_task(request):
+    my_tasks = models.Tasks.objects.filter(name=request.user, status=False).order_by('-ordered_date')
+
+
+    context = {
+        'my_tasks' : my_tasks,
+    }
+
+    return render(request, 'core/user_task.html', context)
+
+
+@login_required(login_url='user-login')
+def delete_task(request, slug):
+    task = models.Tasks.objects.filter(slug_link=slug)
+    task.delete()
+    messages.success(request, ".تم ازالة المهمة لهذا المستخدم بنجاح")
+    return redirect("show_all_tasks")
+
+
+
 class OnlineOrder(LoginRequiredMixin, CreateView):
     model = models.Bill2
     form_class = forms.OnlineOrder

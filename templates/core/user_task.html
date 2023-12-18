@@ -1,0 +1,47 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+  <!-- shop section -->
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+            كل المهام لديك
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col"> تفاصيل الطلب</th>
+                <th scope="col">تاريخ الطلب</th>
+                <th scope="col">تم التنفيذ؟</th>
+
+              </tr>
+            </thead>
+            <tbody>
+                {% for task in my_tasks.all %}
+                <tr>
+                    <th style="width: 150px;" scope="row">{{ forloop.counter }}</th>
+                    <td>{{task.message}}</td>
+                    <td>{{task.ordered_date}}</td>
+                    <td>؟؟؟؟</td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='12' style="font-size:large">لا يوجد لديك أى مهام</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <!-- end shop section -->
+{% endblock content %}
+  

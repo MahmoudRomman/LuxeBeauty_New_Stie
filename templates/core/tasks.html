@@ -1,0 +1,88 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+  <!-- shop section -->
+
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+            كل المهام التى تم طلبها
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">الاسم</th>
+                <th scope="col"> تفاصيل الطلب</th>
+                <th scope="col">تاريخ الطلب</th>
+
+                
+                {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                <th scope="col">حذف؟</th>                
+                {% endif %}
+                  
+              </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks.all %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ task.name }}</td>
+                    <td>{{task.message}}</td>
+                    <td>{{task.ordered_date}}</td>
+
+                    {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                    <td style="width: 150px;">
+                      <a href="{% url 'delete_task' task.slug_link %}">
+                        <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/>
+                      </a>
+                    </td>             
+                    {% endif %}
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='8' style="font-size:large">لا يوجد اى مهام تم طلبها حتى الان</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6">
+
+                        <div class="penality_btn">
+                            <a href="{% url 'add_task' %}">
+                                ارسال مهمه؟    
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+    
+    {% if tasks %}
+        <div class="penality_btn">
+            <a href="{% url 'add_task' %}">
+                ارسال مهمه؟ 
+            </a>
+        </div> 
+    {% endif %}
+    
+
+    </div>
+  </section>
+
+  <!-- end shop section -->
+
+
+{% endblock content %}
+  

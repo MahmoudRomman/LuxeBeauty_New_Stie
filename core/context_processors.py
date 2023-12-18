@@ -77,3 +77,21 @@ def cart_notification(request):
     }
 
     return context
+
+
+
+
+
+
+
+def ordered_task_notification(request):
+    if request.user.is_authenticated:
+        ordered_task_count = models.Tasks.objects.filter(status=False).count()
+    else:
+        ordered_task_count = 0    
+
+    context = {
+        "ordered_task_count" : ordered_task_count,
+    }
+
+    return context
