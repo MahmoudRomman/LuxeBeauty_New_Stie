@@ -318,3 +318,15 @@ class Reward(models.Model):
 
     def __str__(self):
         return f"{self.name} -- {self.date}"
+    
+
+
+class Tasks(models.Model):
+    name = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField(max_length=500)
+    ordered_date = models.DateTimeField(auto_now_add=True)
+    done_date = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.name} -- {self.ordered_date}"

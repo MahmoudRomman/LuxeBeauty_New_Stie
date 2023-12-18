@@ -66,14 +66,14 @@
 
                     <td>
                     {% if order_item.item.discount_price %}
-                        ${{ order_item.get_total_discount_item_price }}
-                        <span class="badge badge-primary">وفرت ${{ order_item.get_amount_saved }}</span>
+                        SAR {{ order_item.get_total_discount_item_price }}
+                        <span class="badge badge-primary">وفرت SAR {{ order_item.get_amount_saved }}</span>
                     {% else %}
-                        ${{ order_item.get_total_item_price }}
+                        SAR {{ order_item.get_total_item_price }}
                     {% endif %}
                     
                     
-                    <!-- ${{ order_item.get_total_item_price }} -->
+                    <!-- SAR{{ order_item.get_total_item_price }} -->
 
                     </td>
                 </tr>
@@ -98,14 +98,14 @@
                 <!-- {% if object.coupon %}
                 <tr>
                     <td colspan="4"><b>Coupon</b></td>
-                    <td><b>-${{ object.coupon.amount }}</b></td>
+                    <td><b>-SAR{{ object.coupon.amount }}</b></td>
                 </tr>
                 {% endif %}
                 
                 {% if object.get_total %}
                 <tr>
                     <td colspan="4"><b>Order Total</b></td>
-                    <td><b>${{ object.get_total }}</b></td>
+                    <td><b>SAR{{ object.get_total }}</b></td>
                 </tr>
                 <tr>
                     <td colspan="5">
@@ -127,11 +127,11 @@
                 </tr>
                 <tr>
                     <td><b>السعر الكلى</b></td>
-                    <td colspan="6"><b>${{ object.get_total }}</b></td>
-                    <td colspan="10"></td>
+                    <td colspan="6"><b>SAR {{ object.get_total }}</b></td>
+                    <td colspan="12"></td>
                 </tr>
                 <tr>
-                    <td colspan="10">
+                    <td colspan="12">
                         <div class="btn float-right">
                             <a href="{% url 'shop' %}">الاستمرار فى البيع</a>
                         </div> 

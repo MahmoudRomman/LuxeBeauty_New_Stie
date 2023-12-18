@@ -137,7 +137,7 @@ def phone_update(request):
             # To reload this file --- forms.py file
             importlib.reload(forms)
                 
-            messages.success(request, ".تم حفظ التعديلات الارقام الخاصة بك")
+            messages.success(request, ".تم حفظ تعديلات الارقام الخاصة بك")
             return redirect("user-profile")
         
         

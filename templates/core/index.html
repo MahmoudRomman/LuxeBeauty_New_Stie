@@ -172,10 +172,10 @@
                     <p class="lead">
                       
                     {% if item.discount_price %}
-                      <span class="mr-1"> <del>${{ item.price }}</del> </span>
-                      <span>${{ item.price|sub:item.discount_price }}</span>                        
+                      <span class="mr-1"> <del>{{ item.price }} SAR</del> </span>
+                      <span>{{ item.price|sub:item.discount_price }} SAR</span>                        
                     {% else %}
-                      <span>${{item.price}} </span>
+                      <span>{{item.price}} SAR</span>
                     {% endif %}
 
                     </p>
@@ -188,15 +188,6 @@
                   <div class="add_to_cart_per_product">
                     <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
                   </div> 
-
-
-
-                  <!-- <hr>
-                  <div class="link-container">
-                    <a href="" class="social-icon"><i class="fa fa-eye product-icon"></i></a>
-                    <a href="{% url 'add-to-cart' item.slug %}" class="social-icon"><i class="fa fa-shopping-cart"></i></a>
-                  </div> -->
-
 
 
                   
@@ -254,48 +245,38 @@
         <h2 style="text-align: center;">الطٌرق المٌتاحة للدفع</h2>
       </div>
       
-      <div class="row">
+      <div class="photo-container">
 
-            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-              <div class="box" style="border-radius: 10px;">
-                  <div style="text-align: center; margin-top: 15px;">
-                    <img src="{% static 'images/apple.png' %}" style="height:90px;">
-                  </div>
-              </div>
+            <div class="photo" style="padding: 10px; border-radius: 10px;">
+                <div style="text-align: center; margin-top: 15px;">
+                  <img src="{% static 'images/apple.png' %}" style="height:90px;">
+                </div>
             </div>
       
 
-            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-              <div class="box" style="border-radius: 10px;">
-                  <div style="text-align: center; margin-top: 15px;">
-                    <img src="{% static 'images/tamara.png' %}" style="height:90px; text-align: center;">
-                  </div>
-              </div>
+            <div class="photo" style="padding: 10px; border-radius: 10px;">
+                <div style="text-align: center; margin-top: 15px;">
+                  <img src="{% static 'images/tamara.png' %}" style="height:90px; text-align: center;">
+                </div>
             </div>
 
-            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-              <div class="box" style="border-radius: 10px;">
-                  <div style="text-align: center; margin-top: 15px;">
-                    <img src="{% static 'images/tabby.png' %}" style="height:90px;">
-                  </div>
-              </div>
+            <div class="photo" style="padding: 10px; border-radius: 10px;">
+                <div style="text-align: center; margin-top: 15px;">
+                  <img src="{% static 'images/tabby.png' %}" style="height:90px;">
+                </div>
             </div>
 
-            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px; ">
-              <div class="box" style="border-radius: 10px;">
-                  <div style="text-align: center; margin-top: 15px;">
-                    <img src="{% static 'images/stripe.jpg' %}" style="height:90px; text-align: center;">
-                  </div>
-              </div>
+            <div class="photo" style="padding: 10px; border-radius: 10px;">
+                <div style="text-align: center; margin-top: 15px;">
+                  <img src="{% static 'images/stripe.jpg' %}" style="height:90px; text-align: center;">
+                </div>
             </div>
 
 
-            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px; ">
-              <div class="box" style="border-radius: 10px;">
-                  <div style="text-align: center; margin-top: 15px;">
-                    <img src="{% static 'images/paytab.png' %}" style="height:90px; text-align: center;">
-                  </div>
-              </div>
+            <div class="photo" style="padding: 10px; border-radius: 10px;">
+                <div style="text-align: center; margin-top: 15px;">
+                  <img src="{% static 'images/paytab.png' %}" style="height:90px; text-align: center;">
+                </div>
             </div>
     </div>
   </div>
@@ -303,30 +284,24 @@
 
 
 
-<style>
-  .link-container {
-      display: flex;
-      justify-content: space-between;
-  }
-
-  .link-container a {
-    margin: 0 50px; 
-    color: #ffffff;
-    font-size: 50px;
-  }
 
 
-.link-container a:hover {
-  background-color: transparent;
-  color: #2471A3;
-}
+  <style>
+    .photo-container {
+        display: flex;
+        justify-content: space-between; /* Adjust as needed */
+    }
 
+     .photo {
+        width: 18%; /* Set the fixed width for each photo div */
+        border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+    }
 
+    .photo img {
+        width: 100%; /* Ensure the image fills the container */
+        height: auto; /* Maintain the aspect ratio of the image */
+    } 
 </style>
-
-
-
-
 
 
 
