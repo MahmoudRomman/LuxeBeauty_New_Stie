@@ -33,23 +33,34 @@
                         <div class="col-md-12">
                             <p class="h3" style="text-align: end;">الارقام المتاحة حالياً</p>
                             <hr>
-                            <form method="POST" enctype="multipart/form-data" dir="rtl">
+   
+                            <form method="POST" action="." dir="rtl">
                                 {% csrf_token %}
 
                                 <div class="row" style="text-align: start;">
                                     <div class="col-12">
-                                    {{phone_update_form.new_phone}}
+                                        <hr>
+                                        {{ form.phone }}
+
+                                    </div>
                                 </div>
-                                </div>
+
                                 <div class="save_changes_of_phone_update mt-3">
-                                    {% if not_taken_phones %}
                                     <input class="btn btn-info" type="submit" value="حفظ التغيرات" style="font-size:large;">
+
+                                    <!-- {% if not_taken_phones %}
+                                         <input class="btn btn-info" type="submit" value="حفظ التغيرات" style="font-size:large;">
                                     {% else %}
-                                    <p class="h5" style="text-align:center;">لا يوجد أى أرقام متاحة فى الوقت الحالى.</p>
-                                    {% endif %}
+                                         <p class="h5" style="text-align:center;">لا يوجد أى أرقام متاحة فى الوقت الحالى.</p>
+                                    {% endif %} -->
                                 </div>
 
                             </form>
+
+
+
+                          
+
                         </div>
                     </div>
                 </div>

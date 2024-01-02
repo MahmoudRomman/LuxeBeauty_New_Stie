@@ -31,9 +31,10 @@ urlpatterns = [
     path('remove_from_cart/<slug>/', views.remove_from_cart, name="remove_from_cart"),
 
 
-    # path('bill/', views.bill, name="bill"),
-    # path('bill/', views.bill.as_view(), name="bill"),
-    path('bill2/', views.bill2.as_view(), name="bill2"),
+    
+    # path('bill2/', views.bill2.as_view(), name="bill2"),
+    path('bill2/', views.make_bill, name="bill2"),
+
 
     path('all_bills/', views.show_bills, name="all_bills"),
     # path('all_bills/', views.show_bills.as_view(), name="all_bills"),
@@ -63,11 +64,27 @@ urlpatterns = [
 
 
     path('show_all_tasks/', views.show_all_tasks, name='show_all_tasks'),
+    path('done_tasks/', views.done_tasks, name='done_tasks'),
     path('add_task/', views.add_task, name='add_task'),
     path('delete_task/<slug>/', views.delete_task, name='delete_task'),
     path('my_tasks/', views.user_task, name='my_tasks'),
+    path('user_done_task/<slug>/', views.user_done_task, name='user_done_task'),
 
 
-    path('online_order/', views.OnlineOrder.as_view(), name='online_order'),
+    # path('online_order/', views.OnlineOrder.as_view(), name='online_order'),
+    path('online_order/', views.online_order, name='online_order'),
+
+    path('phone_and_account_manage/', views.manage_phone_and_account, name='phone_and_account_manage'),
+
+    path('all_phones/', views.show_all_phones, name='all_phones'),
+    path('edit_phone/<slug>/', views.edit_phone, name='edit_phone'),
+    path('delete_phone/<slug>/', views.delete_phone, name='delete_phone'),
+
+    path('users_phones/', views.show_all_user_phones, name='users_phones'),
+    path('add_phone_to_user/', views.add_phone_to_user, name='add_phone_to_user'),
+    path('edit_user_phone/<slug>/', views.edit_user_phone, name='edit_user_phone'),
+    # path('delete_phone/<slug>/', views.delete_phone, name='delete_phone'),
+
+
 
 ]

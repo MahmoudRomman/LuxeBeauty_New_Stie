@@ -207,6 +207,10 @@ class Bill2(models.Model):
     price = models.IntegerField(default=1500)
     pieces_num = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        # verbose_name = 'Bills'
+        verbose_name_plural = 'All Bills'
+
     def __str__(self):
         return f"{self.seller}"
     
@@ -237,32 +241,36 @@ class Offer(models.Model):
     
 
 
-
 class Phones(models.Model):
     phone = models.CharField(max_length=31)
+    date = models.DateTimeField(auto_now_add=True)
+    slug_link = models.SlugField()
+
+
     
     def __str__(self):
         return f"{self.phone}"
+    
+    # def __str__(self):
+    #     return self.phone
 
 
 
 
 
-phones = Phones.objects.all()
-
-phones_list = []
-for c in phones:
-    phones_list.append((str(c), str(c)))
-
-phones_tuple = tuple(phones_list)
-
-
-class PhoneNumber(models.Model):
+class PhoneNumberr(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=31, choices=phones_tuple, blank=False, null=False)
+    phone = models.ForeignKey(Phones, on_delete=models.CASCADE, blank=False, null=False)
+    date = models.DateTimeField(auto_now_add=True)
+    slug_link = models.SlugField()
+
+
+
     
     def __str__(self):
-        return f"{self.phone}"
+        return f"{self.user.username} - {self.phone.phone}"
+    
+
 
 
 
@@ -270,7 +278,9 @@ class Account(models.Model):
     account_name = models.CharField(max_length=200)
     account_link = models.URLField(max_length=1000, null=False, blank=False)
     marketer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    phone_number = models.ForeignKey(PhoneNumber, on_delete=models.CASCADE, null=True, blank=True)
+    # phone_number = models.ForeignKey(PhoneNumber, on_delete=models.CASCADE, null=True, blank=True)
+    phone = models.ForeignKey(PhoneNumberr, on_delete=models.CASCADE, null=True, blank=True)
+
 
 
     def __str__(self):
@@ -324,11 +334,33 @@ class Reward(models.Model):
 class Tasks(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField(max_length=500)
-    ordered_date = models.DateTimeField(auto_now_add=True)
-    done_date = models.DateTimeField(auto_now_add=True)
+    ordered_date = models.DateTimeField(null=True, blank=True)
+    done_date = models.DateTimeField(null=True, blank=True)
     status = models.BooleanField(default=False)
+    done_task_is_read = models.BooleanField(default=False)  # To delete the notification for the done tasks after the admin read it...
     slug_link = models.SlugField()
 
 
     def __str__(self):
         return f"{self.name} -- {self.ordered_date}"
+    
+    def get_duration(self):
+        # time_difference = your_model_instance.end_date - your_model_instance.start_date
+        time_difference = self.done_date - self.ordered_date
+
+
+        # Extract hours and minutes from the timedelta
+        hours, remainder = divmod(time_difference.seconds, 3600)
+        minutes = remainder // 60
+
+        if time_difference.days > 0:
+            # If the difference is greater than one day, include days in the output
+            formatted_difference = f"{time_difference.days} يوم, {hours} ساعة, {minutes} دقيقة"
+        elif hours > 0:
+            # If the difference is greater than one hour, display hours and minutes
+            formatted_difference = f"{hours} ساعة, {minutes} دقيقة"
+        else:
+            # If the difference is less than one hour, display only minutes
+            formatted_difference = f"{minutes} دقيقة"
+
+        return formatted_difference

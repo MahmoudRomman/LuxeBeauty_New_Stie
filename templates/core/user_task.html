@@ -29,7 +29,17 @@
                     <th style="width: 150px;" scope="row">{{ forloop.counter }}</th>
                     <td>{{task.message}}</td>
                     <td>{{task.ordered_date}}</td>
-                    <td>؟؟؟؟</td>
+                    <td>
+
+            
+
+
+                      <a href="{% url 'user_done_task' task.slug_link %}" class="done_task_link">
+                        <i class="fa fa-check" style="font-size: xx-large;"></i>
+                      </a>
+
+                      
+                    </td>
 
                 </tr>
                 {% empty %}

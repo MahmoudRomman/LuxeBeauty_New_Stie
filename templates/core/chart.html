@@ -53,138 +53,215 @@
 
 
         <h2 style="margin: auto; margin-bottom: 20px;">
-            تفصيل بيانات الفواتير الخاصة بك خلال هذا الشهر
-        </h2>
-        <table class="table table-striped" dir='rtl'>
-            <thead style="text-align: center;">
-              <tr style="text-align: center; font-size: large;">
-                <th scope="col">الترتيب</th>
-                <th scope="col">اسم البائع</th>
-                <th scope="col">رقم الهاتف </th>
-                <th scope="col">الدولة</th>
-                <th scope="col">العنوان</th>
-                <th scope="col">اسم العميل</th>
-                <th scope="col">رقم هاتف العميل</th>
-                <th scope="col">اسم الحساب</th>
-                <th scope="col">  التاريخ</th>
-    
-                <th scope="col">نوع الباروكه</th>
-                <th scope="col">الطول</th>
-                <th scope="col">نوع الفروة</th>
-                <th scope="col">اللون</th>
-                <th scope="col">الكثافة</th>
-    
-    
-                <th scope="col">عدد القطع</th>
-                <th scope="col">سعر القطعة</th>
-                <th scope="col">السعر الكلى</th>
-    
-              </tr>
-            </thead>
-            <tbody style="text-align: center;">
-    
-              
-              {% for bill in my_bills %}
-              <tr style="font-size: small;">
-                <th scope="row" class="mt-1">{{forloop.counter}}</th>
-                <td>{{bill.seller}}</td>
-                <td>{{bill.seller_phone_number}}</td>
-                <td>{{bill.country}}</td>
-                <td>{{bill.address}}</td>
-                <td>{{bill.customer_name}}</td>
-                <td>{{bill.customer_phone}}</td>
-                <td>{{bill.account_name}}</td>
-                <td>{{bill.date|date}}</td>
-    
-    
-                <td>{{bill.wig_type}}</td>
-                <td>{{bill.wig_long}}</td>
-                <td>{{bill.scalp_type}}</td>
-                <td>{{bill.wig_color}}</td>
-                <td>{{bill.density}}</td>
-                <td>{{bill.pieces_num}}</td>
-                <td>{{bill.price}}</td>
-                <td>{{bill.total_price}}</td>
-                
-    
-    
-              </tr>
-    
-              {% empty %}
-              <tr>
-
-                <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
-                    <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
-                </td>
-              </tr>
-              {% endfor %}
-
-              {% if my_bills %}
-              <tr>
-                  <td colspan="16"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام</b></td>
-                  <td><b>{{total_bills}}</b></td>
-              </tr>
-              {% endif %} 
-    
-            </tbody>
-        </table>
-
-
-
-
-
-
-        <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
-            اجمالى عدد الفواتير الخاصة بكل رقم
-        </h2>
-        <table class="table table-striped" dir='rtl'>
-            <thead style="text-align: center;">
-              <tr style="text-align: center; font-size: large;">
-                <th scope="col">الترتيب</th>
-                <th scope="col">الرقم</th>
-                <th scope="col">عدد الفواتير</th>
-                <th scope="col">الراتب</th>
-
-              </tr>
-            </thead>
-            <tbody style="text-align: center;">
-    
-              
-              {% for key, value in bills_dict.items %}
-              
-              <tr style="font-size: large;">
-                <th scope="row" class="mt-1">{{forloop.counter}}</th>
-                <td>{{key}}</td>
-                <td>{{value}}</td>
-                
-                {% if value < 10 %}
-                   <td>0 EGP</td>
-                {% elif value >= 10 and value < 20 %}
-                  <td>{% widthratio value 1 100 %} EGP</td>
-                {% elif value >= 20 and value < 30 %}
-                  <td>{% widthratio value 1 150 %} EGP</td>
-                {% elif value >= 30 %}
-                  <td>{% widthratio value 1 200 %} EGP</td>
-                {% endif %}
-              </tr>
-              {% empty %}
-              <tr>
-
-                <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
-                    <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
-                </td>
-              </tr>
-              {% endfor %}
-
-              <tr>
-                <td colspan="3"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
-                <td><b>{{final_salary}}</b></td>
+          تفصيل بيانات الفواتير الخاصة بك خلال هذا الشهر
+      </h2>
+      <table class="table table-striped" dir='rtl'>
+          <thead style="text-align: center;">
+            <tr style="text-align: center; font-size: large;">
+              <th scope="col">الترتيب</th>
+              <th scope="col">اسم البائع</th>
+              <th scope="col">رقم الهاتف </th>
+              <th scope="col">الدولة</th>
+              <th scope="col">العنوان</th>
+              <th scope="col">اسم العميل</th>
+              <th scope="col">رقم هاتف العميل</th>
+              <th scope="col">اسم الحساب</th>
+              <th scope="col">  التاريخ</th>
+  
+              <th scope="col">نوع الباروكه</th>
+              <th scope="col">الطول</th>
+              <th scope="col">نوع الفروة</th>
+              <th scope="col">اللون</th>
+              <th scope="col">الكثافة</th>
+  
+  
+              <th scope="col">عدد القطع</th>
+              <th scope="col">سعر القطعة</th>
+              <th scope="col">السعر الكلى</th>
+  
             </tr>
-            </tbody>
-        </table>
+          </thead>
+          <tbody style="text-align: center;">
+  
+            
+            {% for bill in page_obj %}
+            <tr style="font-size: small;">
+              <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
+              <td>{{bill.seller}}</td>
+              <td>{{bill.seller_phone_number}}</td>
+              <td>{{bill.country}}</td>
+              <td>{{bill.address}}</td>
+              <td>{{bill.customer_name}}</td>
+              <td>{{bill.customer_phone}}</td>
+              <td>{{bill.account_name}}</td>
+              <td>{{bill.date|date}}</td>
+  
+  
+              <td>{{bill.wig_type}}</td>
+              <td>{{bill.wig_long}}</td>
+              <td>{{bill.scalp_type}}</td>
+              <td>{{bill.wig_color}}</td>
+              <td>{{bill.density}}</td>
+              <td>{{bill.pieces_num}}</td>
+              <td>{{bill.price}}</td>
+              <td>{{bill.total_price}}</td>
+              
+  
+  
+            </tr>
+  
+            {% empty %}
+            <tr>
+
+              <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                  <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
+              </td>
+            </tr>
+            {% endfor %}
+
+            {% if page_obj %}
+            <tr>
+                <td colspan="16"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام</b></td>
+                <td><b>{{total_bills}}</b></td>
+            </tr>
+            {% endif %} 
+  
+          </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+        
+
+
+
+        
+    
+
+<nav aria-label="Page navigation example" style="margin: auto; margin-top: 10px;">
+  <ul class="pagination justify-content-center" style="text-align: center;">
+
+
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.previous_page_number }}">
+          Previous
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a  class="page-link" href="">
+          Previous
+        </a>
+      </li>
+    {% endif %}
+
+
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="#">
+          {{page_obj.number}}:{{page_obj.paginator.num_pages}}
+        </a>
+      </li>
+
+
+
+  
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.next_page_number }}">
+          Next
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="">
+          Next
+        </a>
+      </li>
+      {% endif %}
+  </ul>
+</nav>
+
+
 
     
-  </section>
+        
+
+
+
+
+<div class="container" style="max-width: 85%;">
+  <div class="row">
+
+
+    <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
+        اجمالى عدد الفواتير الخاصة بكل رقم
+    </h2>
+    <table class="table table-striped" dir='rtl'>
+        <thead style="text-align: center;">
+          <tr style="text-align: center; font-size: large;">
+            <th scope="col">الترتيب</th>
+            <th scope="col">الرقم</th>
+            <th scope="col">عدد الفواتير</th>
+            <th scope="col">الراتب</th>
+
+          </tr>
+        </thead>
+        <tbody style="text-align: center;">
+
+          
+          {% for key, value in bills_dict.items %}
+          
+          <tr style="font-size: large;">
+            <th scope="row" class="mt-1">{{forloop.counter}}</th>
+            <td>{{key}}</td>
+            <td>{{value}}</td>
+            
+            {% if value < 10 %}
+              <td>0 EGP</td>
+            {% elif value >= 10 and value < 20 %}
+              <td>{% widthratio value 1 100 %} EGP</td>
+            {% elif value >= 20 and value < 30 %}
+              <td>{% widthratio value 1 150 %} EGP</td>
+            {% elif value >= 30 %}
+              <td>{% widthratio value 1 200 %} EGP</td>
+            {% endif %}
+          </tr>
+          {% empty %}
+          <tr>
+
+            <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
+            </td>
+          </tr>
+          {% endfor %}
+
+          <tr>
+            <td colspan="3"><b>الخصومات خلال هذا الشهر</b></td>
+            <td><b>{{total_penality}} EGP</b></td>
+          </tr>
+
+          <tr>
+            <td colspan="3"><b>المكافات خلال هذا الشهر</b></td>
+            <td><b>{{total_reward}} EGP</b></td>
+          </tr>
+
+          <tr>
+            <td colspan="3"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
+            <td><b>{{final_salary}} EGP</b></td>
+          </tr>
+        </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+
+    
 
 
 {% endblock content %}

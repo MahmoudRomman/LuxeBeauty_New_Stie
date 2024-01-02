@@ -122,25 +122,34 @@
                 
                   <li class="nav-item dropdown" dir="ltr">
 
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"> 
-                          {% if penality_count or reward_count or mybills_count %}
-                              {% with result=penality_count|add:reward_count|add:mybills_count %}
+
+                      {% if user.is_authenticated and user.is_superuser and user.is_staff %}
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"> 
+                          {% if done_task_count or ordered_task_count %}
+                              {% with result=done_task_count|add:ordered_task_count %}
                               <span class="badge badge-danger" style="font-size: small; border-radius: 100%; ">{{result}}</span>
                               {% endwith %}
                           {% endif %}
 
                           المزيد
-                      </a>
+                        </a>
+
+                      {% else %}
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"> 
+                          {% if penality_count or reward_count or mybills_count or user_ordered_task_count%}
+                              {% with result=penality_count|add:reward_count|add:mybills_count|add:user_ordered_task_count %}
+                              <span class="badge badge-danger" style="font-size: small; border-radius: 100%; ">{{result}}</span>
+                              {% endwith %}
+                          {% endif %}
+
+                          المزيد
+                        </a>
+                      {% endif %}
+  
 
                       <div class="dropdown-menu" style="text-align: right;">
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
-                            <a class="dropdown-item" href="{% url 'chart_view' %}">
-                              {% if mybills_count > 0 %}
-                              <span class="badge badge-danger">{{mybills_count}}</span>
-                              {% endif %}
-                              فواتيرى
-                              <i class="fa fa-money-bill"></i>
-                            </a>
+
                         {% else %}
                             <a class="dropdown-item" href="{% url 'chart_view' %}">
 
@@ -150,10 +159,10 @@
                               فواتيرى
                               <i class="fa fa-money-bill"></i>
                             </a>
-                            <a class="dropdown-item" href="{% url 'online_order' %}">طلب اونلاين</a>
                         {% endif %}
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
+                            <a class="dropdown-item" href="{% url 'phone_and_account_manage' %}">الارقام والحسابات</a>    
                             <a class="dropdown-item" href="{% url 'all_bills' %}">كل الفواتير</a>    
                             <a class="dropdown-item" href="{% url 'show_all_penalities' %}">الخصومات</a>  
                             <a class="dropdown-item" href="{% url 'show_all_rewards' %}">المكافأت</a>
@@ -168,43 +177,27 @@
                             </a>  
 
                             
-                            <a class="dropdown-item" href="#">المهام المُنفذه</a>  
+
+                            <a class="dropdown-item" href="{% url 'done_tasks' %}">
+                              {% if done_task_count > 0 %}
+                                 <span class="badge badge-danger">{{done_task_count}}</span>
+                              {% endif %}
+                              المهام المُنفذه
+                              <i class="fa fa-check"></i>
+                            </a>  
 
                         {% endif %}
 
-                        <div class="dropdown-divider"></div>
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                         
-                            <a class="dropdown-item" href="{% url 'my_tasks' %}">
-                              <!-- {% if penality_count > 0 %}
-                                  <span class="badge badge-danger">{{penality_count}}</span>
-                              {% endif %} -->
-                              مهامى
-                              <i class="fa fa-tasks"></i>
-                            </a>  
 
-                            <a class="dropdown-item" href="{% url 'my_penalities' %}">
-                              {% if penality_count > 0 %}
-                                  <span class="badge badge-danger">{{penality_count}}</span>
-                              {% endif %}
-                              خصوماتى
-                              <i class="fa fa-ban"></i>
-                            </a>  
-
-                            <a class="dropdown-item" href="{% url 'my_rewards' %}">
-                              {% if reward_count > 0 %}
-                                  <span class="badge badge-danger">{{reward_count}}</span>
-                              {% endif %}
-                              مكافأتى
-                            <i class="fa fa-award"></i>
-                            </a>  
                         {% else %}
 
                           <a class="dropdown-item" href="{% url 'my_tasks' %}">
-                            <!-- {% if penality_count > 0 %}
-                                <span class="badge badge-danger">{{penality_count}}</span>
-                            {% endif %} -->
+                            {% if user_ordered_task_count > 0 %}
+                                <span class="badge badge-danger">{{user_ordered_task_count}}</span>
+                            {% endif %}
                             مهامى
                             <i class="fa fa-tasks"></i>
                           </a>  
@@ -225,6 +218,7 @@
                             </a>  
                         {% endif %}
 
+                        <div class="dropdown-divider"></div>
 
                         <a class="dropdown-item" href="{% url 'user-profile' %}">   
                           صفحتى

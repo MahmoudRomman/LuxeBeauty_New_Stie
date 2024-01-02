@@ -1,0 +1,86 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+  
+
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+            جميع أرقام الهواتف التى تم ربطها بالمستخدمين
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">اسم المستخدم</th>
+                <th scope="col">رقم الهاتف</th>
+                <th scope="col">تاريخ الاضافة</th>
+                <th scope="col">تعديل؟</th>
+                <th scope="col">حذف؟</th>                
+                  
+              </tr>
+            </thead>
+            <tbody>
+                {% for phone_user in users_phones.all %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ phone_user.user.username }}</td>
+                    <td>{{ phone_user.phone.phone }}</td>
+                    <td>{{phone_user.date|date}} -- {{phone_user.date|time}}</td>
+
+  
+                    
+                    <td>
+                      <a  href="{% url 'edit_user_phone' phone_user.slug_link %}" class="edit_item_style">  
+                        <i class="fa fa-edit" style="font-size: xx-large;"></i>
+                      </a>
+                    </td>
+
+                    <td>
+                      <a href="#" class="trash-icon-style">
+                        <i class="fa fa-trash" style="font-size: xx-large;"></i>
+                      </a>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='8' style="font-size:large">لا يوجد أرقام تم تعينها الى المستخدمين</td>
+                </tr>
+
+                <tr>
+                  <td colspan="15">
+
+                      <div class="btn">
+                          <a href="{% url 'add_phone_to_user' %}">
+                            اضافة رقم الى مستخدم
+                          </a>
+                      </div>
+
+                  </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+      {% if users_phones %}
+        <div class="penality_btn">
+            <a href="{% url 'add_phone_to_user' %}">
+                اضافة رقم الى مستخدم
+            </a>
+        </div> 
+      {% endif %}
+    </div>
+  </section>
+
+
+{% endblock content %}
+  

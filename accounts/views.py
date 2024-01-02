@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 import importlib
 from . import forms
 from . import models
-from core.models import PhoneNumber
+from core.models import PhoneNumberr
 from django.contrib import messages
 
 
@@ -63,7 +63,11 @@ def register(request):
 @login_required(login_url='user-login')
 def profile(request):
     profile = models.Profile.objects.get(staff=request.user)
-    my_phones = PhoneNumber.objects.filter(user=request.user)
+    # my_phones = PhoneNumber.objects.filter(user=request.user)
+
+    # Get the new phones from the new model called phonenumberr...
+    my_phones = PhoneNumberr.objects.filter(user=request.user)
+
 
     context = {
         'profile' : profile,
@@ -107,47 +111,90 @@ def profile_update(request):
 
 
 
+# @login_required(login_url='user-login')
+# def phone_update(request):
+
+#     # Calling the function of the phones in the forms.py file to check if there are any phone exists or not...
+#     not_taken_phones = forms.phones_func()
+
+#     phone_update_form = forms.PhoneUpdate()
+#     # all_phones = PhoneNumberr.objects.all()
+#     all_phone_form = forms.PhoneNumberForm()
+
+
+#     if request.method == "POST":
+#         phone_update_form = forms.PhoneUpdate(request.POST or None)
+#         if phone_update_form.is_valid():
+#             # phone_update_form.save()
+
+#             phones = phone_update_form.cleaned_data.get("new_phone")
+
+#             for cnt in range(len(phones)):
+#                 # To check if the entered phone number is already save to the current user or not...
+#                 founded = PhoneNumber.objects.filter(user = request.user, phone = int(phones[cnt]))
+#                 # To reload this file --- forms.py file
+#                 importlib.reload(forms)
+
+
+#                 if founded:
+#                     continue
+#                 else:
+#                     new_user_phone = PhoneNumber.objects.create(user=request.user, phone=int(phones[cnt]))
+#                     new_user_phone.save()
+
+
+#             # To reload this file --- forms.py file
+#             importlib.reload(forms)
+                
+#             messages.success(request, ".تم حفظ تعديلات الارقام الخاصة بك")
+#             return redirect("user-profile")
+        
+        
+#     else:
+#         phone_update_form = forms.PhoneUpdate()
+
+
+#     context = {
+#         'phone_update_form' : phone_update_form,
+#         'not_taken_phones' : not_taken_phones,
+#         # 'all_phones' : all_phones,
+#         'all_phone_form' : all_phone_form,
+#     }
+
+#     return render(request, 'accounts/phone_update.html', context)
+
+
+
+
+
+
+
 @login_required(login_url='user-login')
 def phone_update(request):
+    if request.method == 'POST':
+        form = forms.AllPhonesForm(request.POST)
+        if form.is_valid():
+            phones = form.cleaned_data['phone']
 
-    # Calling the function of the phones in the forms.py file to check if there are any phone exists or not...
-    not_taken_phones = forms.phones_func()
-
-    phone_update_form = forms.PhoneUpdate()
-
-    if request.method == "POST":
-        phone_update_form = forms.PhoneUpdate(request.POST or None)
-        if phone_update_form.is_valid():
-            # phone_update_form.save()
-
-            phones = phone_update_form.cleaned_data.get("new_phone")
-
-            for cnt in range(len(phones)):
+            for phone in phones:
                 # To check if the entered phone number is already save to the current user or not...
-                founded = PhoneNumber.objects.filter(user = request.user, phone = int(phones[cnt]))
-                # To reload this file --- forms.py file
-                importlib.reload(forms)
-
-
+                founded = PhoneNumberr.objects.filter(user=request.user, phone = phone)
+                
                 if founded:
                     continue
                 else:
-                    new_user_phone = PhoneNumber.objects.create(user=request.user, phone=int(phones[cnt]))
+                    new_user_phone = PhoneNumberr.objects.create(user=request.user, phone=phone)
                     new_user_phone.save()
-            # To reload this file --- forms.py file
-            importlib.reload(forms)
-                
+
+
             messages.success(request, ".تم حفظ تعديلات الارقام الخاصة بك")
             return redirect("user-profile")
-        
-        
     else:
-        phone_update_form = forms.PhoneUpdate()
+        form = forms.AllPhonesForm()
 
 
     context = {
-        'phone_update_form' : phone_update_form,
-        'not_taken_phones' : not_taken_phones,
+        'form' : form,
     }
 
     return render(request, 'accounts/phone_update.html', context)
@@ -156,34 +203,20 @@ def phone_update(request):
 
 
 
-@login_required(login_url='user-login')
-def remove_phone(request, phone):
-    phone = PhoneNumber.objects.get(user=request.user, phone=phone)
 
+
+@login_required(login_url='user-login')
+def remove_phone(request, phone_id):
+    phone = PhoneNumberr.objects.get(user=request.user, phone__id=phone_id)
 
     if request.method == "POST":
         phone.delete()
-        # To reload this file --- forms.py file
-        importlib.reload(forms)
         messages.success(request, ".تم ازالة هذا الرقم من ملفك الشخصى")
         return redirect("user-profile")
     
     
     return render(request, 'accounts/phone_deletion_confirm.html')
 
-
-
-
-
-
-
-
-
-
-# class CustomPasswordResetView(PasswordResetView):
-#     form_class = forms.CustomPasswordResetForm
-#     template_name = 'accounts/password_reset.html' 
-#     email_template_name = 'accounts/password_reset_done.html'  
 
 
 

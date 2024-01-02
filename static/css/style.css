@@ -1041,6 +1041,57 @@ button {
 
 
 
+
+
+
+.send_task_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+  text-align: center;
+  font-size: larger;  
+}
+
+
+.send_task_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.send_task_btn a:hover {
+  background-color: transparent;
+  color: #f16179;
+}
+
+
+
+.shop_section .done_task_link {
+  text-decoration: none;
+  color: #F67280; /* Default text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.shop_section .done_task_link:hover {
+  color:#2471A3; /* Text color on hover */
+
+}
+
 .back_to_store {
   display: inline-block;
   padding: 10px 40px;
@@ -1453,6 +1504,41 @@ margin: auto;
 
 
 
+.add_new_phone_btn{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+}
+
+
+.add_new_phone_btn input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+
+  width: 300px;
+  font-size: larger;
+  
+}
+
+
+
+.add_new_phone_btn input:hover {
+  background-color: transparent;
+  color: #f16179;
+}
+
+
+
 
 
 
@@ -1630,6 +1716,43 @@ margin-top: 0px;
   background-color: transparent;
   color: #468B97;
 }
+
+
+
+
+
+
+.confirm_phone_deletion {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+
+.confirm_phone_deletion input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #468B97;
+  color: #ffffff;
+  border: 1px solid #468B97;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.confirm_phone_deletion input:hover {
+  background-color: transparent;
+  color: #468B97;
+}
+
 
 
 

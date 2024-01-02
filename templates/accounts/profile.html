@@ -117,12 +117,12 @@
                         </tr>
                       </thead>
                       <tbody style="text-align: center">
-                        {% for p in my_phones.all %}
+                        {% for phone in my_phones.all %}
                         <tr>
                           <th scope="row" class="mt-1">{{forloop.counter}}</th>
-                          <td>{{p.phone}}</td>
+                          <td>{{phone.phone}}</td>
                           <td>
-                            <a href="{% url 'user-phone-delete' p.phone %}">
+                            <a href="{% url 'user-phone-delete' phone.phone.id %}">
                               <img
                                 width="25"
                                 height="25"

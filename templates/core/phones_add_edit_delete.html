@@ -1,0 +1,119 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+  <!-- shop section -->
+
+
+  <!-- To show this form if edit_phone variable is True -->
+  
+  {% if edit_phone %}
+      <form method="POST" action="." enctype="multipart/form-data" dir="rtl" style="margin-top: 50px;">
+        {% csrf_token %}
+        <div class="row g-3" style="row-gap: 13px;">
+
+            <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto; text-align: right;">
+                <label style="font-size: larger; margin-right: 5px;">تعديل هذا الرقم:</label>
+
+                <div class="form-group">
+                    {{form.phone}}
+                </div>
+
+                <div class="add_new_phone_btn">
+                  <input type="submit" value="تعديل هذا الرقم" style="font-size:large">
+                </div>
+            </div>
+        </div>
+      </form>
+  {% endif %}
+
+
+
+
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+            جميع أرقام الهواتف الموجودة داخل النظام
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">رقم الهاتف</th>
+                <th scope="col">تاريخ الاضافة</th>
+                <th scope="col">تعديل؟</th>
+                <th scope="col">حذف؟</th>                
+                  
+              </tr>
+            </thead>
+            <tbody>
+                {% for phone in phones.all %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ phone.phone }}</td>
+                    <td>{{phone.date|date}} -- {{phone.date|time}}</td>
+
+  
+                    
+                    <td>
+                      <a  href="{% url 'edit_phone' phone.slug_link %}" class="edit_item_style">  
+                        <i class="fa fa-edit" style="font-size: xx-large;"></i>
+                      </a>
+                    </td>
+
+                    <td>
+                      <a href="{% url 'delete_phone' phone.slug_link %}" class="trash-icon-style">
+                        <i class="fa fa-trash" style="font-size: xx-large;"></i>
+                      </a>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='8' style="font-size:large">لا يوجد اى أرقام</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+  
+  <!-- To show this form if add_phone variable is True -->
+  {% if add_phone %}    
+      <form method="POST" action="." enctype="multipart/form-data" dir="rtl" style="margin-top: 50px;">
+        {% csrf_token %}
+        <div class="row g-3" style="row-gap: 13px;">
+
+            <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto">
+                <div class="form-group">
+                    {{form.phone}}
+                </div>
+
+                
+                <div class="add_new_phone_btn">
+                  <input type="submit" value="اضافة الرقم" style="font-size:large">
+                </div>
+
+            </div>
+        </div>
+      </form>
+  {% endif %}
+
+
+
+
+
+    </div>
+  </section>
+
+  <!-- end shop section -->
+
+
+{% endblock content %}
+  

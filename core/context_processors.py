@@ -95,3 +95,31 @@ def ordered_task_notification(request):
     }
 
     return context
+
+
+
+def done_task_notification(request):
+    if request.user.is_authenticated:
+        done_task_count = models.Tasks.objects.filter(status=True,  done_task_is_read=False).count()
+    else:
+        done_task_count = 0    
+
+    context = {
+        "done_task_count" : done_task_count,
+    }
+
+    return context
+
+
+
+def user_ordered_task_notification(request):
+    if request.user.is_authenticated:
+        user_ordered_task_count = models.Tasks.objects.filter(name=request.user, status=False).count()
+    else:
+        user_ordered_task_count = 0    
+
+    context = {
+        "user_ordered_task_count" : user_ordered_task_count,
+    }
+
+    return context

@@ -9,7 +9,9 @@ urlpatterns = [
       path('profile/', user_view.profile, name='user-profile'),
       path('profile/update/', user_view.profile_update, name='user-profile-update'),
       path('phone/update/', user_view.phone_update, name='user-phone-update'),
-      path('phone/delete/<int:phone>/', user_view.remove_phone, name='user-phone-delete'),
+      # path('phone/delete/<int:phone>/', user_view.remove_phone, name='user-phone-delete'),
+      path('phone/delete/<int:phone_id>/', user_view.remove_phone, name='user-phone-delete'),
+
 
 
 

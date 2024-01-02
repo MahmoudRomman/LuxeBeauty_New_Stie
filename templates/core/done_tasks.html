@@ -1,0 +1,101 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+  <!-- shop section -->
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2>
+            كل المهام التى تم تنفيذها
+        </h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">الاسم</th>
+                <th scope="col"> تفاصيل الطلب</th>
+                <th scope="col">تاريخ الطلب</th>
+                <th scope="col">تاريخ التنفيذ</th>
+                <th scope="col">مدة التنفيذ</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for task in page_obj %}
+                <tr>
+                    <th style="width: 150px;" scope="row">{{ page_obj.start_index|add:forloop.counter0 }}</th>
+                    <td>{{task.name}}</td>
+                    <td>{{task.message}}</td>
+                    <td>{{task.ordered_date}}</td>
+                    <td>{{task.done_date}}</td>
+                    <td>
+                      {{task.get_duration}}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='12' style="font-size:large">لا يوجد أى مهام تم تنفيذها</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <!-- end shop section -->
+
+
+
+  
+<nav aria-label="Page navigation example" style="margin: auto; margin-top: 10px;">
+  <ul class="pagination justify-content-center" style="text-align: center;">
+
+
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.previous_page_number }}">
+          Previous
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a  class="page-link" href="">
+          Previous
+        </a>
+      </li>
+    {% endif %}
+
+
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="#">
+          {{page_obj.number}}:{{page_obj.paginator.num_pages}}
+        </a>
+      </li>
+
+
+
+  
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.next_page_number }}">
+          Next
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="">
+          Next
+        </a>
+      </li>
+      {% endif %}
+
+
+  </ul>
+</nav>
+
+{% endblock content %}
+  

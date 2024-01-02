@@ -90,8 +90,8 @@ TEMPLATES = [
                 'core.context_processors.cart_notification',
                 'core.context_processors.reward_notification',
                 'core.context_processors.ordered_task_notification',
-
-
+                'core.context_processors.done_task_notification',
+                'core.context_processors.user_ordered_task_notification',
             ],
         },
     },

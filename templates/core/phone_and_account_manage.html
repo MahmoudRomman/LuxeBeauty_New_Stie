@@ -1,0 +1,116 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+
+
+
+
+
+{% block content %}
+  
+
+
+
+  
+<section class="shop_section layout_padding">
+    <div class="container" style="max-width: 1400px;">
+      <div class="row">
+
+            <div class="col-xl-4 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+                <div class="box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
+                
+
+                    <div class="img-box">
+                        <a href="#">
+                            <div style="text-align: center; margin-top: 15px;">
+                                <img src="{% static 'images/add_account_to_phone.png' %}" style="width: 55%; height: auto;">
+                            </div>
+                        </a>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <p class="lead">
+                            <!-- <span>:الخطوة الاخيرة</span> -->
+                            <i class="fa-solid fa-3"></i>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 15px;">
+                        <p class="lead">
+                            <span>عمل حساب مُسوق وربطة بأحد أرقام المستخدمين</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-xl-4 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+                <div class="box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
+                
+
+                    <div class="img-box">
+                        <a href="{% url 'users_phones' %}">
+                            <div style="text-align: center; margin-top: 15px;">
+                                <img src="{% static 'images/add_phone_to_user.png' %}" style="width: 55%; height: auto;">
+                            </div>
+                        </a>
+                    </div>
+
+
+                    <div style="text-align: center;">
+                        <p class="lead">
+                            <!-- <span>:الخطوة الثانية</span> -->
+                            <i class="fa-solid fa-2"></i>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 15px;">
+                        <p class="lead">
+                            <span>تعيين رقم هاتف الى أحد المستخدمين</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+                <div class="box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
+                    <div class="img-box">
+                        <a href="{% url 'all_phones' %}">
+                            <div style="text-align: center; margin-top: 15px;">
+                                <img src="{% static 'images/add_phone.png' %}" style="width: 60%; height: auto;">
+                            </div>
+                        </a>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <p class="lead">
+                            <!-- <span>:الخطوة الأولى</span> -->
+                            <i class="fa-solid fa-1"></i>
+                            <!-- <i class="fa-solid fa-circle-1"></i> -->
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 15px;">
+                        <p class="lead">
+                            <span>اضافة المزيد من أرقام الهواتف الى النظام</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+
+      </div>
+    </div>
+  </section>
+
+
+
+{% endblock content %}
+  
+
+
+
+
+
