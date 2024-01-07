@@ -270,16 +270,22 @@ class PhoneNumberr(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.phone.phone}"
     
+    
 
 
 
 
 class Account(models.Model):
     account_name = models.CharField(max_length=200)
-    account_link = models.URLField(max_length=1000, null=False, blank=False)
+
+    tiktok_account_link = models.URLField(max_length=1000, null=False, blank=False)
+    instagram_account_link = models.URLField(max_length=1000, null=False, blank=False)
+
     marketer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    # phone_number = models.ForeignKey(PhoneNumber, on_delete=models.CASCADE, null=True, blank=True)
-    phone = models.ForeignKey(PhoneNumberr, on_delete=models.CASCADE, null=True, blank=True)
+    phonenumber = models.ForeignKey(PhoneNumberr, on_delete=models.CASCADE, null=True, blank=True)
+
+    date = models.DateTimeField(auto_now_add=True)
+    slug_link = models.SlugField()
 
 
 

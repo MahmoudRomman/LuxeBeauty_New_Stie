@@ -4,6 +4,7 @@
 
 {% block content %}
 
+
 <div class="container" style="margin-top: 60px;">
     <div class="row">
         <div class="col-md-8 offset-md-2">
@@ -12,16 +13,16 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h1 class="has-text-centered is-size-3" style="text-align: center;">ازالة رقم</h1>
+                            <h1 class="has-text-centered is-size-3" style="text-align: center;">ازالة حساب مُسوق</h1>
 
                             <hr>
                             <div class="alert alert-danger" style="text-align: center;">
-                                <h4>!! أنت على وشك ازالة هذا الرقم نهائياََ من ملفك الشخصى</h4>
+                                <h4>أنت على وشك ازالة هذا الحساب نهائياََ لهذا المستخدم, قد يؤثر هذا على الفواتير التى تم عملها من على هذا الحساب</h4>
                             </div>
                             <form method="POST">
                                 {% csrf_token %}
                                 {{form}}
-                                <div class="confirm_phone_deletion">
+                                <div class="confirm_account_deletion">
                                     <input class="btn btn-info" type="submit" value="تأكيد الازالة" style="font-size:large;">
                                 </div>
                             </form>
@@ -29,8 +30,8 @@
                     </div>
                 </div>
 
-                <div class="back_to_profile_update">
-                    <a href="{% url 'user-profile' %}" style="font-size:large;">التراجع</a>
+                <div class="back_to_users_accounts">
+                    <a href="{% url 'users_accounts' %}" >التراجع</a>
                 </div>
 
 

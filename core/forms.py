@@ -460,23 +460,6 @@ class BillForm2(forms.Form):
 import datetime
 
 
-# today = datetime.date.today()
-# year = today.year
-# month = today.month
-# today_in_month = int(today.day)
-# list_of_days = []
-# list_of_days.append((str("كل الايام"), str("كل الايام")))
-
-
-# for i in range(1, (today_in_month + 1)):
-#     # list_of_days.append(i)
-#     list_of_days.append((str(i), str(i)))
-# list_of_days = tuple(list_of_days)
-
-
-
-
-
 class BillFilterForAdmin(forms.Form):
     
 
@@ -509,17 +492,6 @@ class BillFilterForAdmin(forms.Form):
 
 
 
-
-
-
-
-# all_users = User.objects.all()
-
-# users_list = []
-# for c in all_users:
-#     users_list.append((str(c), str(c)))
-
-# users_tuple = tuple(users_list)
 
 
 
@@ -1050,6 +1022,9 @@ class AddPhoneNumberForUsersForm(forms.Form):
 
 
     
+# The following two forms is used to edit the phones for the different users 
+    
+# 1- This one is used to show the phones that the user take
 class EditPhoneNumberForUsersForm(forms.ModelForm):
 
     
@@ -1059,27 +1034,135 @@ class EditPhoneNumberForUsersForm(forms.ModelForm):
     )
 
     class Meta:
-         model = models.Phones
+         model = models.PhoneNumberr
          fields = ['phone',]
 
+# 2- And this one is used to make the actual updates
+class ActualEditPhoneNumberForUsersForm(forms.Form):
+
+    
+    phone = forms.ModelMultipleChoiceField(
+        queryset = models.Phones.objects.all(), 
+        widget = forms.CheckboxSelectMultiple
+    )
+
+
+
+
+class CreateAccountForm(forms.Form):
+
+    def __init__(self, current_user, *args, **kwargs):
+        super(CreateAccountForm, self).__init__(*args, **kwargs)
+
+        # Exclude the current user from the queryset
+        self.fields['marketer'].queryset = User.objects.exclude(id=current_user.id)
+
+    marketer = forms.ModelChoiceField(
+        queryset=User.objects.all(), 
+        empty_label="اختر أحد المستخدمين ...", 
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+        'style': 'border-color:wightblack; border-radius: 15px;',  
+            }))
+    
+        
+    
+
+    phonenumber = forms.ModelChoiceField(
+        queryset = models.PhoneNumberr.objects.all(),
+        empty_label="اختر أحد أرقام الهواتف الخاصه بالمستخدمين ...", 
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+        'style': 'border-color:wightblack; border-radius: 15px;',  
+            }))
+
+
+    account_name = forms.CharField(required=True, widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'type' : 'text',
+            'size': "200",
+            'placeholder': "ادخل اسم الحساب",
+            'style': 'border-color:wightblack; border-radius: 15px;',
+        }))
+
+    tiktok_account_link = forms.URLField(widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'type' : 'url',
+            'placeholder': "ادخل رابط حساب التيك توك",
+            'style': 'border-color:wightblack; border-radius: 15px;',
+
+        }))
+    
+    instagram_account_link = forms.URLField(widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'type' : 'url',
+            'placeholder': "ادخل رابط حساب الانستجرام",
+            'style': 'border-color:wightblack; border-radius: 15px;',
+
+        }))
+
+
+
+class EditAccountForm(forms.ModelForm):
+
+    # def __init__(self, current_user, *args, **kwargs):
+    #     super(EditAccountForm, self).__init__(*args, **kwargs)
+
+    #     # Exclude the current user from the queryset
+    #     self.fields['marketer'].queryset = User.objects.exclude(id=current_user.id)
+
+    # marketer = forms.ModelChoiceField(
+    #     queryset=User.objects.all(), 
+    #     empty_label="اختر أحد المستخدمين ...", 
+    #     widget=forms.Select(attrs={
+    #     'class': 'form-control',
+    #     'style': 'border-color:wightblack; border-radius: 15px;',  
+    #         }))
+    
+        
+    
+
+    # phonenumber = forms.ModelChoiceField(
+    #     queryset = models.PhoneNumberr.objects.all(),
+    #     empty_label="اختر أحد أرقام الهواتف الخاصه بالمستخدمين ...", 
+    #     widget=forms.Select(attrs={
+    #     'class': 'form-control',
+    #     'style': 'border-color:wightblack; border-radius: 15px;',  
+    #         }))
+
+
+    account_name = forms.CharField(required=True, widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'type' : 'text',
+            'size': "200",
+            'placeholder': "ادخل اسم الحساب",
+            'style': 'border-color:wightblack; border-radius: 15px;',
+        }))
+
+    tiktok_account_link = forms.URLField(widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'type' : 'url',
+            'placeholder': "ادخل رابط حساب التيك توك",
+            'style': 'border-color:wightblack; border-radius: 15px;',
+
+        }))
+    
+    instagram_account_link = forms.URLField(widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'type' : 'url',
+            'placeholder': "ادخل رابط حساب الانستجرام",
+            'style': 'border-color:wightblack; border-radius: 15px;',
+
+        }))
+    
+    class Meta:
+        model = models.Account
+        fields = ['marketer', 'phonenumber', 'account_name', 'tiktok_account_link', 'instagram_account_link']
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    

@@ -1,0 +1,138 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+  
+
+  <section class="shop_section layout_padding">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+
+        <h2 class="has-text-centered mb-5 is-size-3" style="text-align: center;">جميع الحسابات التى تم ربطها بأرقام هواتف المستخدمين</h2>
+
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center; width: 100%; table-layout: fixed;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">اسم المٌسوق</th>
+
+                <th scope="col">اسم الحساب</th>
+
+
+                <th scope="col">حساب التيك توك</th>
+                <th scope="col">حساب الانستجرام</th>
+
+                <th scope="col">رقم الهاتف</th>
+                <th scope="col">تاريخ الاضافة</th>
+
+                <th scope="col">تعديل؟</th>
+                <th scope="col">حذف؟</th>                
+                  
+              </tr>
+            </thead>
+            <tbody>
+                {% for user_account in users_accounts.all %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ user_account.marketer.username }}</td>
+
+                    <td>{{ user_account.account_name }}</td>
+
+                    <td>
+                        <div class="social_box">
+                            <a href="{{ user_account.tiktok_account_link }}" target="_blank" class="social-icon"><i class="fa fa-tiktok"></i></a>
+                        </div>
+                    </td>
+                    <td>
+
+                        <div class="social_box">
+                            <a href="{{ user_account.instagram_account_link }}" target="_blank" class="social-icon"><i class="fa fa-instagram"></i></a>
+                        </div>
+                    </td>
+
+                    <td>{{ user_account.phonenumber.phone }}</td>
+
+
+
+                    <td>
+                      <p>{{user_account.date|date}}</p>
+                      <p>{{user_account.date|time}}</p>
+                    </td>
+
+  
+                    
+                    <td>
+                      <a  href="{% url 'edit_user_account' user_account.slug_link %}" class="edit_item_style">  
+                        <i class="fa fa-edit" style="font-size: xx-large;"></i>
+                      </a>
+                    </td>
+
+                    <td>
+                      <a href="{% url 'delete_user_account' user_account.slug_link %}" class="trash-icon-style">
+                        <i class="fa fa-trash" style="font-size: xx-large;"></i>
+                      </a>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='8' style="font-size:large">لا يوجد أى حسابات تم انشائها الى المستخدمين</td>
+                </tr>
+
+                <tr>
+                  <td colspan="15">
+
+                      <div class="create_social_account_a_tag">
+                          <a href="{% url 'create_new_account' %}">
+                            عمل حساب جديد
+                          </a>
+                      </div>
+
+                  </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+      {% if users_accounts %}
+        <div class="create_social_account_a_tag">
+            <a href="{% url 'create_new_account' %}">
+                عمل حساب جديد
+            </a>
+        </div> 
+      {% endif %}
+    </div>
+  </section>
+
+
+
+  <style>
+
+    .social_box {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    }
+
+    .social_box a {
+    margin: 0 10px;
+    color: #000;
+    font-size: 30px;
+    }
+
+  </style>
+
+{% endblock content %}
+  

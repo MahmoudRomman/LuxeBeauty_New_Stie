@@ -118,6 +118,7 @@
                 <td>{{item.density}}</td>
 
                 <td>
+                  {% if item.quantity %}
                   <div class="dropdown">
                     <a href="{% url 'item_detail' item.slug %}">
                       <img src="{{item.image.url}}" alt="Cinque Terre" width="100" height="50">
@@ -131,6 +132,23 @@
                         </div>
                     </div>
                   </div>
+                  {% else %}
+                  <div class="dropdown">
+                    <a href="{% url 'item_detail' item.slug %}">
+                      <img src="{{item.image.url}}" style="filter: grayscale(100%);" alt="Cinque Terre" width="100" height="50">
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'item_detail' item.slug %}">
+                          <img src="{{item.image.url}}" style="filter: grayscale(100%);" alt="Cinque Terre" width="300" height="200">
+                        </a>
+                        <div class="desc">
+                          <p style="font-weight: bold;">منتج خارج المخزن</p>
+                          
+                          <p>{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
+                        </div>
+                    </div>
+                  </div>
+                  {% endif %}
                 </td>
 
                 <td>{{item.price}} SAR</td>

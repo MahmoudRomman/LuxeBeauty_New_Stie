@@ -44,9 +44,7 @@
   <section class="shop_section layout_padding" style="margin-top: -5%;">
     <div class="container" style="max-width: 85%;">
       <div class="heading_container heading_center">
-        <h2>
-            الطرق المتاحة للدفع
-        </h2>
+        <h2 class="has-text-centered is-size-3" style="text-align: center;">روابط الدفع المتاحة</h2>
       </div>
       <div class="row">
 
@@ -78,14 +76,19 @@
                     <td>{{ link_data.link_name }}</td>
                     <td>{{ link_data.amount }}</td>
                     <td>{{ link_data.date|date }}</td>
-                    <td>
+                    <td class="payment_link_copy_style">
 
                       <button class="btn_payment_button copy-btn" id="btn_after" data-container="{{link_data.AED_link}}">نسخ الرابط</button>
+                      <!-- <i class="fa-solid fa-copy copy-btn" id="btn_after" data-container="{{link_data.AED_link}}" style="font-size: xx-large;"></i> -->
+                      <!-- <span class="copy-icon" data-text-to-copy="Text to copy" style="font-size: xx-large;">&#x1F4CB;</span> -->
+
+
 
                     </td>
                     <td>
 
                       <button class="btn_payment_button copy-btn" id="btn_after" data-container="{{link_data.SAR_link}}">نسخ الرابط</button>
+             
 
                     </td>
                     {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
@@ -106,7 +109,7 @@
                 <tr>
                     <td colspan="6">
 
-                        <div class="btn" style="font-size: large;">
+                        <div class="add_more_payments_link_btn">
                             <a href="{% url 'add_new_payment_link' %}">
                               اضافة المزيد من الروابط 
                             </a>
@@ -121,7 +124,7 @@
 
     
     {% if links_data %}
-        <div class="btn" style="font-size: large;">
+        <div class="add_more_payments_link_btn">
             <a href="{% url 'add_new_payment_link' %}">
             اضافة المزيد من الروابط 
             </a>
@@ -155,8 +158,6 @@
         btn_after.style.backgroundColor = '#27AE60';
         btn_after.style.color = 'white';
       });
-
-
 
 
     </script>

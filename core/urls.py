@@ -76,14 +76,24 @@ urlpatterns = [
 
     path('phone_and_account_manage/', views.manage_phone_and_account, name='phone_and_account_manage'),
 
+    # Links for the Phones model and its views
     path('all_phones/', views.show_all_phones, name='all_phones'),
     path('edit_phone/<slug>/', views.edit_phone, name='edit_phone'),
     path('delete_phone/<slug>/', views.delete_phone, name='delete_phone'),
 
+    # Links for the PhoneNumberr model and its views
     path('users_phones/', views.show_all_user_phones, name='users_phones'),
     path('add_phone_to_user/', views.add_phone_to_user, name='add_phone_to_user'),
     path('edit_user_phone/<slug>/', views.edit_user_phone, name='edit_user_phone'),
-    # path('delete_phone/<slug>/', views.delete_phone, name='delete_phone'),
+    path('delete_user_phone/<slug>/', views.delete_user_phone, name='delete_user_phone'),
+
+    # Links for the Account model and its views
+    path('users_accounts/', views.show_all_user_accounts, name='users_accounts'),
+    path('create_new_account/', views.create_new_account, name='create_new_account'),
+    path('edit_user_account/<slug>/', views.edit_user_account, name='edit_user_account'),
+    path('delete_user_account/<slug>/', views.delete_user_account, name='delete_user_account'),
+
+
 
 
 

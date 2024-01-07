@@ -40,43 +40,6 @@
                   </div>
                 </form>
 
-
-                  <!-- <form method="get" action="." enctype="multipart/form-data" dir="rtl">
-                    <label for="start_date">Start Date:</label>
-                    <input type="date" name="start_date" id="start_date" value="{{ request.GET.start_date }}">
-                  
-                    <label for="end_date">End Date:</label>
-                    <input type="date" name="end_date" id="end_date" value="{{ request.GET.end_date }}">
-                  
-                    <button type="submit">Search</button>
-                  </form> -->
-
-
-
-
-
-                  <!-- <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
-                    {% csrf_token %}
-                    <div class="row g-3">
-                        <div class="col-12 col-sm-2">
-                            <div class="form-group">
-                                {{form_filter.start_date}}
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-sm-2">
-                          <div class="form-group">
-                              {{form_filter.end_date}}
-                          </div>
-                        </div>
-  
-                        <div class="btn_bill_search col-12 col-sm-2" style="font-size: small;">
-                            <input type="submit" value="بحث">
-                        </div>
-  
-                    </div>
-                  </form> -->
-
               </div>
           </div>
       </div>
@@ -93,9 +56,6 @@
 <section class="shop_section layout_padding" style="margin-top: -4%;">
   <div class="container" style="max-width: 85%;">
     <div class="heading_container heading_center">
-      <!-- <h2 style="margin-right: 300px;">
-        جميع الفواتير خلال هذا الشهر
-      </h2> -->
     </div>
     <div class="row">
 
@@ -154,10 +114,10 @@
                 <td>{{bill.price}}</td>
                 <td>{{bill.total_price}}</td>
               </tr>
-
+              
               {% empty %}
               <tr>
-                <td colspan='18' style="font-size:large">لا يوجد فواتير</td>
+                <td colspan='12' style="font-size:large">لا يوجد فواتير</td>
               </tr>
               {% endfor %}
           {% elif page_obj %}
@@ -185,7 +145,7 @@
               </tr>
               {% empty %}
               <tr>
-                <td colspan='18' style="font-size:large">لا يوجد فواتير</td>
+                <td colspan='12' style="font-size:large">لا يوجد فواتير</td>
               </tr>
               {% endfor %}
           {% endif %}
@@ -201,7 +161,6 @@
 
     </div>
   </div>
-<!-- <h2 style="margin-left:43%;  align-items: center;">{{bills_num_this_month}} : عدد الفواتير خلال الشهر الحالى فقط</h2> -->
 <h2 style="text-align: center;">{{bills_num_this_month}} : عدد الفواتير خلال هذا الشهر</h2>
 
 

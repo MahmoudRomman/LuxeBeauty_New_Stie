@@ -1,0 +1,81 @@
+{% extends 'partials/base.html' %}
+
+
+
+
+
+{% block content %}
+
+
+
+<div class="container" style="margin-top: 60px; margin-bottom: 60px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="border bg-white p-3">
+                <h1 class="has-text-centered mb-5 is-size-3" style="text-align: center;">تعديل حساب مُسوق</h1>
+                <hr>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
+                                {% csrf_token %}
+                                <div class="row g-3" style="row-gap: 13px;">
+                                    <!-- <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: larger; margin-right: 5px;">اختر اسم المستخدم:</label>
+                                        <div class="form-group">
+                                            {{form.marketer}}
+                                        </div>
+                                    </div> -->
+        
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: larger; margin-right: 5px;">تعديل اسم الحساب:</label>
+                                        <div class="form-group">
+                                            {{form.account_name}}
+                                        </div>
+                                    </div>
+        
+                                    <!-- <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: larger; margin-right: 5px;">اختر رقم الهاتف:</label>
+                                        <div class="form-group">
+                                            {{form.phonenumber}}
+                                        </div>
+                                    </div> -->
+        
+        
+        
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: larger; margin-right: 5px;">تعديل رابط حساب التك توك:</label>
+                                        <div class="form-group">
+                                            {{form.tiktok_account_link}}
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: larger; margin-right: 5px;">تعديل رابط حساب الانستجرام:</label>
+                                        <div class="form-group">
+                                            {{form.instagram_account_link}}
+                                        </div>
+                                    </div>
+        
+                                    <div class="edit_user_account_btn">
+                                        <input type="submit" value="تعديل معلومات الحساب">
+                                    </div>
+        
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div> 
+
+    
+
+{% endblock content %}
+  

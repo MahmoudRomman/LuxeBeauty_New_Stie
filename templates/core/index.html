@@ -160,23 +160,39 @@
 
         {% for item in items.all %}
             <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-              <div class="box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
+              <div class="box item_box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
                 
                   <div class="img-box">
                     <a href="{% url 'item_detail' item.slug %}">
+                      
+                      {% if item.quantity %}
                       <img src="{{item.image.url}}" alt="">
+                      {% else %}
+                      <img src="{{item.image.url}}" style="filter: grayscale(100%);" alt="">
+                      {% endif %}
+                        
                     </a>
                   </div>
 
                   <div style="text-align: center;">
                     <p class="lead">
                       
-                    {% if item.discount_price %}
-                      <span class="mr-1"> <del>{{ item.price }} SAR</del> </span>
-                      <span>{{ item.price|sub:item.discount_price }} SAR</span>                        
+                    
+                    {% if item.quantity %}
+                        {% if item.discount_price %}
+                        <span class="mr-1"> <del>{{ item.price }} SAR</del> </span>
+                        <span>{{ item.price|sub:item.discount_price }} SAR</span>                        
+                        {% else %}
+                        <span>{{item.price}} SAR</span>
+                        {% endif %}
                     {% else %}
-                      <span>{{item.price}} SAR</span>
+                       <span style="font-weight: bold;">منتج خارج المخزن</span>
                     {% endif %}
+
+
+
+                      
+
 
                     </p>
                   </div>
@@ -209,10 +225,6 @@
                   </div>                    
                   {% endif %}
                   {% endif %}
-
-                    
-
-                
               </div>
             </div>
         {% endfor %}
@@ -287,15 +299,38 @@
 
 
   <style>
+    .item_box {
+        /* Add other styles as needed */
+        transition: transform 0.3s ease; /* Add smooth transition effect for transform property */
+    }
+
+    /* Define styles for hover state */
+    .item_box:hover {
+        transform: translateY(-20px); /* Move the div 5 pixels up on hover */
+        /* Add other styles for hover state */
+    }
+
+
     .photo-container {
         display: flex;
         justify-content: space-between; /* Adjust as needed */
     }
 
+
      .photo {
         width: 18%; /* Set the fixed width for each photo div */
         border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+        transition: transform 0.3s ease; /* Add smooth transition effect for transform property */
     }
+
+
+
+    /* Define styles for hover state */
+    .photo:hover {
+        transform: translateY(-20px); /* Move the div 5 pixels up on hover */
+        /* Add other styles for hover state */
+    }
+
 
     .photo img {
         width: 100%; /* Ensure the image fills the container */

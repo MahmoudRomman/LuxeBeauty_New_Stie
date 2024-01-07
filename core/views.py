@@ -1043,16 +1043,11 @@ def make_bill(request):
 
 @login_required(login_url='user-login')
 def show_bills(request):
-    form = forms.BillFilterForAdmin()
 
     today = datetime.date.today()
-
-
-
     year = today.year
     month = today.month
 
-    # my_bills = models.Bill2.objects.filter(seller=request.user, date__month=month, date__day=str(f"{bills_per_day+1}"))
     data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
     bills_num_this_month = 0
     for bill in data:
@@ -1073,7 +1068,9 @@ def show_bills(request):
             today_day = int(today_day)
             data = models.Bill2.objects.filter(date__year = year, date__month = month, date__day = today_day)
             page_obj = 0
+
     else:
+        form = forms.BillFilterForAdmin()
         data = models.Bill2.objects.filter(date__year = year, date__month = month)
         paginator = Paginator(data, 7)
         page_number = request.GET.get('page')
@@ -1120,9 +1117,8 @@ def banks(request):
 @login_required(login_url='user-login')
 def add_payment_link(request):
 
-    form = forms.AddLinkForm(request.POST or None, request.FILES or None)
-
     if request.method == "POST":
+        form = forms.AddLinkForm(request.POST, request.FILES)
         if form.is_valid():
             link_name = form.cleaned_data.get("link_name")
             amount = form.cleaned_data.get("amount")
@@ -1131,20 +1127,26 @@ def add_payment_link(request):
 
 
             
-            create_slug = create_slug_code()
+            try:
+                check_payment_link = models.AddLink.objects.get(amount=amount, link_name=link_name)
+                messages.info(request, "هذا الرابط موجود بالفعل بنفس طريقة الدفع ونفس القيمة")
+                return redirect("banks_and_payments")
+            except ObjectDoesNotExist:
+                create_slug = create_slug_code()
 
-            new_link = models.AddLink.objects.create(
-                link_name = link_name,
-                slug_link = create_slug,
-                amount = amount,
-                SAR_link = SAR_link,
-                AED_link = AED_link,
-                )
+                new_link = models.AddLink.objects.create(
+                    link_name = link_name,
+                    slug_link = create_slug,
+                    amount = amount,
+                    SAR_link = SAR_link,
+                    AED_link = AED_link,
+                    )
 
-            new_link.save()
-            messages.success(request, "تم اضافة الرابط الجديد بنجاح")
-            return redirect("banks_and_payments")
-
+                new_link.save()
+                messages.success(request, "تم اضافة الرابط هذا بنجاح")
+                return redirect("banks_and_payments")
+    else:
+        form = forms.AddLinkForm()
 
 
     context = {
@@ -1155,11 +1157,26 @@ def add_payment_link(request):
 
 
 
+# @login_required(login_url='user-login')
+# def delete_payment_link(request, slug):
+#     models.AddLink.objects.filter(slug_link=slug).delete()
+#     messages.info(request, "item deleted successfully")
+#     return redirect("banks_and_payments")
+
+
+
 @login_required(login_url='user-login')
 def delete_payment_link(request, slug):
-    models.AddLink.objects.filter(slug_link=slug).delete()
-    messages.info(request, "item deleted successfully")
-    return redirect("banks_and_payments")
+    payment_link = models.AddLink.objects.get(slug_link=slug)
+
+
+    if request.method == "POST":
+        payment_link.delete()
+        messages.success(request, ".تم ازالة هذا الرابط بنجاح")
+        return redirect("banks_and_payments")
+    
+    
+    return render(request, 'core/payment_link_deletion_confirm.html')
 
 
 
@@ -1809,15 +1826,6 @@ def show_all_phones(request):
     }
     return render(request, 'core/phones_add_edit_delete.html', context)
 
-@login_required(login_url='user-login')
-def delete_phone(request, slug):
-    phone = models.Phones.objects.filter(slug_link=slug)
-    phone.delete()
-    messages.success(request, ".تم حذف هذا الرقم بنجاح")
-    return redirect("all_phones")
-
-
-
 
 
 @login_required(login_url='user-login')
@@ -1858,6 +1866,18 @@ def edit_phone(request, slug):
 
 
 
+@login_required(login_url='user-login')
+def delete_phone(request, slug):
+
+    phone = models.Phones.objects.filter(slug_link=slug)
+
+
+    if request.method == "POST":
+        phone.delete()
+        messages.success(request, ".تم حذف هذا الرقم بنجاح")
+        return redirect("all_phones")
+    
+    return render(request, 'core/phone_deletion_confirm.html')
 
 
 
@@ -1912,67 +1932,186 @@ def add_phone_to_user(request):
     return render(request, 'core/add_phone_to_user.html', context)
 
 
-# @login_required(login_url='user-login')
-# def delete_phone(request, slug):
-#     phone = models.Phones.objects.filter(slug_link=slug)
-#     phone.delete()
-#     messages.success(request, ".تم حذف هذا الرقم بنجاح")
-#     return redirect("all_phones")
 
+@login_required(login_url='user-login')
+def edit_user_phone(request, slug):
+    phonenumber = models.PhoneNumberr.objects.get(slug_link=slug)
+
+
+    if request.method == "POST":
+        form = forms.ActualEditPhoneNumberForUsersForm(request.POST)
+
+
+        if form.is_valid():
+            phones = form.cleaned_data['phone']
+
+            phone_edit = models.PhoneNumberr.objects.get(slug_link=slug)
+            phone_user = phone_edit.user
+
+            for phone in phones:
+                try:
+                    check_phone = models.PhoneNumberr.objects.get(user=phone_user, phone=phone)
+                except ObjectDoesNotExist:
+                    create_slug = create_slug_code()
+                    new_phone_user = models.PhoneNumberr.objects.create(
+                        user = phone_user,
+                        phone = phone,
+                        slug_link = create_slug,
+                    )
+                    new_phone_user.save()
+
+
+            
+            messages.success(request, "تم تعديل الارقام الخاصه بهذا المستخدم بنجاح")
+            return redirect("users_phones")
+
+    else:
+        form = forms.EditPhoneNumberForUsersForm(instance=phonenumber)
+
+
+
+    context = {
+        'form' : form,
+    }
+    return render(request, 'core/edit_user_phone.html', context)
+
+
+@login_required(login_url='user-login')
+def delete_user_phone(request, slug):
+    phone = models.PhoneNumberr.objects.get(slug_link=slug)
+
+    if request.method == "POST":
+        phone.delete()
+        messages.success(request, ".تم ازالة الرقم من الملف الشخصى لهذا المستخدم بنجاح")
+        return redirect("users_phones")
+    
+    
+    return render(request, 'core/user_phone_deletion_confirm.html')
+
+
+
+
+
+# This function used to show all phones and also to add more phones to the database...
+@login_required(login_url='user-login')
+def show_all_user_accounts(request):
+    users_accounts = models.Account.objects.all().order_by('-date')
+
+
+    context = {
+        'users_accounts' : users_accounts,
+        
+    }
+    return render(request, 'core/all_users_accounts.html', context)
+
+
+
+
+# Activate the following function
+@login_required(login_url='user-login')
+def create_new_account(request):
+    if request.method == "POST":
+        form = forms.CreateAccountForm(request.user ,request.POST)
+        if form.is_valid():
+            marketer = form.cleaned_data['marketer']
+            phonenumber = form.cleaned_data['phonenumber']
+            account_name = form.cleaned_data['account_name']
+            tiktok_account_link = form.cleaned_data['tiktok_account_link']
+            instagram_account_link = form.cleaned_data['instagram_account_link']
+            create_slug = create_slug_code()
+
+            try:
+                user_account = models.Account.objects.get(phonenumber=phonenumber, marketer=marketer)
+                messages.warning(request, "هذا المُستخدم لدية حساب بالفعل على هذا الرقم, يمكنك التعديل عليه أو ازالته")
+                return redirect("users_accounts")
+
+            except ObjectDoesNotExist:
+                try:
+                    user_account_name = models.Account.objects.get(account_name=account_name)
+                    messages.warning(request, "يوجد لديك فى البيانات حساب يحمل نفس اسم الحساب الذى ادخلته, من فضلك قم بتغير اسم الحساب")
+                    return redirect("users_accounts")
+                except ObjectDoesNotExist:
+                    new_account = models.Account.objects.create(
+                        marketer = marketer,
+                        phonenumber = phonenumber,
+                        account_name = account_name,
+                        tiktok_account_link = tiktok_account_link,
+                        instagram_account_link = instagram_account_link,
+                        slug_link = create_slug,
+                    )
+
+                    new_account.save()
+
+                    
+                    messages.success(request, "تم انشاء حساب مُسوق بنجاح لهذا المُستخدم")
+                    return redirect("users_accounts")
+
+
+    else:
+        form = forms.CreateAccountForm(request.user)
+
+    context = {
+        'form' : form,
+    }
+    return render(request, 'core/create_new_account.html', context)
+
+
+@login_required(login_url='user-login')
+def edit_user_account(request, slug):
+    account = models.Account.objects.get(slug_link = slug)
+    if request.method == "POST":
+        form = forms.EditAccountForm(request.POST, instance=account)
+        if form.is_valid():
+            account_name = form.cleaned_data['account_name']
+            tiktok_account_link = form.cleaned_data['tiktok_account_link']
+            instagram_account_link = form.cleaned_data['instagram_account_link']
+
+            
+            all_accounts = models.Account.objects.all().exclude(slug_link = slug)
+            print("*" * 100)
+            for each_account in all_accounts:
+                print(each_account.account_name)
+                if each_account.account_name == account_name:
+                    messages.warning(request, "يوجد لديك فى البيانات حساب يحمل نفس اسم الحساب الذى ادخلته, من فضلك قم بتغير اسم الحساب")
+                    return redirect("edit_user_account", slug=slug)                
+                else:
+                    try:
+                        account_with_same_info = models.Account.objects.get(
+                            slug_link=slug,
+                            account_name = account_name,
+                            tiktok_account_link = tiktok_account_link,
+                            instagram_account_link = instagram_account_link,
+                            )
+                        messages.info(request, "لا يوجد بيانات تم تغيرها")
+                        return redirect("users_accounts")
+                    except ObjectDoesNotExist:
+                        account = models.Account.objects.filter(slug_link = slug)
+                        account.update(
+                            account_name = account_name,
+                            tiktok_account_link = tiktok_account_link,
+                            instagram_account_link = instagram_account_link
+                        )
+
+                        messages.success(request, "تم تعديل الحساب لهذا المُستخدم بنجاح")
+                        return redirect("users_accounts")
+    else:
+        form = forms.EditAccountForm(instance=account)
+    context = {
+        'form' : form,
+    }
+    return render(request, 'core/edit_user_account.html', context)
 
 
 
 
 @login_required(login_url='user-login')
-def edit_user_phone(request, slug):
-    phonenumber = models.PhoneNumberr.objects.get(slug_link=slug)
-    phone = models.Phones.objects.get(phone = str(phonenumber.phone))
-
-    print("-" * 100)
-    print(phone)
-    # phone = models.PhoneNumberr.objects.get(slug_link=slug, phone=phone)
-
-
+def delete_user_account(request, slug):
+    account = models.Account.objects.get(slug_link=slug)
 
     if request.method == "POST":
-        form = forms.EditPhoneNumberForUsersForm(request.POST, instance=phone)
-
-        print("sdfsdfsdf")
-        if form.is_valid():
-            phones = form.cleaned_data['phone']
-
-            phone_edit = models.PhoneNumberr.objects.get(slug_link=slug)
-            phone_user = phone_edit[0].user
-
-
-            print("*" * 100)
-            print(phone_user)
-            for phone in phones:
-                print(phone)
-
-            # for phone in phones:
-            #     try:
-            #         check_phone = models.PhoneNumberr.objects.get(user=phone_user, phone=phone)
-            #     except ObjectDoesNotExist:
-            #         create_slug = create_slug_code()
-            #         new_phone_user = models.PhoneNumberr.objects.create(
-            #             user = phone_user,
-            #             phone = phone,
-            #             slug_link = create_slug,
-            #         )
-            #         new_phone_user.save()
-
-            # phone_edit.delete()
-
-            
-            # messages.success(request, "تم تعديل الارثام الخاصه بهذا المستخدم بنجاح")
-            # return redirect("all_phones")
-    else:
-        form = forms.EditPhoneNumberForUsersForm(instance=phone)
-
-
-    context = {
-        'form' : form,
-        'phone' : phone,
-    }
-    return render(request, 'core/edit_user_phone.html', context)
+        account.delete()
+        messages.success(request, ".تم ازالة هذا الحساب بنجاح")
+        return redirect("users_accounts")
+    
+    
+    return render(request, 'core/user_account_deletion_confirm.html')

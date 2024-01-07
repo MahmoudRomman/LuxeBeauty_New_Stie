@@ -16,12 +16,12 @@
     <div class="container" style="max-width: 1400px;">
       <div class="row">
 
-            <div class="col-xl-4 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+            <div class="col-xl-4 col-12 col-sm-6 col-md-4 div_box" style="padding: 10px;">
                 <div class="box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
                 
 
                     <div class="img-box">
-                        <a href="#">
+                        <a href="{% url 'users_accounts' %}">
                             <div style="text-align: center; margin-top: 15px;">
                                 <img src="{% static 'images/add_account_to_phone.png' %}" style="width: 55%; height: auto;">
                             </div>
@@ -45,7 +45,7 @@
 
 
 
-            <div class="col-xl-4 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+            <div class="col-xl-4 col-12 col-sm-6 col-md-4 div_box" style="padding: 10px;">
                 <div class="box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
                 
 
@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-4 col-12 col-sm-6 col-md-4" style="padding: 10px;">
+            <div class="col-xl-4 col-12 col-sm-6 col-md-4 div_box" style="padding: 10px;">
                 <div class="box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
                     <div class="img-box">
                         <a href="{% url 'all_phones' %}">
@@ -85,11 +85,11 @@
 
                     <div style="text-align: center;">
                         <p class="lead">
-                            <!-- <span>:الخطوة الأولى</span> -->
                             <i class="fa-solid fa-1"></i>
-                            <!-- <i class="fa-solid fa-circle-1"></i> -->
                         </p>
                     </div>
+
+
 
                     <div style="text-align: center; margin-top: 15px;">
                         <p class="lead">
@@ -105,6 +105,23 @@
     </div>
   </section>
 
+
+
+
+
+  <style>
+    .div_box {
+        /* Add other styles as needed */
+        transition: transform 0.3s ease; /* Add smooth transition effect for transform property */
+    }
+
+    /* Define styles for hover state */
+    .div_box:hover {
+        transform: translateY(-20px); /* Move the div 5 pixels up on hover */
+        /* Add other styles for hover state */
+    }
+
+</style>
 
 
 {% endblock content %}
