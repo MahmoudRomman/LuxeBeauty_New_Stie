@@ -521,6 +521,47 @@ button {
 
 
 
+
+
+
+
+
+
+.shop_section .show_all_products_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 45px;
+}
+
+
+.shop_section .show_all_products_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 20px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  font-size: larger;
+  width: 300px;
+  text-align: center;
+
+}
+
+
+
+.shop_section .show_all_products_btn a:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
+
+
+
 .profile_edit_button {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -536,9 +577,9 @@ button {
 .profile_edit_button a {
   display: inline-block;
   padding: 7px 30px;
-  background-color: #db4f66;
+  background-color: #2471A3;
   color: #ffffff;
-  border: 1px solid #db4f66;
+  border: 1px solid #2471A3;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
@@ -549,7 +590,51 @@ button {
 
 .profile_edit_button a:hover {
   background-color: transparent;
-  color: #db4f66;
+  color: #2471A3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.password_change_button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+
+}
+
+
+.password_change_button a {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 250px;
+
+}
+
+
+
+.password_change_button a:hover {
+  background-color: transparent;
+  color: #2471A3;
 }
 
 
@@ -570,63 +655,28 @@ button {
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 10px;
-  
+  text-align: center;
 }
 
 
 .phone_edit_button a {
   display: inline-block;
   padding: 7px 30px;
-  background-color: #db4f66;
+  background-color: #2471A3;
   color: #ffffff;
-  border: 1px solid #db4f66;
+  border: 1px solid #2471A3;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
-  width: 300px;
+  width: 250px;
 }
 
 
 
 .phone_edit_button a:hover {
   background-color: transparent;
-  color: #db4f66;
+  color: #2471A3;
 }
-
-
-
-
-
-.password_change_button {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  margin-top: 10px;
-}
-
-
-.password_change_button a {
-  display: inline-block;
-  padding: 7px 30px;
-  background-color: #db4f66;
-  color: #ffffff;
-  border: 1px solid #db4f66;
-  border-radius: 5px;
-  -webkit-transition: all .3s;
-  transition: all .3s;
-
-}
-
-
-
-.password_change_button a:hover {
-  background-color: transparent;
-  color: #db4f66;
-}
-
 
 
 
@@ -638,7 +688,6 @@ button {
       -ms-flex-pack: center;
           justify-content: center;
   font-size: large;
-
 }
 
 
@@ -653,8 +702,6 @@ button {
   transition: all .3s;
   width: 300px;
 
-
-
 }
 
 
@@ -664,6 +711,82 @@ button {
   color: #2471A3;
 }
 
+
+
+
+
+
+
+
+
+
+.new_password_reset{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+}
+
+
+.new_password_reset input {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+
+}
+
+
+
+.new_password_reset input:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
+
+
+
+
+
+
+
+.profile_update_save_changes{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+}
+
+
+.profile_update_save_changes input {
+  display: inline-block;
+  padding: 7px 30px;
+  background-color: #2471A3;
+  color: #ffffff;
+  border: 1px solid #2471A3;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+
+}
+
+
+
+.profile_update_save_changes input:hover {
+  background-color: transparent;
+  color: #2471A3;
+}
 
 
 .login_again_button{
@@ -772,6 +895,7 @@ button {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  
 }
 
 
@@ -781,10 +905,11 @@ button {
   background-color: #2471A3;
   color: #ffffff;
   border: 1px solid #2471A3;
-  border-radius: 5px;
+  border-radius: 20px;
   -webkit-transition: all .3s;
   transition: all .3s;
   font-size: large;
+  /* height: 50px; */
 
 }
 
@@ -798,14 +923,67 @@ button {
 
 
 
+ 
+
+
+
+.shop_section .cart-link {
+  text-decoration: none;
+  color: #F67280; /* Default text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.shop_section .cart-link:hover {
+  color:#2471A3; /* Text color on hover */
+
+}
+
+
+.shop_section .trash-icon-style {
+  text-decoration: none;
+  color: #2471A3; /* Default text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.shop_section .trash-icon-style:hover {
+  color:#000000; /* Text color on hover */
+
+}
+
+
+
+.shop_section .payment_link_copy_style {
+  text-decoration: none;
+  color: #2471A3; /* Default text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.shop_section .payment_link_copy_style:hover {
+  color:#000000; /* Text color on hover */
+
+}
 
 
 
 
+.shop_section .edit_item_style {
+  text-decoration: none;
+  color: #F67280; /* Default text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.3s, background-color 0.3s;
+}
 
+.shop_section .edit_item_style:hover {
+  color:#2471A3; /* Text color on hover */
 
-
-
+}
 
 
 .btn {
@@ -835,6 +1013,42 @@ button {
 .btn a:hover {
   background-color: transparent;
   color: #f16179;
+}
+
+
+
+
+.add_more_payments_link_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  font-size: larger;  
+}
+
+
+.add_more_payments_link_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.add_more_payments_link_btn a:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
 }
 
 
@@ -877,6 +1091,57 @@ button {
 
 
 
+
+
+
+
+.send_task_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+  text-align: center;
+  font-size: larger;  
+}
+
+
+.send_task_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.send_task_btn a:hover {
+  background-color: transparent;
+  color: #f16179;
+}
+
+
+
+.shop_section .done_task_link {
+  text-decoration: none;
+  color: #F67280; /* Default text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.shop_section .done_task_link:hover {
+  color:#2471A3; /* Text color on hover */
+
+}
 
 .back_to_store {
   display: inline-block;
@@ -984,12 +1249,49 @@ button {
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
-  
+  height: 40px;
 }
 
 
 
 .btn_store_search input:hover {
+  background-color: transparent;
+  color: #27AE60;
+}
+
+
+
+
+
+
+
+.btn_bill_search {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+
+}
+
+
+.btn_bill_search input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #27AE60;
+  color: #ffffff;
+  border: 1px solid #27AE60;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  height: 40px;
+}
+
+
+
+.btn_bill_search input:hover {
   background-color: transparent;
   color: #27AE60;
 }
@@ -1067,6 +1369,117 @@ button {
 
 
 
+
+
+.btn_save_link{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin: auto;
+}
+
+
+.btn_save_link input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #468B97;
+  color: #ffffff;
+  border: 1px solid #468B97;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  font-size: larger;
+  
+}
+
+
+
+.btn_save_link input:hover {
+  background-color: transparent;
+  color: #468B97;
+  border-radius: 10px 20px;
+}
+
+
+
+
+.payment_link_deletion_confirm {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  font-size:large;
+}
+
+
+.payment_link_deletion_confirm input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #a40000;
+  color: #ffffff;
+  border: 1px solid #a40000;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.payment_link_deletion_confirm input:hover {
+  background-color: transparent;
+  color: #a40000;
+}
+
+
+
+
+.no_deletion_back_to_payments {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin-top: 0px;
+text-align: center;
+font-size: larger;
+
+
+}
+
+
+.no_deletion_back_to_payments a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #228b22;
+  color: #ffffff;
+  border: 1px solid #228b22;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.no_deletion_back_to_payments a:hover {
+  background-color: transparent;
+  color: #228b22;
+}
+
+
 .back_to_payments {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1084,7 +1497,7 @@ button {
   background-color: #FFA500;
   color: #ffffff;
   border: 1px solid #FFA500;
-  border-radius: 5px;
+  border-radius: 10px;
   -webkit-transition: all .3s;
   transition: all .3s;
   width: 300px;
@@ -1097,50 +1510,10 @@ button {
 .back_to_payments a:hover {
   background-color: transparent;
   color: #FFA500;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-.btn_save_link {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  border-radius: 10px 20px;
 
 }
 
-
-.btn_save_link input {
-  display: inline-block;
-  padding: 10px 40px;
-  background-color: #468B97;
-  color: #ffffff;
-  border: 1px solid #468B97;
-  border-radius: 5px;
-  -webkit-transition: all .3s;
-  transition: all .3s;
-  width: 300px;
-  
-}
-
-
-
-.btn_save_link input:hover {
-  background-color: transparent;
-  color: #468B97;
-}
 
 
 
@@ -1253,6 +1626,84 @@ margin: auto;
 
 
 
+.add_new_phone_btn{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: larger;
+
+
+}
+
+
+.add_new_phone_btn input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+
+  width: 300px;
+  
+}
+
+
+
+.add_new_phone_btn input:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+
+}
+
+
+
+
+
+.edit_phone_btn{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: larger;
+
+
+}
+
+
+.edit_phone_btn input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+
+  width: 300px;
+  
+}
+
+
+
+.edit_phone_btn input:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+
+}
+
+
+
 
 
 
@@ -1286,6 +1737,116 @@ margin: auto;
 .btn_penality_add input:hover {
   background-color: transparent;
   color: #f16179;
+}
+
+
+
+
+.create_social_account{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin: auto;
+}
+
+
+.create_social_account input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  font-size: larger;
+  
+}
+
+
+
+.create_social_account input:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+}
+
+
+
+
+.create_social_account_a_tag {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+  text-align: center;
+  font-size: larger;  
+}
+
+
+.create_social_account_a_tag a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.create_social_account_a_tag a:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+}
+
+
+
+.edit_user_account_btn{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin: auto;
+}
+
+
+.edit_user_account_btn input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  font-size: larger;
+  
+}
+
+
+
+.edit_user_account_btn input:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
 }
 
 
@@ -1396,6 +1957,227 @@ margin-top: 0px;
 
 
 
+
+
+
+
+.save_changes_of_phone_update {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+
+.save_changes_of_phone_update input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #468B97;
+  color: #ffffff;
+  border: 1px solid #468B97;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.save_changes_of_phone_update input:hover {
+  background-color: transparent;
+  color: #468B97;
+}
+
+
+
+
+
+
+.confirm_phone_deletion {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  font-size:large;
+}
+
+
+.confirm_phone_deletion input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #a40000;
+  color: #ffffff;
+  border: 1px solid #a40000;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.confirm_phone_deletion input:hover {
+  background-color: transparent;
+  color: #a40000;
+}
+
+
+
+
+
+.confirm_account_deletion {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+
+.confirm_account_deletion input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #a40000;
+  color: #ffffff;
+  border: 1px solid #a40000;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.confirm_account_deletion input:hover {
+  background-color: transparent;
+  color: #a40000;
+}
+
+
+
+
+.back_to_profile_update {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin-top: 0px;
+text-align: center;
+font-size: larger;
+
+
+}
+
+
+.back_to_profile_update a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #228b22;
+  color: #ffffff;
+  border: 1px solid #228b22;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.back_to_profile_update a:hover {
+  background-color: transparent;
+  color: #228b22;
+}
+
+
+
+.back_to_all_phones {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin-top: 0px;
+text-align: center;
+font-size: larger;
+
+
+}
+
+
+.back_to_all_phones a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #228b22;
+  color: #ffffff;
+  border: 1px solid #228b22;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.back_to_all_phones a:hover {
+  background-color: transparent;
+  color: #228b22;
+}
+
+
+
+.back_to_users_accounts {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin-top: 0px;
+text-align: center;
+font-size: larger;
+
+
+}
+
+
+.back_to_users_accounts a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #228b22;
+  color: #ffffff;
+  border: 1px solid #228b22;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.back_to_users_accounts a:hover {
+  background-color: transparent;
+  color: #228b22;
+}
 
 
 
@@ -1982,3 +2764,4 @@ margin-top: 0px;
 .label {
   margin-top: 10px;  /* Set the margin according to your design */
 }
+

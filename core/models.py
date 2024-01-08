@@ -206,6 +206,7 @@ class Bill2(models.Model):
     density = models.CharField(max_length=150, choices=density, null=False)
     price = models.IntegerField(default=1500)
     pieces_num = models.PositiveIntegerField(default=0)
+    # account = models.ForeignKey("Account", on_delete=models.CASCADE)
 
     class Meta:
         # verbose_name = 'Bills'
@@ -286,6 +287,8 @@ class Account(models.Model):
 
     date = models.DateTimeField(auto_now_add=True)
     slug_link = models.SlugField()
+
+    # num_of_bills = models.PositiveIntegerField(default=0)
 
 
 

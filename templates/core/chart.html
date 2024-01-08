@@ -113,7 +113,7 @@
             {% empty %}
             <tr>
 
-              <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
+              <td colspan='18' style="font-size:medium">ليس لديك أى فواتير الى الان خلال هذا الشهر
                   <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
               </td>
             </tr>
@@ -121,7 +121,7 @@
 
             {% if page_obj %}
             <tr>
-                <td colspan="16"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام</b></td>
+                <td colspan="16" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
                 <td><b>{{total_bills}}</b></td>
             </tr>
             {% endif %} 
@@ -147,23 +147,44 @@
       {% if page_obj.has_previous %}
       <li class="page-item">
         <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.previous_page_number }}">
-          Previous
+          &laquo;
         </a>
       </li>
     {% else %}
       <li class="page-item disabled">
         <a  class="page-link" href="">
-          Previous
+          &laquo;
         </a>
       </li>
     {% endif %}
 
 
-      <li class="page-item">
+      <!-- <li class="page-item">
         <a style="color:#F67280;" class="page-link" href="#">
           {{page_obj.number}}:{{page_obj.paginator.num_pages}}
         </a>
-      </li>
+      </li> -->
+
+      {% for i in page_obj.paginator.page_range %}
+      {% if i == page_obj.number %}
+        <!-- <span class="current">{{ i }}</span> -->
+        <li class="page-item">
+          <a style="color:#F67280;" class="page-link" href="#">
+            {{ i }}
+          </a>
+        </li>
+      {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %}
+        <!-- <a href="?page={{ i }}">{{ i }}</a> -->
+
+        <li class="page-item">
+          <a style="color:#F67280;" class="page-link" href="?page={{ i }}">
+            {{ i }}
+          </a>
+        </li>
+      {% elif i == page_obj.paginator.page_range.1|add:'1' or i == page_obj.paginator.page_range.0 %}
+        <span class="dot">...</span>
+      {% endif %}
+      {% endfor %}
 
 
 
@@ -171,13 +192,13 @@
       {% if page_obj.has_next %}
       <li class="page-item">
         <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.next_page_number }}">
-          Next
+          &raquo;
         </a>
       </li>
       {% else %}
       <li class="page-item disabled">
         <a class="page-link" href="">
-          Next
+          &raquo;
         </a>
       </li>
       {% endif %}
@@ -237,17 +258,23 @@
             </td>
           </tr>
           {% endfor %}
+          
 
           <tr>
-            <td colspan="3"><b>الخصومات خلال هذا الشهر</b></td>
+            <td colspan="3"><b>خصوماتك خلال هذا الشهر</b></td>
             <td><b>{{total_penality}} EGP</b></td>
           </tr>
 
           <tr>
-            <td colspan="3"><b>المكافات خلال هذا الشهر</b></td>
+            <td colspan="3"><b>مكافأتك خلال هذا الشهر</b></td>
             <td><b>{{total_reward}} EGP</b></td>
           </tr>
 
+          <tr>
+            <td colspan="3"><b>الراتب الاساسى</b></td>
+            <td><b>2000 EGP</b></td>
+          </tr>
+          
           <tr>
             <td colspan="3"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
             <td><b>{{final_salary}} EGP</b></td>
@@ -260,7 +287,11 @@
 
 
 
-
+<style>
+  .pagination a {
+    margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
+  }
+</style>
     
 
 

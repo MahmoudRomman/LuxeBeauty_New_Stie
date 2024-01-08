@@ -77,7 +77,8 @@
                 <th scope="col" style="text-align: center">الترتيب</th>
                 <th scope="col" style="text-align: center">المنتج</th>
                 <th scope="col" style="text-align: center">الكمية</th>
-                <th scope="col" style="text-align: center">اجمالى السعر</th>
+                <th scope="col" style="text-align: center">سعر الواحده</th>
+                <th scope="col" style="text-align: center">السعر الكلى</th>
             </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -89,6 +90,7 @@
                 <th scope="row" class="mt-1" style="text-align: center">{{forloop.counter}}</th>
                 <td style="text-align: center">{{orderitem.item.name}} - {{orderitem.item.wig_type}} - طول {{orderitem.item.wig_long}} - فروة {{orderitem.item.scalp_type}} - لون {{orderitem.item.wig_color}} - كثافة {{orderitem.item.density}} </td>
                 <td style="text-align: center">{{orderitem.quantity}}</td>
+                <td style="text-align: center">{{orderitem.item.price}} ريال</td>
                 <td style="text-align: center">{{orderitem.get_final_price}} ريال</td>
             </tr>
             {% endfor %}
@@ -97,6 +99,7 @@
                     <th scope="row" class="mt-1" style="text-align: center">1</th>
                     <td style="text-align: center">{{wig_name}} - {{wig_type}} - طول {{wig_long}} - فروة {{scalp_type}} - لون {{wig_color}} - كثافة {{density}} </td>
                     <td style="text-align: center">{{pieces_num}}</td>
+                    <td style="text-align: center">{{total_cost}} ريال</td>
                     <td style="text-align: center">{{price}} ريال</td>
                 </tr>
             {% endif %}
@@ -114,7 +117,9 @@
             <tr style="text-align: center">
                 <th scope="col" style="text-align: center">اسم البائع</th>
                 <th scope="col" style="text-align: center">رقم هاتف البائع</th>
+                <th scope="col" style="text-align: center">اسم المُسوق</th>
                 <th scope="col" style="text-align: center">اسم حساب المُسوق</th>
+
 
                 <th scope="col" style="text-align: center">الدولة</th>
                 <th scope="col" style="text-align: center">العنوان</th>
@@ -129,7 +134,9 @@
                 <tr style="text-align: center">
                     <td style="text-align: center">{{bill.seller}}</td>
                     <td style="text-align: center">{{bill.seller_phone_number}}</td>
+                    <td style="text-align: center">{{bill.marketer}}</td>
                     <td style="text-align: center">{{bill.account_name}}</td>
+
 
                     <td style="text-align: center">{{bill.country}}</td>
                     <td style="text-align: center">{{bill.address}}</td>
@@ -142,6 +149,7 @@
                 <tr style="text-align: center">
                     <td style="text-align: center">{{seller}}</td>
                     <td style="text-align: center">{{seller_phone_number}}</td>
+                    <td style="text-align: center">{{marketer}}</td>
                     <td style="text-align: center">{{account_name}}</td>
 
                     <td style="text-align: center">{{country}}</td>

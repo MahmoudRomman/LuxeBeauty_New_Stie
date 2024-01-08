@@ -22,6 +22,7 @@ from django.utils import timezone
 import string
 import random
 from django.contrib.auth.models import User
+from django.views.decorators.http import require_POST
 
 
 
@@ -657,226 +658,6 @@ def order_summary(request):
 
 
 
-# class bill2(LoginRequiredMixin, CreateView):
-#     model = models.Bill2
-#     form_class = forms.BillForm2
-#     template_name = 'core/bill.html'
-#     success_url = reverse_lazy('chart_view')
-#     order = None
-
-#     def get_form_kwargs(self):
-#         """ Passes the request object to the form class.
-#          This is necessary to only display members that belong to a given user"""
-
-#         kwargs = super(bill2, self).get_form_kwargs()
-#         kwargs['request'] = self.request
-#         return kwargs
-    
-    
-
-#     def form_valid(self, form):
-#         order = models.Order.objects.get(user=self.request.user, ordered=False)
-
-#         orders_num = order.items.all()
-#         one_bill = orders_num[0]
-        
-#         seller_phone_number = form.cleaned_data.get("seller_phone_number")
-
-#         country = form.cleaned_data.get("country")
-#         address = form.cleaned_data.get("address")
-#         customer_phone = form.cleaned_data.get("customer_phone")
-#         customer_name = form.cleaned_data.get("customer_name")
-
-
-#         check_customer_name = str(customer_name).split()
-
-#         if len(check_customer_name) <= 2:
-#             messages.warning(self.request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
-#             return redirect("bill2")
-        
-        
-
-#         # if 'customer_name' in form.errors:
-#         #     form.errors['customer_name'] = []
-
-        
-
-#         if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
-#             messages.warning(self.request, ".عفواً, يجب اختيار رقم العمل الخاص بك")
-#             return redirect("bill2")
-        
-#         # phone = models.PhoneNumber.objects.get(phone = str(seller_phone_number))
-
-#         print("*" * 100)
-#         print(seller_phone_number)
-#         # phone = models.PhoneNumberr.objects.get(user=self.request.user, phone = seller_phone_number)
-#         phone = models.PhoneNumberr.objects.get(user=self.request.user, phone = seller_phone_number)
-
-#         print("*" * 100)
-#         print(phone.phone)
-#         print("*" * 100)
-
-
-
-#         # account = models.Account.objects.get(phone_number = phone)
-
-
-#         # account_qs = models.Account.objects.filter(phone_number = phone)
-#         # # bill_info = []
-#         bill_info = {}
-
-
-
-
-#         try:
-#             # account = models.Account.objects.get(phone_number = phone)
-#             account = models.Account.objects.filter(phone = phone)
-
-
-#             form.instance.seller = self.request.user
-#             form.instance.account_name = account.account_name
-
-#             form.instance.wig_type = one_bill.item.wig_type
-#             form.instance.wig_long = one_bill.item.wig_long
-#             form.instance.scalp_type = one_bill.item.scalp_type
-#             form.instance.wig_color = one_bill.item.wig_color
-#             form.instance.density = one_bill.item.density
-#             form.instance.price = one_bill.item.price
-#             form.instance.pieces_num = one_bill.quantity
-
-
-
-
-#             country = form.cleaned_data.get("country")
-#             address = form.cleaned_data.get("address")
-#             customer_phone = form.cleaned_data.get("customer_phone")
-#             customer_name = form.cleaned_data.get("customer_name")
-#             orders_num = orders_num[1:]
-            
-
-
-#             bill_info["seller"] = str(self.request.user)
-#             bill_info["seller_phone_number"] = str(seller_phone_number)
-#             bill_info["account_name"] = str(account.account_name)
-
-
-#             bill_info["country"] = str(country)
-#             bill_info["address"] = str(address)
-#             bill_info["customer_name"] = str(customer_name)
-#             bill_info["customer_phone"] = str(customer_phone)
-
-
-
-
-#             for other_orders in orders_num:
-#                 new_bill2 = models.Bill2.objects.create(
-#                     seller = self.request.user,
-#                     seller_phone_number = seller_phone_number,
-#                     country = country,
-#                     address = address,
-#                     customer_phone = customer_phone,
-#                     customer_name = customer_name,
-#                     account_name = account.account_name,
-
-#                     wig_type = other_orders.item.wig_type,
-#                     wig_long = other_orders.item.wig_long,
-#                     scalp_type = other_orders.item.scalp_type,
-#                     wig_color = other_orders.item.wig_color,
-#                     density = other_orders.item.density,
-#                     price = other_orders.item.price,
-#                     pieces_num = other_orders.quantity
-
-#                 )
-
-#                 new_bill2.save()
-
-#             order_items = order.items.all()
-#             order_items.update(ordered = True)
-#             for item in order_items:
-#                 item.save()
-
-
-
-#             # To increment the number of sales per item...
-#             for order_item in order.items.all():
-#                 order_item.item.num_of_sales = order_item.item.num_of_sales + order_item.quantity
-#                 order_item.item.save()
-
-
-#             # Change the status of the ordered query to True because the ordered is done successfully...
-#             order.ordered = True
-#             order.save()
-
-
-#             ## Sending mail using celery...
-            
-#             from datetime import datetime
-#             # from django.forms.models import model_to_dict
-
-#             # order_item_lst = []
-#             # for order_item in order.items.all():
-#             #     order_item_lst.append(model_to_dict(order_item))
-
-#             # for one in order_item_lst:
-#             #     print("*" * 100)
-#             #     print(one)
-
-#             # merge_data = {
-#             #     "bill_user" : model_to_dict(self.request.user),
-#             #     "date" : datetime.now(),
-#             #     "order" : order_item_lst,
-#             #     "bill" : bill_info,
-#             # }
-
-#             # # email = self.request.user.email
-#             # # email = str(email)
-#             # send_bill_mail.delay(merge_data, 'mahmoud.sayyedahmed900@gmail.com')
-#             # # send_bill_mail.apply_async(args=[merge_data, email])
-
-
-#             ## To send the bill_mail
-#             from django.core.mail import EmailMultiAlternatives
-#             from django.template.loader import render_to_string
-
-
-#             merge_data = {
-#                 "bill_user" : self.request.user,
-#                 "date" : datetime.now(),
-#                 "order" : order,
-#                 "bill" : bill_info,
-#             }
-
-#             html_body = render_to_string("core/bill_mail.html", merge_data)
-#             subject = "Bill From LuxeBeauty Site"
-            
-#             email = self.request.user.email
-            
-
-#             msg = EmailMultiAlternatives(
-#                 subject = subject,
-#                 from_email= settings.EMAIL_HOST_USER,
-#                 # to=(email,),
-#                 to=(settings.EMAIL_HOST_USER,),
-#                 reply_to=(settings.EMAIL_HOST_USER,),
-#                 )
-            
-#             msg.attach_alternative(html_body, "text/html")
-#             msg.send()
-
-
-#             messages.success(self.request, ".تم حفظ الفاتورة بنجاح")
-#             return super(bill2,self).form_valid(form)
-#         except ObjectDoesNotExist:
-#             messages.warning(self.request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
-#             return redirect("bill2")
-
-
-
-
-
-
-
-
 @login_required(login_url='user-login')
 def make_bill(request):
     if request.method == "POST":
@@ -902,17 +683,6 @@ def make_bill(request):
             
 
             else:
-                print("*" * 100)
-                print('seller_phone_number = ', models.PhoneNumberr.objects.get(id=seller_phone_number).phone)
-                print('country = ', country)
-                print('address = ', address)
-                print('customer_phone = ', customer_phone)
-                print('customer_name = ', customer_name)
-
-                print("*" * 100)
-
-
-
                 try:
                     order = models.Order.objects.get(user=request.user, ordered=False)
                     try:
@@ -920,18 +690,7 @@ def make_bill(request):
                         bill_info = {}
 
                         try:
-                            account = models.Account.objects.get(phone = phone)
-
-
-                            print("*" * 100)
-                            print(account.account_name)
-                            print(account.account_link)
-                            print(account.marketer)
-                            print(account.phone)
-                            print("*" * 100)
-
-
-
+                            account = models.Account.objects.get(phonenumber = phone)
 
                             for order_item in  order.items.all():
                                 new_bill2 = models.Bill2.objects.create(
@@ -953,6 +712,10 @@ def make_bill(request):
                                 )
 
                                 new_bill2.save()
+                                
+                                # # Incremeant the number of bills for this marketer account...
+                                # account.num_of_bills += order_item.quantity
+                                # account.save()
 
                             order_items = order.items.all()
                             order_items.update(ordered = True)
@@ -968,12 +731,13 @@ def make_bill(request):
                                 order_item.item.num_of_sales = order_item.item.num_of_sales + order_item.quantity
                                 order_item.item.save()
 
-
-
-
                             
                             bill_info["seller"] = str(request.user)
-                            bill_info["seller_phone_number"] = str(seller_phone_number)
+
+                            seller_phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
+                            bill_info["seller_phone_number"] = str(seller_phone.phone.phone)
+
+                            bill_info["marketer"] = str(account.marketer)
                             bill_info["account_name"] = str(account.account_name)
 
 
@@ -981,10 +745,6 @@ def make_bill(request):
                             bill_info["address"] = str(address)
                             bill_info["customer_name"] = str(customer_name)
                             bill_info["customer_phone"] = str(customer_phone)
-
-
-
-
 
                             
                             from datetime import datetime
@@ -1018,7 +778,8 @@ def make_bill(request):
 
 
                             messages.success(request, ".تم حفظ الفاتورة بنجاح")
-                            return redirect("chart_view")
+                            return JsonResponse({'status': 'success'})
+                        
                         
                         except ObjectDoesNotExist:
                             messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
@@ -1041,6 +802,7 @@ def make_bill(request):
 
 
 
+
 @login_required(login_url='user-login')
 def show_bills(request):
 
@@ -1049,6 +811,8 @@ def show_bills(request):
     month = today.month
 
     data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
+
+
     bills_num_this_month = 0
     for bill in data:
         bills_num_this_month += bill.pieces_num
@@ -1085,6 +849,7 @@ def show_bills(request):
         'data' : data,
         'bills_num_this_month' : bills_num_this_month,
         'form' : form,
+
         }
 
     return render(request, 'core/show_bills.html', context)
@@ -1095,7 +860,6 @@ def show_bills(request):
 
 @login_required(login_url='user-login')
 def banks(request):
-
     if request.method == "POST":
         form = forms.LinkValueFilterForm(request.POST)
         value = request.POST.get("value")
@@ -1155,13 +919,6 @@ def add_payment_link(request):
 
     return render(request, 'core/add_new_link.html', context)
 
-
-
-# @login_required(login_url='user-login')
-# def delete_payment_link(request, slug):
-#     models.AddLink.objects.filter(slug_link=slug).delete()
-#     messages.info(request, "item deleted successfully")
-#     return redirect("banks_and_payments")
 
 
 
@@ -1225,6 +982,8 @@ def chart_data(request):
 @login_required(login_url='user-login')
 def chart_view(request):
     my_bills = models.Bill2.objects.filter(seller=request.user, date__month=today.month).order_by('-date')
+
+
     paginator = Paginator(my_bills, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -1302,7 +1061,6 @@ def show_all_penalities(request):
 
 @login_required(login_url='user-login')
 def penality(request):
-
     if request.method == "POST":
         form = forms.PenalityForm(request.user, request.POST)
         if form.is_valid():
@@ -1367,7 +1125,6 @@ def show_all_rewards(request):
 
 @login_required(login_url='user-login')
 def reward(request):
-
     if request.method == "POST":
         form = forms.RewardForm(request.user, request.POST)
         if form.is_valid():
@@ -1536,125 +1293,6 @@ def user_done_task(request, slug):
 
 
 
-
-# class OnlineOrder(LoginRequiredMixin, CreateView):
-#     model = models.Bill2
-#     form_class = forms.OnlineOrder
-#     template_name = 'core/online_order.html'
-#     success_url = reverse_lazy('chart_view')
-
-#     def get_form_kwargs(self):
-#         """ Passes the request object to the form class.
-#          This is necessary to only display members that belong to a given user"""
-
-#         kwargs = super(OnlineOrder, self).get_form_kwargs()
-#         kwargs['request'] = self.request
-#         return kwargs
-
-
-
-
-#     def form_valid(self, form):
-#         country = form.cleaned_data.get("country")
-#         address = form.cleaned_data.get("address")
-#         customer_phone = form.cleaned_data.get("customer_phone")
-#         customer_name = form.cleaned_data.get("customer_name")
-#         seller_phone_number = form.cleaned_data.get("seller_phone_number")
-
-
-#         wig_name = form.cleaned_data.get("wig_name")
-#         wig_type = form.cleaned_data.get("wig_type")
-#         wig_long = form.cleaned_data.get("wig_long")
-#         scalp_type = form.cleaned_data.get("scalp_type")
-#         wig_color = form.cleaned_data.get("wig_color")
-#         density = form.cleaned_data.get("density")
-#         price = form.cleaned_data.get("price")
-#         pieces_num = form.cleaned_data.get("pieces_num")
-
-#         check_customer_name = str(customer_name).split()
-
-#         if len(check_customer_name) <= 2:
-#             messages.warning(self.request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
-#             return redirect("online_order")
-
-        
-#         if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
-#             messages.warning(self.request, ".عفواً, يجب اختيار رقم العمل الخاص بك")
-#             return redirect("online_order")
-        
-#         phone = models.PhoneNumber.objects.get(phone = str(seller_phone_number))
-        
-
-#         if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
-#             messages.warning(self.request, ".عفواً ,لديك بعض المُدخلات الخاطئة, أعد مرة أخرى")
-#             # return to the same page ---> online_order page to make the online_bill again...
-#             return redirect("online_order")
-#         else:
-#             # if account_qs.exists():
-#             try:
-#                 account = models.Account.objects.get(phone_number = phone)
-
-#                 form.instance.seller = self.request.user
-#                 form.instance.account_name = account.account_name
-
-        
-
-#                 ## To send the bill_mail
-#                 from django.core.mail import EmailMultiAlternatives
-#                 from django.template.loader import render_to_string
-#                 from datetime import datetime
-
-#                 merge_data = {
-#                     "bill_user" : self.request.user,
-#                     "date" : datetime.now(),
-#                     "wig_name" : wig_name,
-#                     "wig_type" : wig_type,
-#                     "wig_long" : wig_long,
-#                     "scalp_type" : scalp_type,
-#                     "wig_color" : wig_color,
-#                     "density" : density,
-#                     "pieces_num" : pieces_num,
-#                     "price" : price,
-
-#                     "seller" : str(self.request.user),
-#                     "seller_phone_number" : seller_phone_number,
-#                     "account_name" : str(account.account_name),
-#                     "country" : country,
-#                     "address" : address,
-#                     "customer_name" : customer_name,
-#                     "customer_phone" : customer_phone,
-#                 }
-
-#                 html_body = render_to_string("core/bill_mail.html", merge_data)
-#                 subject = "Bill From LuxeBeauty Site"
-                
-#                 email = self.request.user.email
-                
-
-#                 msg = EmailMultiAlternatives(
-#                     subject = subject,
-#                     from_email= settings.EMAIL_HOST_USER,
-#                     # to=(email,),
-#                     to=(settings.EMAIL_HOST_USER,),
-#                     reply_to=(settings.EMAIL_HOST_USER,),
-#                     )
-                
-#                 msg.attach_alternative(html_body, "text/html")
-#                 msg.send()
-
-
-#                 messages.success(self.request, ".تم حفظ الفاتورة بنجاح")
-#                 # return to the success page that exists in this view in the top...
-#                 return super(OnlineOrder, self).form_valid(form)
-#             # else:
-#             except ObjectDoesNotExist:
-#                 messages.warning(self.request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
-#                 # return to the same page ---> online_order page to make the bill again...
-#                 return redirect("online_order")
-
-
-
-#########################################
 @login_required(login_url='user-login')
 def online_order(request):
     if request.method == "POST":
@@ -1695,7 +1333,7 @@ def online_order(request):
                     phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
 
                     try:
-                        account = models.Account.objects.get(phone = phone)
+                        account = models.Account.objects.get(phonenumber = phone)
 
                         ## Create new instance for the bill and save it to the database in the bill model...
                         new_bill = models.Bill2.objects.create(
@@ -1718,11 +1356,16 @@ def online_order(request):
 
                         new_bill.save()
 
+                        # # Incremeant the number of bills for this marketer account...
+                        # account.num_of_bills += pieces_num
+                        # account.save()
+
                         ## Send a mail to the admin for the new bill...
                         from django.core.mail import EmailMultiAlternatives
                         from django.template.loader import render_to_string
                         from datetime import datetime
-
+                        seller_phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
+                        total_cost = pieces_num * price
                         merge_data = {
                             "bill_user" : request.user,
                             "date" : datetime.now(),
@@ -1735,8 +1378,11 @@ def online_order(request):
                             "pieces_num" : pieces_num,
                             "price" : price,
 
+                            "total_cost" : total_cost,
+
                             "seller" : str(request.user),
-                            "seller_phone_number" : seller_phone_number,
+                            "seller_phone_number" : str(seller_phone.phone.phone),
+                            "marketer" : str(account.marketer),
                             "account_name" : str(account.account_name),
                             "country" : country,
                             "address" : address,
@@ -1762,7 +1408,8 @@ def online_order(request):
 
 
                         messages.success(request, ".تم حفظ الفاتورة بنجاح")
-                        return redirect("chart_view")
+                        # return redirect("chart_view")
+                        return JsonResponse({'status': 'success'})
 
                     except ObjectDoesNotExist:
                         messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")

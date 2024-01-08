@@ -27,3 +27,11 @@ $('.owl-carousel').owlCarousel({
         }
     }
 })
+
+
+
+// Script to prevent the user to back to the website content after he logged out...
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+    history.go(1);
+};

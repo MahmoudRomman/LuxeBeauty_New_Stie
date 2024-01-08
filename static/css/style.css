@@ -1018,6 +1018,78 @@ button {
 
 
 
+.continue_shopping_for_order_summary {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 5px;
+}
+
+
+.continue_shopping_for_order_summary a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  
+}
+
+
+
+.continue_shopping_for_order_summary a:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+
+}
+
+
+
+
+
+
+
+.add_products_to_store_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+}
+
+
+.add_products_to_store_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  
+}
+
+
+
+.add_products_to_store_btn a:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+}
+
+
+
+
 .add_more_payments_link_btn {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1075,7 +1147,7 @@ button {
   background-color: #f16179;
   color: #ffffff;
   border: 1px solid #f16179;
-  border-radius: 5px;
+  border-radius: 10px;
   -webkit-transition: all .3s;
   transition: all .3s;
   width: 300px;
@@ -1087,9 +1159,82 @@ button {
 .penality_btn a:hover {
   background-color: transparent;
   color: #f16179;
+  border-radius: 10px 20px;
 }
 
 
+
+
+.reward_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+  text-align: center;
+  font-size: larger;  
+}
+
+
+.reward_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.reward_btn a:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+}
+
+
+
+
+.add_task_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+  text-align: center;
+  font-size: larger;  
+}
+
+
+.add_task_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.add_task_btn a:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+}
 
 
 
@@ -1342,6 +1487,7 @@ button {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  margin-top: 5px;
 
 
 }
@@ -1353,7 +1499,7 @@ button {
   background-color: #FFA500;
   color: #ffffff;
   border: 1px solid #FFA500;
-  border-radius: 5px;
+  border-radius: 10px;
   -webkit-transition: all .3s;
   transition: all .3s;
   
@@ -1364,6 +1510,7 @@ button {
 .btn_go_to_bill a:hover {
   background-color: transparent;
   color: #FFA500;
+  border-radius: 10px 20px;
 }
 
 
@@ -1526,6 +1673,7 @@ font-size: larger;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  font-size:large;
 
 }
 
@@ -1536,9 +1684,10 @@ font-size: larger;
   background-color: #27AE60;
   color: #ffffff;
   border: 1px solid #27AE60;
-  border-radius: 5px;
+  border-radius: 10px;
   -webkit-transition: all .3s;
   transition: all .3s;
+  width: 300px;
   
 }
 
@@ -1547,6 +1696,7 @@ font-size: larger;
 .btn_bill_finish input:hover {
   background-color: transparent;
   color: #27AE60;
+  border-radius: 10px 20px;
 }
 
 
@@ -1563,7 +1713,7 @@ font-size: larger;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-
+  font-size:large;
 }
 
 
@@ -1573,11 +1723,9 @@ font-size: larger;
   background-color: #27AE60;
   color: #ffffff;
   border: 1px solid #27AE60;
-  border-radius: 5px;
+  border-radius: 10px;
   -webkit-transition: all .3s;
   transition: all .3s;
-
-
   width: 300px;
 }
 
@@ -1586,6 +1734,7 @@ font-size: larger;
 .btn_online_bill_finish input:hover {
   background-color: transparent;
   color: #27AE60;
+  border-radius: 10px 20px;
 }
 
 
@@ -1953,6 +2102,48 @@ margin-top: 0px;
   background-color: transparent;
   color: #f16179;
 }
+
+
+
+
+
+
+.continue_shopping_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+margin-top: 0px;
+text-align: center;
+font-size: large;
+
+}
+
+
+.continue_shopping_btn a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 300px;
+  
+}
+
+
+
+.continue_shopping_btn a:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+}
+
 
 
 
