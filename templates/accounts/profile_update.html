@@ -68,6 +68,17 @@
                         </span>
                         </div>
                     </div>
+
+                    <div class="field">
+                      <label for="" class="label" style="text-align: right;">نوع العمل</label>
+                      <div class="control has-icons-right">
+                      {{ profile_form.job_type }}
+                      <br>
+                      <div style="text-align: center;">
+                          <span class="badge badge-danger">{{ profile_form.job_type.errors }}</span>
+                      </div>
+                      </div>
+                  </div>
   
                   <div class="field">
                     <label for="" class="label" style="text-align: right;">البريد الالكترونى</label>
@@ -135,25 +146,17 @@
 
 
 <Script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Get the form, input, and plus icon elements
-    var uploadForm = document.getElementById('upload-form');
-    var imageInput = document.getElementById('image-input');
-    // var plusIcon = document.getElementById('plus-icon');
+    document.addEventListener('DOMContentLoaded', function () {
+        var uploadForm = document.getElementById('upload-form');
+        var imageInput = document.getElementById('image-input');
 
-    // Add an event listener to the plus icon
-    // plusIcon.addEventListener('click', function () {
-    //     // Trigger the click event of the hidden input element
-    //     imageInput.click();
-    // });
-
-    // Add an event listener to the input element for file selection
-    imageInput.addEventListener('change', function () {
-        // Submit the form after file selection
-        uploadForm.submit();
+        imageInput.addEventListener('change', function () {
+            uploadForm.submit();
+        });
     });
-});
-</Script>
+</Script> 
+
+
 {% endblock content %}
     
 

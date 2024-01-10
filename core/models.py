@@ -313,12 +313,22 @@ class AddLink(models.Model):
 class BankAccount(models.Model):
     bank_name = models.CharField(max_length = 100, null=False, blank=False)
     country = CountryField(multiple=False, blank_label="(select country)")
+    
     card_number = models.CharField(max_length=19, blank=True, null=True)
     validation_date = models.DateField()
-    # ccv_or_cvc = 
     ccv_or_cvc = models.CharField(max_length=3)
+
+
+    # IBAN = models.CharField(max_length = 100, null=False, blank=False)
+    # swift_code = models.CharField(max_length = 100, null=False, blank=False)
+    # beneficiary_name = models.CharField(max_length = 100, null=False, blank=False)
+
+    
     date = models.DateTimeField(auto_now_add=True, blank=False, null=False)
     slug_link = models.CharField(max_length=150, unique=True, null=False, blank=False)
+
+
+
 
 
     def __str__(self):

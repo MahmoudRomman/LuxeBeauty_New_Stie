@@ -41,13 +41,25 @@ def register(request):
         form = forms.CreateUserForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data.get('email')
+            job_type = form.cleaned_data.get("job_type")
+
 
             if User.objects.filter(email=email).exists():
                 messages.warning(request, ".الايميل الذى قمت بتسجيله موجود بالفعل, من فضلك أعد التسجيل بعنوان ايميل أخر")
-                return redirect('user-register')
+                # return redirect('user-register')
+            elif job_type == "Choose Job Type":
+                messages.warning(request, ".من فضلك أختر نوع العمل")
             else:
+
                 form.save()
+                job_type = form.cleaned_data.get("job_type")
                 username = form.cleaned_data.get('username')
+                user = User.objects.get(username = username)
+
+                profile = models.Profile.objects.get(staff = user)
+                profile.job_type = job_type
+                profile.save()
+
                 messages.success(request, f'.لقد قمت بانشاء حساب الان, للأستمرار برجاء تسجيل الدخول {username}')
                 return redirect('user-login')
     else:
@@ -63,9 +75,6 @@ def register(request):
 @login_required(login_url='user-login')
 def profile(request):
     profile = models.Profile.objects.get(staff=request.user)
-    # my_phones = PhoneNumber.objects.filter(user=request.user)
-
-    # Get the new phones from the new model called phonenumberr...
     my_phones = PhoneNumberr.objects.filter(user=request.user)
 
 
@@ -83,20 +92,36 @@ def profile_update(request):
         user_form = forms.UserUpdateForm(request.POST, instance=request.user)
         profile_form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
-        if profile_form.is_valid():
-            image = profile_form.cleaned_data.get('image')
-            profile = models.Profile.objects.get(staff=request.user)
-            profile.image = image
-            profile.save()
+        # if profile_form.is_valid():
+        #     image = profile_form.cleaned_data.get('image')
+        #     profile = models.Profile.objects.get(staff=request.user)
+        #     profile.image = image
+        #     profile.save()
+        #     messages.success(request, "تم حفظ الصورة الشخصية")
+
+
+        # if user_form.is_valid() and profile_form.is_valid():
+        #     job_type = profile_form.cleaned_data.get("job_type")
+        #     if job_type == "Choose Job Type":
+        #         messages.warning(request, ".من فضلك أختر نوع العمل")
+        #     else:
+        #         user_form.save()
+        #         profile_form.save()
+        #         messages.success(request, "تم حفظ التعديلات")
+        #         return redirect('user-profile')
+
+
 
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            return redirect('user-profile')
-
-
-
-        
+            job_type = profile_form.cleaned_data.get("job_type")
+            if job_type == "Choose Job Type":
+                messages.warning(request, ".من فضلك أختر نوع العمل")
+                return redirect('user-profile-update')
+            else:
+                user_form.save()
+                profile_form.save()
+                messages.success(request, "تم حفظ التعديلات")
+                return redirect('user-profile')
     else:
         user_form = forms.UserUpdateForm(instance=request.user)
         profile_form = forms.ProfileUpdateForm(instance=request.user.profile)
@@ -107,66 +132,6 @@ def profile_update(request):
         'profile_form': profile_form,
     }
     return render(request, 'accounts/profile_update.html', context)
-
-
-
-
-# @login_required(login_url='user-login')
-# def phone_update(request):
-
-#     # Calling the function of the phones in the forms.py file to check if there are any phone exists or not...
-#     not_taken_phones = forms.phones_func()
-
-#     phone_update_form = forms.PhoneUpdate()
-#     # all_phones = PhoneNumberr.objects.all()
-#     all_phone_form = forms.PhoneNumberForm()
-
-
-#     if request.method == "POST":
-#         phone_update_form = forms.PhoneUpdate(request.POST or None)
-#         if phone_update_form.is_valid():
-#             # phone_update_form.save()
-
-#             phones = phone_update_form.cleaned_data.get("new_phone")
-
-#             for cnt in range(len(phones)):
-#                 # To check if the entered phone number is already save to the current user or not...
-#                 founded = PhoneNumber.objects.filter(user = request.user, phone = int(phones[cnt]))
-#                 # To reload this file --- forms.py file
-#                 importlib.reload(forms)
-
-
-#                 if founded:
-#                     continue
-#                 else:
-#                     new_user_phone = PhoneNumber.objects.create(user=request.user, phone=int(phones[cnt]))
-#                     new_user_phone.save()
-
-
-#             # To reload this file --- forms.py file
-#             importlib.reload(forms)
-                
-#             messages.success(request, ".تم حفظ تعديلات الارقام الخاصة بك")
-#             return redirect("user-profile")
-        
-        
-#     else:
-#         phone_update_form = forms.PhoneUpdate()
-
-
-#     context = {
-#         'phone_update_form' : phone_update_form,
-#         'not_taken_phones' : not_taken_phones,
-#         # 'all_phones' : all_phones,
-#         'all_phone_form' : all_phone_form,
-#     }
-
-#     return render(request, 'accounts/phone_update.html', context)
-
-
-
-
-
 
 
 @login_required(login_url='user-login')

@@ -9,6 +9,8 @@ from core.models import Phones, PhoneNumberr
 
 
 
+
+
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
@@ -33,6 +35,8 @@ class UserLoginForm(AuthenticationForm):
         "placeholder": "ادخل كلمة المرور",
         'style': 'border-color:wightblack; border-radius: 10px;',
     }))
+
+
 
 
 
@@ -74,6 +78,17 @@ class CreateUserForm(UserCreationForm):
         "class" : "input",
         "type" : "password",
         "placeholder" : "أعد احال كلمة السر مرة أخرى",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+    }))
+
+
+
+    job_type = forms.ChoiceField(
+        choices = models.job_type,
+        required=True,
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+        'type' : 'radio',
         'style': 'border-color:wightblack; border-radius: 10px;',
     }))
 
@@ -146,14 +161,6 @@ class CustomPasswordResetConfirmForm(SetPasswordForm):
             'style': 'border-color:wightblack; border-radius: 10px;',
             }),
     )
-
-
-    # class Meta:
-    #     model = User
-    #     fields = ("new_password1", "new_password2")
-
-
-
 
 
 
@@ -261,59 +268,25 @@ class ProfileUpdateForm(forms.ModelForm):
         'accept' : 'image/*',
     }))
 
+    job_type = forms.ChoiceField(
+        choices = models.job_type,
+        required=True,
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+        'type' : 'radio',
+        'style': 'border-color:wightblack; border-radius: 10px;',
+
+        # 'type' : "text",
+        # 'id' : "inputField",
+        # 'value' : "Choose Job Type",
+    }))
+
 
  
 
     class Meta:
         model = models.Profile
-        fields = ['address', 'phone', 'image']
-
-
-
-
-
-
-# def phones_func():
-#     all_phones_lst = []
-#     all_phones = Phones.objects.all()
-#     for phone in all_phones:
-#         all_phones_lst.append(int(phone.phone))
-
-
-#     # To get the phones that taken by users...
-#     phone_taken_lst = []
-#     phone_taken = PhoneNumber.objects.all()
-#     for phone in phone_taken:
-#         phone_taken_lst.append(int(phone.phone))
-
-
-#     # To get the rest of the phone number that not taken by anyone...
-#     not_taken_phones = list(set(all_phones_lst) - set(phone_taken_lst))
-
-
-#     not_taken_phones_to_show_to_users = []
-#     for phone in not_taken_phones:
-#         not_taken_phones_to_show_to_users.append((str(phone), str(phone)))
-
-
-#     phones_tuple = tuple(not_taken_phones_to_show_to_users)
-
-#     return phones_tuple
-
-
-
-
-# class PhoneUpdate(forms.Form):
-
-#     phones_tuple = phones_func()
-    
-#     new_phone = forms.MultipleChoiceField(
-#         label = '..اختر أرقامك',  
-#         choices = phones_tuple,
-#         widget = forms.CheckboxSelectMultiple()) 
-    
-
-
+        fields = ['address', 'phone', 'image', 'job_type']
 
 
 
