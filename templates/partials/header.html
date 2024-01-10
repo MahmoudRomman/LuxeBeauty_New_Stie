@@ -81,11 +81,11 @@
                       </a>
 
                       <div class="dropdown-menu" style="text-align: right;">
-                            <a class="dropdown-item" href="#">الحسابات البنكية
+                            <a class="dropdown-item" href="{% url 'show_banks' %}">الحسابات البنكية
                               <i class="fa fa-bank"></i>
                             </a>  
 
-                            <a class="dropdown-item" href="{% url 'banks_and_payments' %}">روابط الدفع
+                            <a class="dropdown-item" href="{% url 'show_payments' %}">روابط الدفع
                               <i class="fa fa-link"></i>
                             </a>
                       
@@ -105,9 +105,9 @@
                       </a>
 
                       <div class="dropdown-menu" style="text-align: right;">
-                            <a class="dropdown-item" href="#">الحسابات البنكية</a>  
+                            <a class="dropdown-item" href="{% url 'show_bank_accounts_to_users' %}">الحسابات البنكية</a>  
 
-                            <a class="dropdown-item" href="{% url 'banks_and_payments' %}">روابط الدفع
+                            <a class="dropdown-item" href="{% url 'show_payments' %}">روابط الدفع
                               <i class="fa fa-money-bill"></i>
                               
                             </a>

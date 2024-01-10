@@ -29,9 +29,9 @@ from django.views.decorators.http import require_POST
 # Create your views here.
 
 
-
+# Very important function to create a random code of lenth 25 to be used in the slug field of different models
 def create_slug_code():
-    return "".join(random.choices(string.ascii_lowercase + string.digits, k=20))
+    return "".join(random.choices(string.ascii_lowercase + string.digits, k=25))
 
 
 
@@ -39,13 +39,17 @@ today = datetime.date.today()
 month = today.month
 
 
-from core.tasks import print_func
+
+
+
+
+
+
 
 
 def home(request):
     items = models.Item.objects.all().order_by('-date')[:8]
     today_gift = models.Offer.objects.all().order_by('-date')[0:1]
-
 
     context = {
         'items' : items,
@@ -267,23 +271,6 @@ def edit_item_in_store(request, slug):
             if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
                  messages.warning(request, "هناك خطأ من فضلك راجع المدخلات مره أخرى")
             else:
-
-                print('*' * 100)
-                print(image)
-                # models.Item.objects.filter(slug=slug).update(
-                #     name = name, 
-                #     wig_type = wig_type,
-                #     wig_long = wig_long,
-                #     scalp_type = scalp_type,
-                #     wig_color = wig_color,
-                #     density = density,
-                #     image = image,
-                #     price = price, 
-                #     discount_price = discount_price,
-                #     quantity = quantity
-                #     )
-                
-
                 item = models.Item.objects.get(slug=slug)
                 item.name = name
                 item.wig_type = wig_type
@@ -323,91 +310,6 @@ def delete_from_store(request, slug):
 
 
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-# @login_required(login_url='user-login')
-# def shop(request):
-#     if request.method == "POST":
-#         form = forms.ItemForm()
-        
-#         wig_type = request.POST.get("wig_type")
-#         wig_long = request.POST.get("wig_long")
-#         scalp_type = request.POST.get("scalp_type")
-#         wig_color = request.POST.get("wig_color")
-#         density = request.POST.get("density")
-
-#         # if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
-#         #     data = models.Item.objects.all().order_by('-date')
-#         #     paginator = Paginator(data, 7)
-#         #     page_number = request.GET.get('page')
-#         #     page_obj = paginator.get_page(page_number)
-
-#         # else:
-#         #     data = models.Item.objects.filter(wig_type = wig_type, wig_long = wig_long,
-#         #                                         scalp_type = scalp_type, wig_color = wig_color,
-#         #                                         density = density).order_by('-date')
-            
-#         #     paginator = Paginator(data, 7)
-#         #     page_number = request.GET.get('page')
-#         #     page_obj = paginator.get_page(page_number)
-#         if density=='اختر كثافة الباروكة' and wig_color=='اختر لون الباروكة' and scalp_type=='اختر نوع الفروة' and wig_long=='طول الباروكة' and wig_type=='اختر نوع الباروكة':
-#             data = models.Item.objects.all().order_by('-date')
-#             paginator = Paginator(data, 7)
-#             page_number = request.GET.get('page')
-#             page_obj = paginator.get_page(page_number)
-            
-#         else:
-#             # if density or wig_color or wig_long or wig_type or scalp_type:
-#             if (wig_type or wig_long or scalp_type or wig_color or density) and (density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة'):
-               
-#                 multiple_query = Q(
-#                 Q(wig_type__icontains=wig_type) | Q(wig_long__icontains=wig_long) | 
-#                 Q(scalp_type__icontains=scalp_type) | Q(wig_color__icontains=wig_color) |
-#                 Q(density__icontains=density)  
-#                 ) 
-
-#                 data = models.Item.objects.filter(multiple_query).order_by('-date')
-#                 paginator = Paginator(data, 7)
-#                 page_number = request.GET.get('page')
-#                 page_obj = paginator.get_page(page_number)
-
-
-#             elif wig_type and wig_long and scalp_type and wig_color and density:
-
-#                 multiple_query = Q(
-#                 Q(wig_type__icontains=wig_type) & Q(wig_long__icontains=wig_long) & 
-#                 Q(scalp_type__icontains=scalp_type) & Q(wig_color__icontains=wig_color) &
-#                 Q(density__icontains=density)  
-#                 ) 
-
-#                 data = models.Item.objects.filter(multiple_query).order_by('-date')
-#                 paginator = Paginator(data, 7)
-#                 page_number = request.GET.get('page')
-#                 page_obj = paginator.get_page(page_number)
-
-
-#         context = {
-#             'page_obj' : page_obj,
-#             'form' : form,
-#         }
-
-#         return render(request, 'core/shop.html', context)
-    
-
-#     else:
-#         form = forms.ItemForm()
-#         data = models.Item.objects.all().order_by('-date')
-#         paginator = Paginator(data, 7)
-#         page_number = request.GET.get('page')
-#         page_obj = paginator.get_page(page_number)
-
-#         context = {
-#             'page_obj' : page_obj,
-#             'form' : form,
-#         }
-
-#         return render(request, 'core/shop.html', context)
-    
     
 
 @login_required(login_url='user-login')
@@ -691,6 +593,8 @@ def make_bill(request):
 
                         try:
                             account = models.Account.objects.get(phonenumber = phone)
+                            account_id = models.Account.objects.filter(phonenumber = phone)
+
 
                             for order_item in  order.items.all():
                                 new_bill2 = models.Bill2.objects.create(
@@ -708,14 +612,11 @@ def make_bill(request):
                                     wig_color = order_item.item.wig_color,
                                     density = order_item.item.density,
                                     price = order_item.item.price,
-                                    pieces_num = order_item.quantity
+                                    pieces_num = order_item.quantity,
+                                    account = account
                                 )
 
                                 new_bill2.save()
-                                
-                                # # Incremeant the number of bills for this marketer account...
-                                # account.num_of_bills += order_item.quantity
-                                # account.save()
 
                             order_items = order.items.all()
                             order_items.update(ordered = True)
@@ -801,7 +702,7 @@ def make_bill(request):
     return render(request, 'core/bill.html', context)
 
 
-
+from django.db.models import Sum
 
 @login_required(login_url='user-login')
 def show_bills(request):
@@ -810,14 +711,26 @@ def show_bills(request):
     year = today.year
     month = today.month
 
+
+    # Script to calculate the number of bills per account in this month...
+    social_accounts = models.Account.objects.all()
+    bills_per_account = []
+
+    for account in social_accounts:
+        bill_seller = models.Bill2.objects.filter(account_name=account.account_name, date__year = year, date__month = month)
+        total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+        bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber.phone.phone, 'bills_count': total_pieces})
+
+
+    # Script to calculate the total number of bills for all accounts in this month...
     data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
-
-
     bills_num_this_month = 0
+
     for bill in data:
         bills_num_this_month += bill.pieces_num
 
 
+    # To start activate filter if the POST method is exists(activate the form) with no pagination , if not activate the pagination...
     if request.method == "POST":
         form = forms.BillFilterForAdmin(request.POST)
         today_day = request.POST.get("today_day")
@@ -830,12 +743,12 @@ def show_bills(request):
             data = 0
         else:
             today_day = int(today_day)
-            data = models.Bill2.objects.filter(date__year = year, date__month = month, date__day = today_day)
+            data = models.Bill2.objects.filter(date__year = year, date__month = month, date__day = today_day).order_by("-date")
             page_obj = 0
 
     else:
         form = forms.BillFilterForAdmin()
-        data = models.Bill2.objects.filter(date__year = year, date__month = month)
+        data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
         paginator = Paginator(data, 7)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -849,6 +762,7 @@ def show_bills(request):
         'data' : data,
         'bills_num_this_month' : bills_num_this_month,
         'form' : form,
+        'bills_per_account' : bills_per_account,
 
         }
 
@@ -859,7 +773,7 @@ def show_bills(request):
 
 
 @login_required(login_url='user-login')
-def banks(request):
+def show_payments(request):
     if request.method == "POST":
         form = forms.LinkValueFilterForm(request.POST)
         value = request.POST.get("value")
@@ -874,7 +788,7 @@ def banks(request):
         'links_data' : links_data,
         'form' : form,
     }
-    return render(request, 'core/banks.html', context)
+    return render(request, 'core/payment_links.html', context)
 
 
 
@@ -888,6 +802,9 @@ def add_payment_link(request):
             amount = form.cleaned_data.get("amount")
             SAR_link = form.cleaned_data.get("SAR_link")
             AED_link = form.cleaned_data.get("AED_link")
+            USD_link = form.cleaned_data.get("USD_link")
+
+            
 
 
             
@@ -904,6 +821,7 @@ def add_payment_link(request):
                     amount = amount,
                     SAR_link = SAR_link,
                     AED_link = AED_link,
+                    USD_link = USD_link,
                     )
 
                 new_link.save()
@@ -939,9 +857,165 @@ def delete_payment_link(request, slug):
 
 
 
+
+# Banks.......
+@login_required(login_url='user-login')
+def show_banks(request):
+    banks = models.BankAccount.objects.all().order_by("-date")
+
+    context = {
+        'banks' : banks,
+    }
+    return render(request, 'core/banks.html', context)
+
+
+
+@login_required(login_url='user-login')
+def add_bank_account(request):
+    if request.method == "POST":
+        form = forms.BankAccountForm(request.POST)
+        if form.is_valid():
+            bank_name = request.POST.get('bank_name')
+            country = request.POST.get('country')  
+
+            card_number = request.POST.get('card_number')  
+            validation_date = request.POST.get('validation_date') 
+            ccv_or_cvc = request.POST.get('ccv_or_cvc') 
+
+
+            create_slug = create_slug_code()
+
+            if len(card_number) < 19:
+                messages.warning(request, "عفواً, رقم الحساب الذى أدخلته يجب ان يتكون من 16 رقم")
+            elif len(ccv_or_cvc) < 3:
+                messages.warning(request, "عفواً, الرقم الثلاثى لهذا الحساب يجب ان يتكون من ثلاثة أرقام")
+            else:
+                try:
+                    bank_account_exists = models.BankAccount.objects.get(card_number=card_number)
+                    messages.warning(request, "عفواً, هذا الحساب البنكى موجود لديك بالفعل يمكنك التعديل عليه أو ازالته")
+                    return redirect("show_banks")
+                except ObjectDoesNotExist:
+                    new_bank_account = models.BankAccount.objects.create(
+                        bank_name = bank_name,
+                        country = country,
+                        card_number = card_number,
+                        validation_date = validation_date,
+                        ccv_or_cvc = ccv_or_cvc,
+                        slug_link = create_slug,
+                    )
+
+                    new_bank_account.save()
+                    messages.success(request, "لقد تم حفظ بيانات هذا الحساب البنكى بنجاح")
+                    return redirect("show_banks")
+
+
+        else:
+            messages.warning(request, "هناك خطأ فى تعبئة البيانات من فضلك حاول مرة أخرى")
+            return redirect("add_bank_account")
+    else:
+        form = forms.BankAccountForm()
+
+    context = {
+        'form' : form,
+    }
+    return render(request, 'core/add_bank_account.html', context)
+
+
+@login_required(login_url='user-login')
+def edit_bank_account(request, slug):
+    bank_account = models.BankAccount.objects.get(slug_link = slug)
+    if request.method == "POST":
+        form = forms.BankAccountForm(request.POST, instance=bank_account)
+        if form.is_valid():
+            bank_name = request.POST.get('bank_name')
+            country = request.POST.get('country')  
+
+            card_number = request.POST.get('card_number')  
+            validation_date = request.POST.get('validation_date') 
+            ccv_or_cvc = request.POST.get('ccv_or_cvc') 
+
+
+
+            if len(card_number) < 19:
+                messages.warning(request, "عفواً, رقم الحساب الذى أدخلته يجب ان يتكون من 16 رقم")
+            elif len(ccv_or_cvc) < 3:
+                messages.warning(request, "عفواً, الرقم الثلاثى لهذا الحساب يجب ان يتكون من ثلاثة أرقام")
+            else:
+                try:
+                    check_account_exists = models.BankAccount.objects.get(bank_name=bank_name, country=country,
+                                                                          card_number=card_number, validation_date=validation_date,
+                                                                          ccv_or_cvc=ccv_or_cvc, slug_link=slug)
+                    messages.info(request, "لا يوجد تعديلات لحفظها")
+                    return redirect("show_banks")
+                except ObjectDoesNotExist:
+                    bank_account = models.BankAccount.objects.get(slug_link = slug)
+
+                    bank_account.bank_name = bank_name
+                    bank_account.country = country
+                    bank_account.card_number = card_number
+                    bank_account.validation_date = validation_date
+                    bank_account.ccv_or_cvc = ccv_or_cvc
+
+                    bank_account.save()
+                    messages.success(request, "لقد تم تعديل بيانات هذا الحساب البنكى بنجاح")
+                    return redirect("show_banks")
+
+
+        else:
+            messages.warning(request, "هناك خطأ فى تعبئة البيانات من فضلك حاول مرة أخرى")
+            return redirect("add_bank_account")
+    else:
+        form = forms.BankAccountForm(instance=bank_account)
+
+    context = {
+        'form' : form,
+    }
+    return render(request, 'core/edit_bank_account.html', context)
+
+
+@login_required(login_url='user-login')
+def delete_bank_account(request, slug):
+    bank_account = models.BankAccount.objects.get(slug_link = slug)
+
+
+
+    if request.method == "POST":
+        bank_account.delete()
+        messages.success(request, ".تم حذف هذا الحساب البنكى بنجاح")
+        return redirect("show_banks")
+    
+    return render(request, 'core/bank_account_deletion_confirm.html')
+
+
+
+
+
+def show_bank_accounts_to_users(request):
+    banks = models.BankAccount.objects.all().order_by('-date')
+
+    context = {
+        'banks' : banks,
+    }
+    return render(request, 'core/show_bank_accounts_to_users.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 today = datetime.date.today()
-
-
 @login_required(login_url='user-login')
 def chart_data(request):
 
@@ -981,7 +1055,7 @@ def chart_data(request):
 
 @login_required(login_url='user-login')
 def chart_view(request):
-    my_bills = models.Bill2.objects.filter(seller=request.user, date__month=today.month).order_by('-date')
+    my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
 
 
     paginator = Paginator(my_bills, 10)
@@ -1019,7 +1093,7 @@ def chart_view(request):
         total_bills += bill.pieces_num
 
     # Calculate the penalities
-    penalities = models.Penality.objects.filter(name=request.user, date__month=today.month)
+    penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
     days = 0
     for penality in penalities:
         days += penality.days_num
@@ -1027,11 +1101,10 @@ def chart_view(request):
 
 
     # Calculate the rewards
-    rewards = models.Reward.objects.filter(name=request.user, date__month=today.month)
+    rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
     total_reward = 0
     for reward in rewards:
         total_reward += reward.price
-    # total_penality = (final_salary // 30) * days
 
     final_salary = final_salary - total_penality + total_reward
 
@@ -1351,7 +1424,8 @@ def online_order(request):
                             wig_color = wig_color,
                             density = density,
                             price = price,
-                            pieces_num = pieces_num
+                            pieces_num = pieces_num,
+                            account = account
                         )
 
                         new_bill.save()

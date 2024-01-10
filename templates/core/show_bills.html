@@ -163,7 +163,7 @@
 
     </div>
   </div>
-<h2 style="text-align: center;">{{bills_num_this_month}} : عدد الفواتير خلال هذا الشهر</h2>
+<!-- <h2 style="text-align: center;">{{bills_num_this_month}} : عدد الفواتير خلال هذا الشهر</h2> -->
 
 
 </section>
@@ -229,6 +229,72 @@
   </ul>
 </nav>
 {% endif %}
+
+
+
+
+
+
+
+<section class="shop_section layout_padding mt-3" style="margin-top: -4%;">
+  <div class="container" style="max-width: 85%;">
+
+
+    <div class="heading_container heading_center">
+      <h2 class="has-text-centered is-size-3" style="text-align: center;">عدد الفواتير الخاصة بكل حساب هذا الشهر</h2>
+    </div>
+    <div class="row">
+
+
+      <table class="table table-striped" dir='rtl'>
+        <thead style="text-align: center;">
+          <tr style="text-align: center; font-size: large;">
+            <th scope="col">الترتيب</th>
+            <th scope="col">اسم البائع</th>
+            <th scope="col">اسم المُسوق</th>
+            <th scope="col">اسم الحساب</th>
+            <th scope="col">رقم الهاتف</th>
+            <th scope="col">عدد الفواتير</th>
+          </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            
+            {% for bill in bills_per_account %}
+            <tr style="font-size: medium;">
+              <th scope="row" class="mt-1">{{forloop.counter}}</th>
+              <td>{{bill.seller}}</td>
+              <td>{{bill.marketer}}</td>
+              <td>{{bill.account_name}}</td>
+              <td>{{bill.phonenumber}}</td>
+              <td>{{bill.bills_count}}</td>
+            </tr>
+            
+            {% empty %}
+            <tr>
+              <td colspan='12' style="font-size:large">لا يوجد فواتير</td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td colspan="5"><b>اجمالى عدد الفواتير خلال هذا الشهر</b></td>
+              <td><b>{{bills_num_this_month}}</b></td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- <h2 style="text-align: center;">{{bills_num_this_month}} : اجمالى عدد الفواتير خلال هذا الشهر</h2> -->
+
+
+</section>
+
 
 
 

@@ -1,0 +1,207 @@
+{% extends 'partials/base.html' %}
+
+
+
+{% block content %}
+
+
+
+
+ 
+<div class="container-xxl py-5">
+  <div class="container" style="max-width: 85%;">
+      <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+          
+          <div class="tab-content">
+              <div id="tab-1" class="tab-pane fade show p-0 active">
+
+
+                  <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
+                      {% csrf_token %}
+                      <div class="row g-3">
+                          <div class="col-12 col-sm-2">
+                              <div class="form-group">
+                                  {{form.value}}
+                              </div>
+                          </div>
+
+                          <div class="btn_bill_search col-12 col-sm-2" style="font-size: large;">
+                              <input type="submit" value="بحث">
+                          </div>
+
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+  <!-- shop section -->
+
+  <section class="shop_section layout_padding" style="margin-top: -5%;">
+    <div class="container" style="max-width: 85%;">
+      <div class="heading_container heading_center">
+        <h2 class="has-text-centered is-size-3" style="text-align: center;">روابط الدفع المتاحة</h2>
+      </div>
+      <div class="row">
+
+        <table class="table table-striped" dir='rtl' style="text-align: center; font-size: large;">
+            <thead>
+              <tr>
+                <th scope="col">الترتيب</th>
+                <th scope="col">الاسم</th>
+                <th scope="col">القيمة</th>
+                <th scope="col">تاريخ الاضافة</th>
+                <th scope="col">دولار أمريكى؟</th>
+                <th scope="col">ريال سعودى؟</th>
+                <th scope="col">درهم اماراتى؟</th>
+
+                
+                {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                <th scope="col">حذف؟</th>                
+                {% endif %}
+                  
+              </tr>
+            </thead>
+            <tbody>
+
+
+
+
+                {% for link_data in links_data.all %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ link_data.link_name }}</td>
+                    <td>{{ link_data.amount }}</td>
+                    <td>{{ link_data.date|date }}</td>
+                    <td class="payment_link_copy_style">
+                        <span 
+                        class="copy-info" data-info="{{link_data.USD_link}}" 
+                        style="font-size: xx-large;" onclick="copyInfo(this)">&#x1F4CB;
+                        </span>
+                    </td>
+
+                    <td>
+                      <span 
+                      class="copy-info" data-info="{{link_data.SAR_link}}" 
+                      style="font-size: xx-large;" onclick="copyInfo(this)">&#x1F4CB;
+                      </span>
+                    </td>
+
+                    <td class="payment_link_copy_style">
+                      <span 
+                      class="copy-info" data-info="{{link_data.AED_link}}" 
+                      style="font-size: xx-large;" onclick="copyInfo(this)">&#x1F4CB;
+                      </span>
+                    </td>
+                    {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                    <td>
+                        <a href="{% url 'delete_payment_link' link_data.slug_link %}" class="trash-icon-style">
+                          <i class="fa fa-trash" style="font-size: xx-large;"></i>
+                        </a>
+                    </td>             
+                    {% endif %}
+
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='8' style="font-size:large">ليس لديك اى روابط دفع</td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+
+                        <div class="add_more_payments_link_btn">
+                            <a href="{% url 'add_new_payment_link' %}">
+                              اضافة المزيد من الروابط 
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+    
+    {% if links_data %}
+        <div class="add_more_payments_link_btn">
+            <a href="{% url 'add_new_payment_link' %}">
+            اضافة المزيد من الروابط 
+            </a>
+        </div> 
+    {% endif %}
+
+
+
+    </div>
+  </section>
+
+  <!-- end shop section -->
+
+
+
+  
+<style>
+  .copy-info {
+      cursor: pointer; 
+      position: relative; 
+      display: inline-block;
+  }
+
+  .copy-info:hover {
+      cursor: pointer;
+  }
+
+  
+  .copied-message {
+      display: none;
+  }
+</style>
+
+
+
+<script>
+  function copyInfo(span) {
+      // Get the data-info attribute value (assuming it contains the information you want to copy)
+      var infoToCopy = span.getAttribute("data-info");
+
+      // Create a temporary textarea to copy the text
+      var tempTextarea = document.createElement("textarea");
+      tempTextarea.value = infoToCopy;
+      document.body.appendChild(tempTextarea);
+
+      // Select the text in the textarea
+      tempTextarea.select();
+      tempTextarea.setSelectionRange(0, 66666); // For mobile devices
+
+      // Copy the selected text
+      document.execCommand("copy");
+
+      // Remove the temporary textarea
+      document.body.removeChild(tempTextarea);
+
+      // Change the icon to indicate copying
+      span.innerHTML = "✔";
+      
+
+      // Display the "Copied!" message
+      var copiedMessage = document.createElement("span");
+      copiedMessage.className = "copied-message";
+      copiedMessage.textContent = "Copied!";
+      span.appendChild(copiedMessage);
+
+      // Reset the icon and message after 3 seconds
+      setTimeout(function() {
+          span.innerHTML = "&#x1F4CB";
+          span.removeChild(copiedMessage);
+      }, 2000);
+  }
+</script>
+
+{% endblock content %}
+  

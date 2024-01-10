@@ -30,6 +30,8 @@ admin.site.register(models.Account)
 
 
 admin.site.register(models.AddLink)
+admin.site.register(models.BankAccount)
+
 
 
 # New registerd model to add penalites to the users
@@ -39,3 +41,6 @@ admin.site.register(models.Tasks)
 
 
 admin.site.register(models.PhoneNumberr)
+
+
+

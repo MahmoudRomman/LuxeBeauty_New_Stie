@@ -31,13 +31,21 @@
                                         </div>
                                     </div>
         
+
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group">
+                                            {{form.USD_link}}
+                                        </div>
+                                    </div>
+
+
                                     <div class="col-12 col-sm-12">
                                         <div class="form-group">
                                             {{form.SAR_link}}
                                         </div>
                                     </div>
         
-        
+                                    
         
                                     <div class="col-12 col-sm-12">
                                         <div class="form-group">
@@ -48,7 +56,7 @@
 
         
                                     <div class="btn_save_link">
-                                        <input type="submit" value="انشاء الحساب">
+                                        <input type="submit" value="اضافة الرابط">
                                     </div>
 
                                 </div>
@@ -59,7 +67,7 @@
 
 
                 <div class="back_to_payments" style="margin: auto; text-align: center; font-size: large;">
-                    <a href="{% url 'banks_and_payments' %}">الغاء العملية</a>
+                    <a href="{% url 'show_payments' %}">الغاء العملية</a>
                 </div>
 
 

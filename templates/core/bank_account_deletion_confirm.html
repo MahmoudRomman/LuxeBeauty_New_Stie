@@ -13,26 +13,25 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h1 class="has-text-centered is-size-3" style="text-align: center;">ازالة رابط دفع </h1>
+                            <h1 class="has-text-centered is-size-3" style="text-align: center;">ازالة رقم هاتف </h1>
 
                             <hr>
                             <div class="alert alert-danger" style="text-align: center;">
-                                <h4>!انت على وشك ازالة رابط دفع, هل تود الاستمرار</h4>
-
+                                <h4>أنت على وشك ازالة هذا الحساب البنكى</h4>
                             </div>
                             <form method="POST">
                                 {% csrf_token %}
                                 {{form}}
-                                <div class="payment_link_deletion_confirm">
-                                    <input type="submit" value="الاستمرار فى الازالة" style="font-size:large;">
+                                <div class="confirm_phone_deletion">
+                                    <input class="btn btn-info" type="submit" value="تأكيد الازالة" style="font-size:large;">
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
 
-                <div class="no_deletion_back_to_payments">
-                    <a href="{% url 'show_payments' %}">التراجع</a>
+                <div class="back_to_all_phones">
+                    <a href="{% url 'show_banks' %}">التراجع</a>
                 </div>
 
 

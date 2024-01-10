@@ -206,7 +206,7 @@ class Bill2(models.Model):
     density = models.CharField(max_length=150, choices=density, null=False)
     price = models.IntegerField(default=1500)
     pieces_num = models.PositiveIntegerField(default=0)
-    # account = models.ForeignKey("Account", on_delete=models.CASCADE)
+    account = models.ForeignKey("Account", on_delete=models.CASCADE)
 
     class Meta:
         # verbose_name = 'Bills'
@@ -251,9 +251,7 @@ class Phones(models.Model):
     
     def __str__(self):
         return f"{self.phone}"
-    
-    # def __str__(self):
-    #     return self.phone
+
 
 
 
@@ -286,6 +284,8 @@ class Account(models.Model):
     phonenumber = models.ForeignKey(PhoneNumberr, on_delete=models.CASCADE, null=True, blank=True)
 
     date = models.DateTimeField(auto_now_add=True)
+
+
     slug_link = models.SlugField()
 
     # num_of_bills = models.PositiveIntegerField(default=0)
@@ -299,15 +299,34 @@ class Account(models.Model):
 
 # the model of the add new link to show in the banks and pyament page
 class AddLink(models.Model):
-    link_name = models.CharField(max_length=150, null=False, blank=False)
-    slug_link = models.CharField(max_length=150, unique=True, null=False, blank=False)
-    amount = models.IntegerField(null=False, blank=False)
-    SAR_link = models.URLField(max_length=500, null=False, blank=False)
-    AED_link = models.URLField(max_length=500, null=False, blank=False)
+    link_name = models.CharField(max_length=150, null=True, blank=True)
+    slug_link = models.CharField(max_length=150, unique=True, null=True, blank=True)
+    amount = models.IntegerField(null=True, blank=True)
+    SAR_link = models.URLField(max_length=500, null=True, blank=True)
+    USD_link = models.URLField(max_length=500, null=True, blank=True)
+    AED_link = models.URLField(max_length=500, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return self.slug_link
+    
+class BankAccount(models.Model):
+    bank_name = models.CharField(max_length = 100, null=False, blank=False)
+    country = CountryField(multiple=False, blank_label="(select country)")
+    card_number = models.CharField(max_length=19, blank=True, null=True)
+    validation_date = models.DateField()
+    # ccv_or_cvc = 
+    ccv_or_cvc = models.CharField(max_length=3)
+    date = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+    slug_link = models.CharField(max_length=150, unique=True, null=False, blank=False)
+
+
+    def __str__(self):
+        return f"{self.bank_name}"
+    
+
+
+
 
 
 

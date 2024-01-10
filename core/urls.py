@@ -41,9 +41,28 @@ urlpatterns = [
 
 
     
-    path('banks_and_payments/', views.banks, name="banks_and_payments"),
+    path('banks_and_payments/', views.show_payments, name="show_payments"),
     path('add_new_payment_link/', views.add_payment_link, name="add_new_payment_link"),
     path('delete_payment_link/<slug>/', views.delete_payment_link, name="delete_payment_link"),
+
+
+    path("show_banks/", views.show_banks, name="show_banks"),
+    path("show_bank_accounts_to_users/", views.show_bank_accounts_to_users, name="show_bank_accounts_to_users"),
+    path("add_bank_account/", views.add_bank_account, name="add_bank_account"),
+    path("edit_bank_account/<slug>/", views.edit_bank_account, name="edit_bank_account"),
+    path("delete_bank_account/<slug>/", views.delete_bank_account, name="delete_bank_account"),
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     path('chart-data/', views.chart_data, name='chart_data'),

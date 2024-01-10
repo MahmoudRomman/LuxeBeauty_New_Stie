@@ -4,47 +4,10 @@
 
 {% block content %}
 
-
-
-
- 
-<div class="container-xxl py-5">
-  <div class="container" style="max-width: 85%;">
-      <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-          
-          <div class="tab-content">
-              <div id="tab-1" class="tab-pane fade show p-0 active">
-
-
-                  <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
-                      {% csrf_token %}
-                      <div class="row g-3">
-                          <div class="col-12 col-sm-2">
-                              <div class="form-group">
-                                  {{form.value}}
-                              </div>
-                          </div>
-
-                          <div class="btn_bill_search col-12 col-sm-2" style="font-size: large;">
-                              <input type="submit" value="بحث">
-                          </div>
-
-                      </div>
-                  </form>
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
-
-
-
-  <!-- shop section -->
-
-  <section class="shop_section layout_padding" style="margin-top: -5%;">
+  <section class="shop_section layout_padding">
     <div class="container" style="max-width: 85%;">
       <div class="heading_container heading_center">
-        <h2 class="has-text-centered is-size-3" style="text-align: center;">روابط الدفع المتاحة</h2>
+        <h2 class="has-text-centered is-size-3" style="text-align: center;">الحسابات البنكية المُتاحة</h2>
       </div>
       <div class="row">
 
@@ -52,14 +15,16 @@
             <thead>
               <tr>
                 <th scope="col">الترتيب</th>
-                <th scope="col">الاسم</th>
-                <th scope="col">القيمة</th>
+                <th scope="col">اسم البنك</th>
+                <th scope="col">الدولة</th>
+                <th scope="col">رقم الحساب</th>
+                <th scope="col">الرقم الثلاثى</th>
+                <th scope="col">صالحة الى تاريخ</th>
                 <th scope="col">تاريخ الاضافة</th>
-                <th scope="col">رابط الدفع بالدرهم الاماراتى</th>
-                <th scope="col">رابط الدفع بالريال السعودى</th>
 
                 
                 {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                <th scope="col">تعديل؟</th>   
                 <th scope="col">حذف؟</th>                
                 {% endif %}
                   
@@ -70,31 +35,27 @@
 
 
 
-                {% for link_data in links_data.all %}
+                {% for bank in banks.all %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ link_data.link_name }}</td>
-                    <td>{{ link_data.amount }}</td>
-                    <td>{{ link_data.date|date }}</td>
-                    <td class="payment_link_copy_style">
-
-                      <button class="btn_payment_button copy-btn" id="btn_after" data-container="{{link_data.AED_link}}">نسخ الرابط</button>
-                      <!-- <i class="fa-solid fa-copy copy-btn" id="btn_after" data-container="{{link_data.AED_link}}" style="font-size: xx-large;"></i> -->
-                      <!-- <span class="copy-icon" data-text-to-copy="Text to copy" style="font-size: xx-large;">&#x1F4CB;</span> -->
+                    <td>{{ bank.bank_name }}</td>
+                    <td>{{ bank.country }}</td>
+                    <td>{{ bank.card_number }}</td>
+                    <td>{{ bank.ccv_or_cvc }}</td>
+                    <td>{{ bank.validation_date }}</td>
+                    <td>{{ bank.date|date }}</td>
 
 
-
-                    </td>
-                    <td>
-
-                      <button class="btn_payment_button copy-btn" id="btn_after" data-container="{{link_data.SAR_link}}">نسخ الرابط</button>
-             
-
-                    </td>
                     {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                    
                     <td>
-                        <a href="{% url 'delete_payment_link' link_data.slug_link %}" class="trash-icon-style">
-                          <!-- <img width="25" height="25" src="https://img.icons8.com/dusk/25/filled-trash.png" alt="filled-trash"/> -->
+                      <a  href="{% url 'edit_bank_account' bank.slug_link %}" class="edit_item_style">  
+                        <i class="fa fa-edit" style="font-size: xx-large;"></i>
+                      </a>
+                    </td>
+
+                    <td>
+                        <a href="{% url 'delete_bank_account' bank.slug_link %}" class="trash-icon-style">
                           <i class="fa fa-trash" style="font-size: xx-large;"></i>
                         </a>
                     </td>             
@@ -104,14 +65,14 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan='8' style="font-size:large">ليس لديك اى روابط دفع</td>
+                    <td colspan='8' style="font-size:large">ليس لديك اى حسابات بنكية</td>
                 </tr>
                 <tr>
-                    <td colspan="6">
+                    <td colspan="8">
 
                         <div class="add_more_payments_link_btn">
-                            <a href="{% url 'add_new_payment_link' %}">
-                              اضافة المزيد من الروابط 
+                            <a href="{% url 'add_bank_account' %}">
+                              اضافة المزيد من الحسابات البنكية 
                             </a>
                         </div>
 
@@ -123,51 +84,15 @@
       </div>
 
     
-    {% if links_data %}
+    {% if banks %}
         <div class="add_more_payments_link_btn">
-            <a href="{% url 'add_new_payment_link' %}">
-            اضافة المزيد من الروابط 
+            <a href="{% url 'add_bank_account' %}">
+            اضافة المزيد من الحسابات البنكية 
             </a>
         </div> 
     {% endif %}
-        
-
-
-    <script>
-      const copyBtns_AED = [...document.getElementsByClassName('copy-btn')]
-      
-      let previous_AED = null 
-      copyBtns_AED.forEach(btn=> btn.addEventListener('click', ()=>{
-        const AED_text = btn.getAttribute('data-container')
-        navigator.clipboard.writeText(AED_text)
-        btn.textContent = "تم النسخ"
-
-
-        if (previous_AED) {
-          previous_AED.textContent = "نسخ الرابط"
-
-        }
-        previous_AED = btn
-      }))
-
-
-      // to change the color of the button after copy it
-      const btn_after = document.getElementById('btn_after');
-
-      btn_after.addEventListener('click', function onClick() {
-        btn_after.style.backgroundColor = '#27AE60';
-        btn_after.style.color = 'white';
-      });
-
-
-    </script>
-
 
     </div>
   </section>
-
-  <!-- end shop section -->
-
-
 {% endblock content %}
   
