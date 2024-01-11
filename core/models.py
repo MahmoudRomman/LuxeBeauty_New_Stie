@@ -247,7 +247,6 @@ class Phones(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     slug_link = models.SlugField()
 
-
     
     def __str__(self):
         return f"{self.phone}"
@@ -264,8 +263,6 @@ class PhoneNumberr(models.Model):
     slug_link = models.SlugField()
 
 
-
-    
     def __str__(self):
         return f"{self.user.username} - {self.phone.phone}"
     
@@ -276,24 +273,23 @@ class PhoneNumberr(models.Model):
 
 class Account(models.Model):
     account_name = models.CharField(max_length=200)
-
     tiktok_account_link = models.URLField(max_length=1000, null=False, blank=False)
     instagram_account_link = models.URLField(max_length=1000, null=False, blank=False)
 
-    marketer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    phonenumber = models.ForeignKey(PhoneNumberr, on_delete=models.CASCADE, null=True, blank=True)
+    marketer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='account_marketer_name')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='account_seller_name')
 
+    # phonenumber = models.ForeignKey(PhoneNumberr, on_delete=models.CASCADE, null=True, blank=True)
+
+
+    phone = models.ForeignKey(Phones, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
-
-
     slug_link = models.SlugField()
-
-    # num_of_bills = models.PositiveIntegerField(default=0)
-
 
 
     def __str__(self):
         return f"{self.account_name}"
+    
 
 
 
@@ -307,9 +303,12 @@ class AddLink(models.Model):
     AED_link = models.URLField(max_length=500, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
+
     def __str__(self):
         return self.slug_link
-    
+
+
+
 class BankAccount(models.Model):
     bank_name = models.CharField(max_length = 100, null=False, blank=False)
     country = CountryField(multiple=False, blank_label="(select country)")

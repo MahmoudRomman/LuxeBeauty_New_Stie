@@ -201,9 +201,13 @@
                     <p>{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
                   </div>
 
-                  <div class="add_to_cart_per_product">
-                    <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
-                  </div> 
+                  
+                  {% if is_seller %}
+                    <div class="add_to_cart_per_product">
+                      <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
+                    </div> 
+                  {% endif %}
+                    
 
 
                   

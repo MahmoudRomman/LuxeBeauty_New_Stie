@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
 from . import models
+from accounts import models as accounts_models
 
 
 def penality_notification(request):
@@ -122,4 +123,22 @@ def user_ordered_task_notification(request):
         "user_ordered_task_count" : user_ordered_task_count,
     }
 
+    return context
+
+
+
+
+def check_user_job_type(request):
+    if request.user.is_authenticated:
+        current_user = accounts_models.Profile.objects.get(staff=request.user)
+        if current_user.job_type == "Seller":
+            is_seller = True
+        else:
+            is_seller = False
+    else:
+        is_seller = True
+
+    context = {
+        'is_seller' : is_seller,
+    }
     return context

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 import importlib
 from . import forms
 from . import models
-from core.models import PhoneNumberr
+from core import models as core_models
 from django.contrib import messages
 
 
@@ -75,12 +75,28 @@ def register(request):
 @login_required(login_url='user-login')
 def profile(request):
     profile = models.Profile.objects.get(staff=request.user)
-    my_phones = PhoneNumberr.objects.filter(user=request.user)
+    my_phones = core_models.PhoneNumberr.objects.filter(user=request.user)
+
+
+    # For marketer details
+    marketer_phones_details = []
+    for phone in my_phones:
+        account = core_models.Account.objects.get(phone=phone.phone)
+        marketer_phones_details.append({'phone': phone.phone, 'seller': account.seller.username})
+
+    # For seller details
+    seller_phones_details = []
+    for phone in my_phones:
+        account = core_models.Account.objects.get(phone=phone.phone)
+        seller_phones_details.append({'phone': phone.phone, 'marketer': account.marketer.username})
+       
 
 
     context = {
         'profile' : profile,
         'my_phones' : my_phones,
+        'marketer_phones_details' : marketer_phones_details,
+        'seller_phones_details' : seller_phones_details,
     }
     return render(request, 'accounts/profile.html', context)
 
@@ -143,12 +159,12 @@ def phone_update(request):
 
             for phone in phones:
                 # To check if the entered phone number is already save to the current user or not...
-                founded = PhoneNumberr.objects.filter(user=request.user, phone = phone)
+                founded = core_models.PhoneNumberr.objects.filter(user=request.user, phone = phone)
                 
                 if founded:
                     continue
                 else:
-                    new_user_phone = PhoneNumberr.objects.create(user=request.user, phone=phone)
+                    new_user_phone = core_models.PhoneNumberr.objects.create(user=request.user, phone=phone)
                     new_user_phone.save()
 
 
@@ -172,7 +188,7 @@ def phone_update(request):
 
 @login_required(login_url='user-login')
 def remove_phone(request, phone_id):
-    phone = PhoneNumberr.objects.get(user=request.user, phone__id=phone_id)
+    phone = core_models.PhoneNumberr.objects.get(user=request.user, phone__id=phone_id)
 
     if request.method == "POST":
         phone.delete()

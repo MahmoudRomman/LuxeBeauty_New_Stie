@@ -15,6 +15,7 @@ from django.db.models import Q
 from django.contrib import messages
 from django.urls import reverse_lazy
 from . import models
+from accounts import models as accounts_models
 from . import forms
 from datetime import datetime 
 import datetime, calendar
@@ -42,6 +43,14 @@ month = today.month
 
 
 
+@login_required(login_url='user-login')
+def welcome(request):
+    current_user = request.user.username
+
+    context = {
+        'current_user' : current_user,
+    }
+    return render(request, 'core/welcome.html', context)
 
 
 
@@ -50,6 +59,7 @@ month = today.month
 def home(request):
     items = models.Item.objects.all().order_by('-date')[:8]
     today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+
 
     context = {
         'items' : items,
@@ -592,9 +602,7 @@ def make_bill(request):
                         bill_info = {}
 
                         try:
-                            account = models.Account.objects.get(phonenumber = phone)
-                            account_id = models.Account.objects.filter(phonenumber = phone)
-
+                            account = models.Account.objects.get(phone = phone.phone)
 
                             for order_item in  order.items.all():
                                 new_bill2 = models.Bill2.objects.create(
@@ -679,12 +687,13 @@ def make_bill(request):
 
 
                             messages.success(request, ".تم حفظ الفاتورة بنجاح")
-                            return JsonResponse({'status': 'success'})
+                            # return JsonResponse({'status': 'success'})
+                            return redirect('chart_view')
                         
                         
                         except ObjectDoesNotExist:
                             messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
-                            return redirect("bill2")
+                            # return redirect("bill2")
 
                     except ObjectDoesNotExist:
                         messages.warning(request, ".هناك خطأ فى ربط البيانات الخاصة بالرقم الذى قُمت باختياره, من فضلك تواصل مع أحد أعضاء الادارة")
@@ -693,6 +702,8 @@ def make_bill(request):
                 except ObjectDoesNotExist:
                     messages.warning(request, ".انتهت مدة الطلب المُحددة لديك, من فضلك أضف المنتجات الى السلة مرة أخرى")
                     return redirect("shop")
+        else:
+            print("not valiiiiiiiiiiiiid")
     else:
         form = forms.BillForm2(request.user)
 
@@ -719,7 +730,14 @@ def show_bills(request):
     for account in social_accounts:
         bill_seller = models.Bill2.objects.filter(account_name=account.account_name, date__year = year, date__month = month)
         total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-        bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber.phone.phone, 'bills_count': total_pieces})
+        # bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
+        
+        bills_per_account.append({'seller': account.seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phone.phone, 'bills_count': total_pieces})
+        
+        # if len(bill_seller) == 0:
+        #     bills_per_account.append({'seller': "-----", 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
+        # else:
+        #     bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
 
 
     # Script to calculate the total number of bills for all accounts in this month...
@@ -999,22 +1017,6 @@ def show_bank_accounts_to_users(request):
     return render(request, 'core/show_bank_accounts_to_users.html', context)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 today = datetime.date.today()
 @login_required(login_url='user-login')
 def chart_data(request):
@@ -1055,58 +1057,214 @@ def chart_data(request):
 
 @login_required(login_url='user-login')
 def chart_view(request):
-    my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
 
 
-    paginator = Paginator(my_bills, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    bills_dict = {} 
-    for bill in my_bills:
-        if bill.seller_phone_number not in bills_dict:
-            bills_dict[str(bill.seller_phone_number)] = int(bill.pieces_num)
-        else:
-            bills_dict[str(bill.seller_phone_number)] += int(bill.pieces_num)
-
-
-
-    final_salary = 2000
-    for key, value in bills_dict.items():
-        salary = 0
-        
-        if value < 10:
-            salary = 0
-        elif value==10 or value<20:
-            salary = value*100 
-        elif value==20 or value<30:
-            salary = value*150 
-        elif value==30 or value>30:
-            salary = value*200 
-
-        final_salary += salary
+    user_profile = accounts_models.Profile.objects.get(staff=request.user)
+    bills_and_phones_detials = []
     
+    if user_profile.job_type == "Seller":
+        is_seller = True
+
+        my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+        paginator = Paginator(my_bills, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        # bills_dict = {} 
+        # for bill in my_bills:
+        #     if bill.seller_phone_number not in bills_dict:
+        #         bills_dict[str(bill.seller_phone_number)] = int(bill.pieces_num)
+        #     else:
+        #         bills_dict[str(bill.seller_phone_number)] += int(bill.pieces_num)
 
 
-    total_bills = 0
-    for bill in my_bills:
-        total_bills += bill.pieces_num
 
-    # Calculate the penalities
-    penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
-    days = 0
-    for penality in penalities:
-        days += penality.days_num
-    total_penality = (final_salary // 30) * days
+        # final_salary = 2000
+        # for key, value in bills_dict.items():
+        #     salary = 0
+            
+        #     if value < 10:
+        #         salary = 0
+        #     elif value==10 or value<20:
+        #         salary = value*100 
+        #     elif value==20 or value<30:
+        #         salary = value*150 
+        #     elif value==30 or value>30:
+        #         salary = value*200 
+
+        #     final_salary += salary
 
 
-    # Calculate the rewards
-    rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
-    total_reward = 0
-    for reward in rewards:
-        total_reward += reward.price
 
-    final_salary = final_salary - total_penality + total_reward
+
+
+# phone ------- total_bills ---------- salary_per_each_phone_bills
+        final_salary = 2000
+        
+        my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+        for phone in my_phones:
+            account = models.Account.objects.get(phone=phone.phone)
+            my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+            my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+          
+            salary = 0
+            bills_salary = 0
+            if my_bills_count <= 10:
+                salary = final_salary
+                bills_salary = 0
+            elif my_bills_count > 10 and my_bills_count <20:
+                salary = (my_bills_count * 100) + final_salary
+                bills_salary = my_bills_count * 100
+            elif my_bills_count >= 20 and my_bills_count < 30:
+                salary = (my_bills_count * 150) + final_salary
+                bills_salary = my_bills_count * 150
+            elif my_bills_count >= 30:
+                salary = (my_bills_count * 200) + final_salary
+                bills_salary = my_bills_count * 200
+            final_salary += salary
+            bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+
+
+
+
+
+        bills_dict = {} 
+        for bill in my_bills:
+            if bill.seller_phone_number not in bills_dict:
+                bills_dict[str(bill.seller_phone_number)] = int(bill.pieces_num)
+            else:
+                bills_dict[str(bill.seller_phone_number)] += int(bill.pieces_num)
+
+
+
+        final_salary = 2000
+        for key, value in bills_dict.items():
+            salary = 0
+            
+            if value < 10:
+                salary = 0
+            elif value==10 or value<20:
+                salary = value*100 
+            elif value==20 or value<30:
+                salary = value*150 
+            elif value==30 or value>30:
+                salary = value*200 
+
+            final_salary += salary
+
+
+        
+
+
+        total_bills = 0
+        for bill in my_bills:
+            total_bills += bill.pieces_num
+
+        # Calculate the penalities
+        penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+        days = 0
+        for penality in penalities:
+            days += penality.days_num
+        total_penality = (final_salary // 30) * days
+
+
+        # Calculate the rewards
+        rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+        total_reward = 0
+        for reward in rewards:
+            total_reward += reward.price
+
+        final_salary = final_salary - total_penality + total_reward
+
+    else:
+        is_seller = False
+
+
+        my_accounts = models.Account.objects.filter(marketer=request.user)
+        page_obj = 0
+
+
+
+
+        final_salary = 2000
+        
+        my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+        for phone in my_phones:
+            account = models.Account.objects.get(phone=phone.phone)
+            my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+            my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+
+            print("*" * 100)
+            print(my_bills_count)
+            salary = 0
+            bills_salary = 0
+            if my_bills_count <= 10:
+                salary = final_salary
+                bills_salary = 0
+            elif my_bills_count > 10 and my_bills_count <20:
+                salary = (my_bills_count * 100) + final_salary
+                bills_salary = my_bills_count * 100
+            elif my_bills_count >= 20 and my_bills_count < 30:
+                salary = (my_bills_count * 150) + final_salary
+                bills_salary = my_bills_count * 150
+            elif my_bills_count >= 30:
+                salary = (my_bills_count * 200) + final_salary
+                bills_salary = my_bills_count * 200
+            final_salary += salary
+            bills_and_phones_detials.append({'phone': phone.phone,  'seller':account.seller ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+
+
+
+        bills_dict = {} 
+
+        for account in my_accounts:
+            my_bills = models.Bill2.objects.filter(account=account, date__year=today.year, date__month=today.month).order_by('-date')
+            
+            for bill in my_bills:
+                
+                if bill.seller_phone_number not in bills_dict:
+                    bills_dict[str(bill.seller_phone_number)] = int(bill.pieces_num)
+                else:
+                    bills_dict[str(bill.seller_phone_number)] += int(bill.pieces_num)
+                    
+
+        final_salary = 2000
+        for key, value in bills_dict.items():
+            salary = 0
+            
+            if value < 10:
+                salary = 0
+            elif value==10 or value<20:
+                salary = value*100 
+            elif value==20 or value<30:
+                salary = value*150 
+            elif value==30 or value>30:
+                salary = value*200 
+
+            final_salary += salary
+        
+
+
+        total_bills = 0
+        for bill in my_bills:
+            total_bills += bill.pieces_num
+
+        # Calculate the penalities
+        penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+        days = 0
+        for penality in penalities:
+            days += penality.days_num
+        total_penality = (final_salary // 30) * days
+
+
+        # Calculate the rewards
+        rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+        total_reward = 0
+        for reward in rewards:
+            total_reward += reward.price
+
+        final_salary = final_salary - total_penality + total_reward
+
 
     context = {
         'page_obj' : page_obj,
@@ -1116,6 +1274,9 @@ def chart_view(request):
         'total_penality' : total_penality,
         'total_reward' : total_reward,
         'final_salary' : final_salary,
+
+        'bills_and_phones_detials' : bills_and_phones_detials,
+        'is_seller' : is_seller,
     }
     return render(request, 'core/chart.html', context)
 
@@ -1399,14 +1560,12 @@ def online_order(request):
             elif len(check_customer_name) <= 2:
                 messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
                 return redirect("online_order")
-            
 
             else:
                 try:
                     phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
-
                     try:
-                        account = models.Account.objects.get(phonenumber = phone)
+                        account = models.Account.objects.get(phone = phone.phone)
 
                         ## Create new instance for the bill and save it to the database in the bill model...
                         new_bill = models.Bill2.objects.create(
@@ -1735,26 +1894,28 @@ def create_new_account(request):
         form = forms.CreateAccountForm(request.user ,request.POST)
         if form.is_valid():
             marketer = form.cleaned_data['marketer']
-            phonenumber = form.cleaned_data['phonenumber']
+            seller = form.cleaned_data['seller']
+            phone = form.cleaned_data['phone']
             account_name = form.cleaned_data['account_name']
             tiktok_account_link = form.cleaned_data['tiktok_account_link']
             instagram_account_link = form.cleaned_data['instagram_account_link']
+
             create_slug = create_slug_code()
 
             try:
-                user_account = models.Account.objects.get(phonenumber=phonenumber, marketer=marketer)
-                messages.warning(request, "هذا المُستخدم لدية حساب بالفعل على هذا الرقم, يمكنك التعديل عليه أو ازالته")
-                return redirect("users_accounts")
+                user_account = models.Account.objects.get(phone=phone)
+                messages.warning(request, "هذا المُسوق لدية حساب بالفعل على هذا الرقم, يمكنك التعديل عليه أو ازالته")
 
             except ObjectDoesNotExist:
                 try:
                     user_account_name = models.Account.objects.get(account_name=account_name)
                     messages.warning(request, "يوجد لديك فى البيانات حساب يحمل نفس اسم الحساب الذى ادخلته, من فضلك قم بتغير اسم الحساب")
-                    return redirect("users_accounts")
                 except ObjectDoesNotExist:
                     new_account = models.Account.objects.create(
                         marketer = marketer,
-                        phonenumber = phonenumber,
+                        seller = seller,
+                        # phonenumber = phone.phone,
+                        phone = phone,
                         account_name = account_name,
                         tiktok_account_link = tiktok_account_link,
                         instagram_account_link = instagram_account_link,
@@ -1766,8 +1927,6 @@ def create_new_account(request):
                     
                     messages.success(request, "تم انشاء حساب مُسوق بنجاح لهذا المُستخدم")
                     return redirect("users_accounts")
-
-
     else:
         form = forms.CreateAccountForm(request.user)
 
@@ -1786,35 +1945,30 @@ def edit_user_account(request, slug):
             account_name = form.cleaned_data['account_name']
             tiktok_account_link = form.cleaned_data['tiktok_account_link']
             instagram_account_link = form.cleaned_data['instagram_account_link']
-
             
-            all_accounts = models.Account.objects.all().exclude(slug_link = slug)
-            print("*" * 100)
-            for each_account in all_accounts:
-                print(each_account.account_name)
-                if each_account.account_name == account_name:
+            try:
+                account_with_same_info = models.Account.objects.get(
+                    slug_link=slug,
+                    account_name = account_name,
+                    tiktok_account_link = tiktok_account_link,
+                    instagram_account_link = instagram_account_link,
+                    )
+                messages.info(request, "لا يوجد بيانات تم تغيرها")
+                return redirect("users_accounts")
+            except ObjectDoesNotExist:
+                try:
+                    account = models.Account.objects.get(account_name = account_name)
                     messages.warning(request, "يوجد لديك فى البيانات حساب يحمل نفس اسم الحساب الذى ادخلته, من فضلك قم بتغير اسم الحساب")
-                    return redirect("edit_user_account", slug=slug)                
-                else:
-                    try:
-                        account_with_same_info = models.Account.objects.get(
-                            slug_link=slug,
-                            account_name = account_name,
-                            tiktok_account_link = tiktok_account_link,
-                            instagram_account_link = instagram_account_link,
-                            )
-                        messages.info(request, "لا يوجد بيانات تم تغيرها")
-                        return redirect("users_accounts")
-                    except ObjectDoesNotExist:
-                        account = models.Account.objects.filter(slug_link = slug)
-                        account.update(
-                            account_name = account_name,
-                            tiktok_account_link = tiktok_account_link,
-                            instagram_account_link = instagram_account_link
-                        )
+                except:
+                    account = models.Account.objects.filter(slug_link = slug)
+                    account.update(
+                        account_name = account_name,
+                        tiktok_account_link = tiktok_account_link,
+                        instagram_account_link = instagram_account_link
+                    )
 
-                        messages.success(request, "تم تعديل الحساب لهذا المُستخدم بنجاح")
-                        return redirect("users_accounts")
+                    messages.success(request, "تم تعديل الحساب لهذا المُستخدم بنجاح")
+                    return redirect("users_accounts")
     else:
         form = forms.EditAccountForm(instance=account)
     context = {

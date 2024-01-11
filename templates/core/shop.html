@@ -96,7 +96,10 @@
             <th scope="col">صورة المنتج</th>
             <th scope="col">السعر</th>
             <th scope="col">العدد المُتاح</th>
+            
+            {% if is_seller %}
             <th scope="col">تريد البيع؟</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody style="text-align: center;">
@@ -153,13 +156,14 @@
 
                 <td>{{item.price}} SAR</td>
                 <td>{{item.quantity}}</td>
-                <td>
+
+                {% if is_seller %}
+                  <td>
                     <a href="{% url 'add-to-cart' item.slug %}" class="cart-link"> 
                       <i class="fa fa-shopping-cart" style="font-size: xx-large;"></i>
                     </a>
-
-                  
-                </td>
+                  </td>
+                {% endif %}
 
               </tr>
 
@@ -206,14 +210,6 @@
         </a>
       </li>
     {% endif %}
-
-
-    
-      <!-- <li class="page-item">
-        <a style="color:#F67280;" class="page-link" href="#">
-          {{page_obj.number}}:{{page_obj.paginator.num_pages}}
-        </a>
-      </li> -->
 
       {% for i in page_obj.paginator.page_range %}
       {% if i == page_obj.number %}

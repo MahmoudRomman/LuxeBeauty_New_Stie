@@ -19,15 +19,18 @@
             <thead>
               <tr>
                 <th scope="col">الترتيب</th>
-                <th scope="col">اسم المٌسوق</th>
-
                 <th scope="col">اسم الحساب</th>
+                <th scope="col">اسم المٌسوق</th>
+                <th scope="col">اسم البائع</th>
+                <th scope="col">رقم هاتف الحساب</th>
+
+
+
 
 
                 <th scope="col">حساب التيك توك</th>
                 <th scope="col">حساب الانستجرام</th>
 
-                <th scope="col">رقم الهاتف</th>
                 <th scope="col">تاريخ الاضافة</th>
 
                 <th scope="col">تعديل؟</th>
@@ -39,9 +42,12 @@
                 {% for user_account in users_accounts.all %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ user_account.marketer.username }}</td>
-
                     <td>{{ user_account.account_name }}</td>
+                    <td>{{ user_account.marketer.username }}</td>
+                    <td>{{ user_account.seller.username }}</td>
+                    <td>{{ user_account.phone.phone }}</td>
+
+
 
                     <td>
                         <div class="social_box">
@@ -55,7 +61,6 @@
                         </div>
                     </td>
 
-                    <td>{{ user_account.phonenumber.phone }}</td>
 
 
 

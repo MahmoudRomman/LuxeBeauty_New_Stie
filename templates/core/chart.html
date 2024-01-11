@@ -6,6 +6,8 @@
 {% block content %}
 
 
+{% if is_seller %}
+
 
 <h1 class="text-center mb-5 wow fadeInUp mt-5" data-wow-delay="0.1s">احصائياتك هذا الشهر حتى الان</h1>
 
@@ -220,7 +222,7 @@
     <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
         اجمالى عدد الفواتير الخاصة بكل رقم
     </h2>
-    <table class="table table-striped" dir='rtl'>
+    <!-- <table class="table table-striped" dir='rtl'>
         <thead style="text-align: center;">
           <tr style="text-align: center; font-size: large;">
             <th scope="col">الترتيب</th>
@@ -257,26 +259,174 @@
                 <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
             </td>
           </tr>
-          {% endfor %}
+          {% endfor %} -->
           
 
+
+
+    <table class="table table-striped" dir='rtl'>
+          <thead style="text-align: center;">
+            <tr style="text-align: center; font-size: large;">
+              <th scope="col">الترتيب</th>
+              <th scope="col">الرقم</th>
+              <th scope="col">اسم المُسوق</th>
+              <th scope="col">عدد الفواتير</th>
+              <th scope="col">الراتب</th>
+  
+            </tr>
+          </thead>
+      <tbody style="text-align: center;">
+            {% for bill_detail in bills_and_phones_detials %}
+                <tr style="font-size: large;">
+                  <th scope="row" class="mt-1">{{forloop.counter}}</th>
+                  <td>{{bill_detail.phone}}</td>
+                  <td>{{bill_detail.marketer}}</td>
+                  <td>{{bill_detail.total_bills_per_phone}}</td>
+                  <td>{{bill_detail.bills_salary}}</td>
+                </tr>
+            {% empty %}
+                <tr>
+      
+                  <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                      <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
+                  </td>
+                </tr>
+            {% endfor %}
+              
+
           <tr>
-            <td colspan="3"><b>خصوماتك خلال هذا الشهر</b></td>
+            <td colspan="4"><b>خصوماتك خلال هذا الشهر</b></td>
             <td><b>{{total_penality}} EGP</b></td>
           </tr>
 
           <tr>
-            <td colspan="3"><b>مكافأتك خلال هذا الشهر</b></td>
+            <td colspan="4"><b>مكافأتك خلال هذا الشهر</b></td>
             <td><b>{{total_reward}} EGP</b></td>
           </tr>
 
           <tr>
-            <td colspan="3"><b>الراتب الاساسى</b></td>
+            <td colspan="4"><b>الراتب الاساسى</b></td>
             <td><b>2000 EGP</b></td>
           </tr>
           
           <tr>
-            <td colspan="3"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
+            <td colspan="4"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
+            <td><b>{{final_salary}} EGP</b></td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+<style>
+  .pagination a {
+    margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
+  }
+</style>
+      
+{% else %}
+
+
+
+
+<div class="container" style="max-width: 85%;">
+  <div class="row">
+
+
+    <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
+        اجمالى عدد الفواتير الخاصة بكل رقم
+    </h2>
+    <!-- <table class="table table-striped" dir='rtl'>
+        <thead style="text-align: center;">
+          <tr style="text-align: center; font-size: large;">
+            <th scope="col">الترتيب</th>
+            <th scope="col">الرقم</th>
+            <th scope="col">عدد الفواتير</th>
+            <th scope="col">الراتب</th>
+
+          </tr>
+        </thead>
+        <tbody style="text-align: center;">
+
+          
+          {% for key, value in bills_dict.items %}
+          
+          <tr style="font-size: large;">
+            <th scope="row" class="mt-1">{{forloop.counter}}</th>
+            <td>{{key}}</td>
+            <td>{{value}}</td>
+            
+            {% if value < 10 %}
+              <td>0 EGP</td>
+            {% elif value >= 10 and value < 20 %}
+              <td>{% widthratio value 1 100 %} EGP</td>
+            {% elif value >= 20 and value < 30 %}
+              <td>{% widthratio value 1 150 %} EGP</td>
+            {% elif value >= 30 %}
+              <td>{% widthratio value 1 200 %} EGP</td>
+            {% endif %}
+          </tr>
+          {% empty %}
+          <tr>
+
+            <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
+            </td>
+          </tr>
+          {% endfor %} -->
+          
+
+          <table class="table table-striped" dir='rtl'>
+            <thead style="text-align: center;">
+              <tr style="text-align: center; font-size: large;">
+                <th scope="col">الترتيب</th>
+                <th scope="col">الرقم</th>
+                <th scope="col">اسم البائع</th>
+                <th scope="col">عدد الفواتير</th>
+                <th scope="col">الراتب</th>
+    
+              </tr>
+            </thead>
+         <tbody style="text-align: center;">
+              {% for bill_detail in bills_and_phones_detials %}
+                  <tr style="font-size: large;">
+                    <th scope="row" class="mt-1">{{forloop.counter}}</th>
+                    <td>{{bill_detail.phone}}</td>
+                    <td>{{bill_detail.seller}}</td>
+                    <td>{{bill_detail.total_bills_per_phone}}</td>
+                    <td>{{bill_detail.bills_salary}}</td>
+                  </tr>
+              {% empty %}
+                  <tr>
+        
+                    <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
+                        <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
+                    </td>
+                  </tr>
+              {% endfor %}
+
+
+
+          <tr>
+            <td colspan="4"><b>خصوماتك خلال هذا الشهر</b></td>
+            <td><b>{{total_penality}} EGP</b></td>
+          </tr>
+
+          <tr>
+            <td colspan="4"><b>مكافأتك خلال هذا الشهر</b></td>
+            <td><b>{{total_reward}} EGP</b></td>
+          </tr>
+
+          <tr>
+            <td colspan="4"><b>الراتب الاساسى</b></td>
+            <td><b>2000 EGP</b></td>
+          </tr>
+          
+          <tr>
+            <td colspan="4"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
             <td><b>{{final_salary}} EGP</b></td>
           </tr>
         </tbody>
@@ -293,6 +443,8 @@
   }
 </style>
     
+{% endif %}
+  
 
 
 {% endblock content %}

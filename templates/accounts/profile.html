@@ -119,45 +119,107 @@
                     <br>
 
 
-                    <table class="table table-striped px-3" dir="rtl">
-                      <thead style="text-align: center">
-                        <tr style="text-align: center">
-                          <th scope="col">الترتيب</th>
-                          <th scope="col">أرقام الهواتف الخاصة بك</th>
-                          <th scope="col">حذف؟</th>
-                        </tr>
-                      </thead>
-                      <tbody style="text-align: center">
-                        {% for phone in my_phones.all %}
-                        <tr>
-                          <th scope="row" class="mt-1">{{forloop.counter}}</th>
-                          <td>{{phone.phone}}</td>
-                          <td>
-                            <a href="{% url 'user-phone-delete' phone.phone.id %}">
-                              <img
-                                width="25"
-                                height="25"
-                                src="https://img.icons8.com/dusk/25/filled-trash.png"
-                                alt="filled-trash"
-                              />
-                            </a>
-                          </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                          <td colspan="10" style="font-size: large; text-align: center">
-                            ليس لديك اى أرقام هواتف
-                          </td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
+                    
+                    {% if is_seller %}
+                        <table class="table table-striped px-3" dir="rtl">
+                          <thead style="text-align: center">
+                            <tr style="text-align: center">
+                              <th scope="col">الترتيب</th>
+                              <th scope="col">رقم الهاتف</th>
+                              <th scope="col">اسم المُسوق</th>
 
-                    <div class="phone_edit_button mx-auto" style="font-size: large;">
+                              <!-- <th scope="col">حذف؟</th> -->
+                            </tr>
+                          </thead>
+                          <tbody style="text-align: center">
+                            {% for phone in seller_phones_details %}
+                            <tr>
+                              <th scope="row" class="mt-1">{{forloop.counter}}</th>
+                              <td>{{phone.phone}}</td>
+                              <td>{{phone.marketer}}</td>
+
+
+
+                              <!-- The Following trash icon is stoped, to be activated latter -->
+                              <!-- <td>
+                                <a href="{% url 'user-phone-delete' phone.phone.id %}">
+                                  <img
+                                    width="25"
+                                    height="25"
+                                    src="https://img.icons8.com/dusk/25/filled-trash.png"
+                                    alt="filled-trash"
+                                  />
+                                </a>
+                              </td> -->
+
+
+                            </tr>
+                            {% empty %}
+                            <tr>
+                              <td colspan="10" style="font-size: large; text-align: center">
+                                ليس لديك اى أرقام هواتف
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                    {% else %}
+                        <table class="table table-striped px-3" dir="rtl">
+                          <thead style="text-align: center">
+                            <tr style="text-align: center">
+                              <th scope="col">الترتيب</th>
+                              <th scope="col">رقم الهاتف</th>
+                              <th scope="col">اسم البائع</th>
+
+                              <!-- <th scope="col">حذف؟</th> -->
+                            </tr>
+                          </thead>
+                          <tbody style="text-align: center">
+                            {% for phone in marketer_phones_details %}
+                            <tr>
+                              <th scope="row" class="mt-1">{{forloop.counter}}</th>
+                              <td>{{phone.phone}}</td>
+                              <td>{{phone.seller}}</td>
+
+
+
+                              <!-- The Following trash icon is stoped, to be activated latter -->
+                              <!-- <td>
+                                <a href="{% url 'user-phone-delete' phone.phone.id %}">
+                                  <img
+                                    width="25"
+                                    height="25"
+                                    src="https://img.icons8.com/dusk/25/filled-trash.png"
+                                    alt="filled-trash"
+                                  />
+                                </a>
+                              </td> -->
+
+
+                            </tr>
+                            {% empty %}
+                            <tr>
+                              <td colspan="10" style="font-size: large; text-align: center">
+                                ليس لديك اى أرقام هواتف
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                    {% endif %}
+                      
+
+
+                    <!-- The Following button is stoped, to be activated latter -->
+                    <!-- <div class="phone_edit_button mx-auto" style="font-size: large;">
                       <a href="{% url 'user-phone-update' %}">
                         اضافة المزيد من الارقام
                       </a>
-                    </div>
+                    </div> -->
+                      
+
+
+
                   </div>
                 </div>
             </div>

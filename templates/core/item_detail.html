@@ -37,10 +37,14 @@
         </div>
 
         
+
         {% if user.is_authenticated %}
-            <div class="add_to_cart_per_product">
-                <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
-            </div>
+        {% if is_seller %}
+        <div class="add_to_cart_per_product">
+            <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
+        </div>
+        {% else %}
+        {% endif %}
         {% endif %}
 
     </div> 

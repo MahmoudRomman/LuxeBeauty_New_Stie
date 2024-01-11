@@ -92,6 +92,10 @@ TEMPLATES = [
                 'core.context_processors.ordered_task_notification',
                 'core.context_processors.done_task_notification',
                 'core.context_processors.user_ordered_task_notification',
+                'core.context_processors.check_user_job_type',
+                'accounts.context_processors.check_user_job_type',
+
+                
             ],
         },
     },
@@ -169,7 +173,9 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'home'
+# LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'welcome'
+
 LOGIN_URL = 'user-login'
 
 ## Sending Emails...

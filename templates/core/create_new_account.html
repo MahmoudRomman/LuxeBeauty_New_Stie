@@ -22,33 +22,57 @@
                             <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
                                 {% csrf_token %}
                                 <div class="row g-3" style="row-gap: 13px;">
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large; margin-right: 5px;">اسم المُسوق:</label>
                                         <div class="form-group">
                                             {{form.marketer}}
                                         </div>
                                     </div>
+
+
+
+                                    
+
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large; margin-right: 5px;">اسم البائع:</label>
+
+                                        <div class="form-group">
+                                            {{form.seller}}
+                                        </div>
+                                    </div>
         
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large; margin-right: 5px;">اسم الحساب:</label>
                                         <div class="form-group">
                                             {{form.account_name}}
                                         </div>
                                     </div>
         
-                                    <div class="col-12 col-sm-12">
+
+        
+
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large; margin-right: 5px;">رقم الهاتف:</label>
                                         <div class="form-group">
-                                            {{form.phonenumber}}
+                                            {{form.phone}}
                                         </div>
                                     </div>
         
+
+
+
         
-        
-                                    <div class="col-12 col-sm-12">
+                                    <div class="col-12 col-sm-12" style="text-align: right;">
+                                        <label style="font-size: large; margin-right: 5px;">رابط حساب التيك توك:</label>
+
                                         <div class="form-group">
                                             {{form.tiktok_account_link}}
                                         </div>
                                     </div>
         
-                                    <div class="col-12 col-sm-12">
+                                    <div class="col-12 col-sm-12" style="text-align: right;">
+                                        <label style="font-size: large; margin-right: 5px;">رابط حساب الانستجرام:</label>
+
                                         <div class="form-group">
                                             {{form.instagram_account_link}}
                                         </div>

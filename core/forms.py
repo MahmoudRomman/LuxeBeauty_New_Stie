@@ -784,25 +784,33 @@ class CreateAccountForm(forms.Form):
 
         # Exclude the current user from the queryset
         self.fields['marketer'].queryset = User.objects.exclude(id=current_user.id)
+        self.fields['seller'].queryset = User.objects.exclude(id=current_user.id)
 
     marketer = forms.ModelChoiceField(
         queryset=User.objects.all(), 
-        empty_label="اختر أحد المستخدمين ...", 
+        empty_label="اختر اسم المُسوق ...", 
         widget=forms.Select(attrs={
         'class': 'form-control',
         'style': 'border-color:wightblack; border-radius: 15px;',  
             }))
     
-        
+    seller = forms.ModelChoiceField(
+        queryset=User.objects.all(), 
+        empty_label="اختر اسم البائع ...", 
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+        'style': 'border-color:wightblack; border-radius: 15px;',  
+            }))
     
+    
+    phone = forms.ModelChoiceField(
+        queryset = models.Phones.objects.all(),
+        empty_label="اختر أحد أرقام الهواتف  ...", 
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+        'style': 'border-color:wightblack; border-radius: 15px;',  
+            }))
 
-    phonenumber = forms.ModelChoiceField(
-        queryset = models.PhoneNumberr.objects.all(),
-        empty_label="اختر أحد أرقام الهواتف الخاصه بالمستخدمين ...", 
-        widget=forms.Select(attrs={
-        'class': 'form-control',
-        'style': 'border-color:wightblack; border-radius: 15px;',  
-            }))
 
 
     account_name = forms.CharField(required=True, widget=forms.TextInput(attrs={
@@ -832,33 +840,6 @@ class CreateAccountForm(forms.Form):
 
 
 class EditAccountForm(forms.ModelForm):
-
-    # def __init__(self, current_user, *args, **kwargs):
-    #     super(EditAccountForm, self).__init__(*args, **kwargs)
-
-    #     # Exclude the current user from the queryset
-    #     self.fields['marketer'].queryset = User.objects.exclude(id=current_user.id)
-
-    # marketer = forms.ModelChoiceField(
-    #     queryset=User.objects.all(), 
-    #     empty_label="اختر أحد المستخدمين ...", 
-    #     widget=forms.Select(attrs={
-    #     'class': 'form-control',
-    #     'style': 'border-color:wightblack; border-radius: 15px;',  
-    #         }))
-    
-        
-    
-
-    # phonenumber = forms.ModelChoiceField(
-    #     queryset = models.PhoneNumberr.objects.all(),
-    #     empty_label="اختر أحد أرقام الهواتف الخاصه بالمستخدمين ...", 
-    #     widget=forms.Select(attrs={
-    #     'class': 'form-control',
-    #     'style': 'border-color:wightblack; border-radius: 15px;',  
-    #         }))
-
-
     account_name = forms.CharField(required=True, widget=forms.TextInput(attrs={
             'class': 'form-control',
             'type' : 'text',
@@ -885,55 +866,21 @@ class EditAccountForm(forms.ModelForm):
     
     class Meta:
         model = models.Account
-        fields = ['marketer', 'phonenumber', 'account_name', 'tiktok_account_link', 'instagram_account_link']
+        fields = ['account_name', 'tiktok_account_link', 'instagram_account_link']
 
 
 
-# forms.py
+
+
+
 from django import forms
 from django.core.validators import MinValueValidator
-
-
-
 
 class DateInput(forms.DateInput):
     input_type = 'month'
 
 
-
-# class VisaCardForm(forms.ModelForm):
-
-#     card_number = forms.TextInput(attrs={
-#             'class': 'form-control',
-#             'pattern': '\d{16}', 
-#             'maxlength': '19', 
-#             'title': '16 digits with spaces',
-#             'data-name': 'card_number',
-#             'placeholder': 'XXXX XXXX XXXX XXXX',
-#             'style': 'border-color:wightblack; border-radius: 15px;',
-
-#         })
-    
-    
-    
-#     validation_date = DateInput(attrs={
-#             # 'class': 'form-control',
-#             'data-name': 'validation_date',
-#             # 'style': 'border-color:wightblack; border-radius: 15px;',
-#             'placeholder': '-- ----',
-
-#         })
-    
-#     class Meta:
-#         model = models.Bank111
-#         fields = ['card_number', 'validation_date']
-        
-
-
 class BankAccountForm(forms.ModelForm):
-
-    # validation_date = MonthYearField()
-
     country = CountryField(blank_label="Choose a country").formfield(
             widget=CountrySelectWidget(attrs={
                 'class': 'form-control',
@@ -978,7 +925,6 @@ class BankAccountForm(forms.ModelForm):
                 'class': 'form-control', 
                 'style': 'border-color:wightblack; border-radius: 15px;',
                 'type' : 'date',
-                # 'type': 'month',
                 }),
         }
 
