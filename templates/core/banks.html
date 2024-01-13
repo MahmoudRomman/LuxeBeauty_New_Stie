@@ -17,9 +17,12 @@
                 <th scope="col">الترتيب</th>
                 <th scope="col">اسم البنك</th>
                 <th scope="col">الدولة</th>
-                <th scope="col">رقم الحساب</th>
-                <th scope="col">الرقم الثلاثى</th>
-                <th scope="col">صالحة الى تاريخ</th>
+               
+                <th scope="col">IBAN</th>
+                <th scope="col">Account Number</th>
+                <th scope="col">Swift Code</th>
+                <th scope="col">اسم المُستفيد</th>
+
                 <th scope="col">تاريخ الاضافة</th>
 
                 
@@ -40,9 +43,12 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ bank.bank_name }}</td>
                     <td>{{ bank.country }}</td>
-                    <td>{{ bank.card_number }}</td>
-                    <td>{{ bank.ccv_or_cvc }}</td>
-                    <td>{{ bank.validation_date }}</td>
+                    
+                    <td>{{ bank.IBAN }}</td>
+                    <td>{{ bank.account_number }}</td>
+                    <td>{{ bank.swift_code }}</td>
+                    <td>{{ bank.beneficiary_name }}</td>
+                    
                     <td>{{ bank.date|date }}</td>
 
 

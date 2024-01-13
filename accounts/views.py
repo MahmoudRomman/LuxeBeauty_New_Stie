@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 import importlib
 from . import forms
 from . import models
+from core import views as core_views
 from core import models as core_models
 from django.contrib import messages
 
@@ -52,6 +53,7 @@ def register(request):
             else:
 
                 form.save()
+                
                 job_type = form.cleaned_data.get("job_type")
                 username = form.cleaned_data.get('username')
                 user = User.objects.get(username = username)
@@ -59,6 +61,9 @@ def register(request):
                 profile = models.Profile.objects.get(staff = user)
                 profile.job_type = job_type
                 profile.save()
+
+                user.user_permissions.add(core_views.can_make_order_permission)
+                user.save()
 
                 messages.success(request, f'.لقد قمت بانشاء حساب الان, للأستمرار برجاء تسجيل الدخول {username}')
                 return redirect('user-login')

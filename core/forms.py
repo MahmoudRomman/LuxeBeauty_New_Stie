@@ -890,7 +890,9 @@ class BankAccountForm(forms.ModelForm):
                 }))
     class Meta:
         model = models.BankAccount
-        fields = ['bank_name', 'card_number', 'validation_date', 'country', 'ccv_or_cvc']
+        # fields = ['bank_name', 'country', 'IBAN', 'account_number', 'swift_code', 'beneficiary_name', 'card_number', 'validation_date', 'ccv_or_cvc']
+        fields = ['bank_name', 'country', 'IBAN', 'account_number', 'swift_code', 'beneficiary_name']
+
         widgets = {
             'bank_name': forms.TextInput(attrs={
                 'class': 'form-control', 
@@ -898,34 +900,63 @@ class BankAccountForm(forms.ModelForm):
                 'placeholder': 'bank name',
                 }),
 
-            'card_number': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'XXXX XXXX XXXX XXXX',
-                'style': 'border-color:wightblack; border-radius: 15px;',
-                'required' : 'True',
-                'id' : 'id_card_number',
-                }),
 
-            'ccv_or_cvc': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter CVC/CCV:',
-                'style': 'border-color:wightblack; border-radius: 15px;',
-                'required' : 'True',
-                'id' : 'cvc',
-                'oninput' : 'restrictToThreeDigits(this)',
-                'type' : 'text',
-                'title' : 'Only numeric characters',
-                'pattern' : '\d*',
-                }),
-
-
-
-
-            'validation_date': forms.DateInput(attrs={
+            'IBAN': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'style': 'border-color:wightblack; border-radius: 15px;',
-                'type' : 'date',
+                'placeholder': 'IBAN',
                 }),
+
+
+            'account_number': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'style': 'border-color:wightblack; border-radius: 15px;',
+                'placeholder': 'Account Number',
+                }),
+
+
+            'swift_code': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'style': 'border-color:wightblack; border-radius: 15px;',
+                'placeholder': 'Swift Code',
+                }),
+
+
+            'beneficiary_name': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'style': 'border-color:wightblack; border-radius: 15px;',
+                'placeholder': 'Beneficiary Name',
+                }),
+
+
+            # 'card_number': forms.TextInput(attrs={
+            #     'class': 'form-control',
+            #     'placeholder': 'XXXX XXXX XXXX XXXX',
+            #     'style': 'border-color:wightblack; border-radius: 15px;',
+            #     'required' : 'True',
+            #     'id' : 'id_card_number',
+            #     }),
+
+            # 'ccv_or_cvc': forms.TextInput(attrs={
+            #     'class': 'form-control',
+            #     'placeholder': 'Enter CVC/CCV:',
+            #     'style': 'border-color:wightblack; border-radius: 15px;',
+            #     'required' : 'True',
+            #     'id' : 'cvc',
+            #     'oninput' : 'restrictToThreeDigits(this)',
+            #     'type' : 'text',
+            #     'title' : 'Only numeric characters',
+            #     'pattern' : '\d*',
+            #     }),
+
+
+
+
+            # 'validation_date': forms.DateInput(attrs={
+            #     'class': 'form-control', 
+            #     'style': 'border-color:wightblack; border-radius: 15px;',
+            #     'type' : 'date',
+            #     }),
         }
 
 

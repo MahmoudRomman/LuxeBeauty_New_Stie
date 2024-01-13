@@ -29,6 +29,63 @@ from django.views.decorators.http import require_POST
 
 # Create your views here.
 
+# from django.contrib.auth.models import Permission
+# from django.contrib.contenttypes.models import ContentType
+
+
+# content_type = ContentType.objects.get_for_model(accounts_models.Profile)
+# can_make_order_permission = Permission.objects.create(
+#     codename='can_make_order',
+#     name='Can Make Order',
+#     content_type=content_type,
+# )
+
+
+
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+
+content_type = ContentType.objects.get_for_model(accounts_models.Profile)
+
+existing_permissions = Permission.objects.filter(content_type=content_type, codename='can_make_order')
+
+if not existing_permissions.exists():
+    # Create the permission
+    can_make_order_permission = Permission.objects.create(
+        codename='can_make_order',
+        name='Can Make Order',
+        content_type=content_type,
+    )
+
+    # can_make_order_permission, created = Permission.objects.get_or_create(
+    #     codename='can_make_order',
+    #     name='Can Make Order',
+    #     content_type=content_type,
+    # )
+
+
+
+
+from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseForbidden
+
+def seller_required(view_func):
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.profile.job_type == 'Seller':
+            return view_func(request, *args, **kwargs)
+        else:
+            # Redirect or show an error message for non-sellers
+            # messages.warning(request, "عفواً, ليس لديك صلاحيات الوصول الى هذه الصفحة")
+            return redirect("not_have_permissions")
+            # return HttpResponseForbidden("You do not have permission to access this page.")
+
+    return _wrapped_view
+
+
+
+
+def not_have_permissions(request):
+    return render(request, 'core/not_have_permissions.html')
 
 # Very important function to create a random code of lenth 25 to be used in the slug field of different models
 def create_slug_code():
@@ -385,6 +442,7 @@ def shop(request):
 
 
 @login_required(login_url='user-login')
+@seller_required
 def add_to_cart(request, slug):
     # get the item
     item = get_object_or_404(models.Item, slug=slug)
@@ -442,6 +500,7 @@ def add_to_cart(request, slug):
             
 
 @login_required(login_url='user-login')
+@seller_required
 def remove_single_item_from_cart(request, slug):
     # get the item
     item = get_object_or_404(models.Item, slug=slug)
@@ -485,6 +544,7 @@ def remove_single_item_from_cart(request, slug):
 
 
 @login_required(login_url='user-login')
+@seller_required
 def remove_from_cart(request, slug):
     # get the item
     item = get_object_or_404(models.Item, slug=slug)
@@ -521,6 +581,7 @@ def remove_from_cart(request, slug):
 
 
 @login_required(login_url='user-login')
+@seller_required
 def order_summary(request):
     try:
         order = models.Order.objects.get(user=request.user, ordered=False)
@@ -571,6 +632,7 @@ def order_summary(request):
 
 
 @login_required(login_url='user-login')
+@seller_required
 def make_bill(request):
     if request.method == "POST":
         form = forms.BillForm2(request.user, request.POST)
@@ -586,13 +648,11 @@ def make_bill(request):
 
             if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
                 messages.warning(request, ".عفواً, يجب اختيار رقم العمل الخاص بك")
-                return redirect("bill2")
+                return JsonResponse({'status': 'error'})
             
-
             elif len(check_customer_name) <= 2:
                 messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
-                return redirect("bill2")
-            
+                return JsonResponse({'status': 'error'})
 
             else:
                 try:
@@ -687,23 +747,23 @@ def make_bill(request):
 
 
                             messages.success(request, ".تم حفظ الفاتورة بنجاح")
-                            # return JsonResponse({'status': 'success'})
-                            return redirect('chart_view')
+                            return JsonResponse({'status': 'success'})
                         
                         
                         except ObjectDoesNotExist:
                             messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
-                            # return redirect("bill2")
-
+                            return JsonResponse({'status': 'error'})
+                        
                     except ObjectDoesNotExist:
                         messages.warning(request, ".هناك خطأ فى ربط البيانات الخاصة بالرقم الذى قُمت باختياره, من فضلك تواصل مع أحد أعضاء الادارة")
-                        return redirect("bill2")
+                        return JsonResponse({'status': 'error'})
 
                 except ObjectDoesNotExist:
                     messages.warning(request, ".انتهت مدة الطلب المُحددة لديك, من فضلك أضف المنتجات الى السلة مرة أخرى")
                     return redirect("shop")
         else:
-            print("not valiiiiiiiiiiiiid")
+            messages.warning(request, ".هناك خطأ فى هذا المحتوى, من فضلك تواصل مع أحد أعضاء الادارة")
+            return JsonResponse({'status': 'error'})
     else:
         form = forms.BillForm2(request.user)
 
@@ -716,73 +776,77 @@ def make_bill(request):
 from django.db.models import Sum
 
 @login_required(login_url='user-login')
+@seller_required
 def show_bills(request):
-
-    today = datetime.date.today()
-    year = today.year
-    month = today.month
-
-
-    # Script to calculate the number of bills per account in this month...
-    social_accounts = models.Account.objects.all()
-    bills_per_account = []
-
-    for account in social_accounts:
-        bill_seller = models.Bill2.objects.filter(account_name=account.account_name, date__year = year, date__month = month)
-        total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-        # bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
-        
-        bills_per_account.append({'seller': account.seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phone.phone, 'bills_count': total_pieces})
-        
-        # if len(bill_seller) == 0:
-        #     bills_per_account.append({'seller': "-----", 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
-        # else:
-        #     bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
+    if request.user.is_staff:
+        today = datetime.date.today()
+        year = today.year
+        month = today.month
 
 
-    # Script to calculate the total number of bills for all accounts in this month...
-    data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
-    bills_num_this_month = 0
+        # Script to calculate the number of bills per account in this month...
+        social_accounts = models.Account.objects.all()
+        bills_per_account = []
 
-    for bill in data:
-        bills_num_this_month += bill.pieces_num
+        for account in social_accounts:
+            bill_seller = models.Bill2.objects.filter(account_name=account.account_name, date__year = year, date__month = month)
+            total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+            # bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
+            
+            bills_per_account.append({'seller': account.seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phone.phone, 'bills_count': total_pieces})
+            
+            # if len(bill_seller) == 0:
+            #     bills_per_account.append({'seller': "-----", 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
+            # else:
+            #     bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
 
 
-    # To start activate filter if the POST method is exists(activate the form) with no pagination , if not activate the pagination...
-    if request.method == "POST":
-        form = forms.BillFilterForAdmin(request.POST)
-        today_day = request.POST.get("today_day")
+        # Script to calculate the total number of bills for all accounts in this month...
+        data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
+        bills_num_this_month = 0
 
-        if today_day == "كل الايام":
+        for bill in data:
+            bills_num_this_month += bill.pieces_num
+
+
+        # To start activate filter if the POST method is exists(activate the form) with no pagination , if not activate the pagination...
+        if request.method == "POST":
+            form = forms.BillFilterForAdmin(request.POST)
+            today_day = request.POST.get("today_day")
+
+            if today_day == "كل الايام":
+                data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
+                paginator = Paginator(data, 7)
+                page_number = request.GET.get('page')
+                page_obj = paginator.get_page(page_number)
+                data = 0
+            else:
+                today_day = int(today_day)
+                data = models.Bill2.objects.filter(date__year = year, date__month = month, date__day = today_day).order_by("-date")
+                page_obj = 0
+
+        else:
+            form = forms.BillFilterForAdmin()
             data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
             paginator = Paginator(data, 7)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
             data = 0
-        else:
-            today_day = int(today_day)
-            data = models.Bill2.objects.filter(date__year = year, date__month = month, date__day = today_day).order_by("-date")
-            page_obj = 0
 
+
+
+
+        context = {
+            'page_obj' : page_obj,
+            'data' : data,
+            'bills_num_this_month' : bills_num_this_month,
+            'form' : form,
+            'bills_per_account' : bills_per_account,
+
+            }
     else:
-        form = forms.BillFilterForAdmin()
-        data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
-        paginator = Paginator(data, 7)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        data = 0
-
-
-
-
-    context = {
-        'page_obj' : page_obj,
-        'data' : data,
-        'bills_num_this_month' : bills_num_this_month,
-        'form' : form,
-        'bills_per_account' : bills_per_account,
-
-        }
+        context = {}
+        return redirect('not_have_permissions')
 
     return render(request, 'core/show_bills.html', context)
 
@@ -812,46 +876,49 @@ def show_payments(request):
 
 @login_required(login_url='user-login')
 def add_payment_link(request):
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        if request.method == "POST":
+            form = forms.AddLinkForm(request.POST, request.FILES)
+            if form.is_valid():
+                link_name = form.cleaned_data.get("link_name")
+                amount = form.cleaned_data.get("amount")
+                SAR_link = form.cleaned_data.get("SAR_link")
+                AED_link = form.cleaned_data.get("AED_link")
+                USD_link = form.cleaned_data.get("USD_link")
 
-    if request.method == "POST":
-        form = forms.AddLinkForm(request.POST, request.FILES)
-        if form.is_valid():
-            link_name = form.cleaned_data.get("link_name")
-            amount = form.cleaned_data.get("amount")
-            SAR_link = form.cleaned_data.get("SAR_link")
-            AED_link = form.cleaned_data.get("AED_link")
-            USD_link = form.cleaned_data.get("USD_link")
-
-            
-
-
-            
-            try:
-                check_payment_link = models.AddLink.objects.get(amount=amount, link_name=link_name)
-                messages.info(request, "هذا الرابط موجود بالفعل بنفس طريقة الدفع ونفس القيمة")
-                return redirect("banks_and_payments")
-            except ObjectDoesNotExist:
-                create_slug = create_slug_code()
-
-                new_link = models.AddLink.objects.create(
-                    link_name = link_name,
-                    slug_link = create_slug,
-                    amount = amount,
-                    SAR_link = SAR_link,
-                    AED_link = AED_link,
-                    USD_link = USD_link,
-                    )
-
-                new_link.save()
-                messages.success(request, "تم اضافة الرابط هذا بنجاح")
-                return redirect("banks_and_payments")
-    else:
-        form = forms.AddLinkForm()
+                
 
 
-    context = {
-        'form' : form,
-    }
+                
+                try:
+                    check_payment_link = models.AddLink.objects.get(amount=amount, link_name=link_name)
+                    messages.info(request, "هذا الرابط موجود بالفعل بنفس طريقة الدفع ونفس القيمة")
+                    return redirect("banks_and_payments")
+                except ObjectDoesNotExist:
+                    create_slug = create_slug_code()
+
+                    new_link = models.AddLink.objects.create(
+                        link_name = link_name,
+                        slug_link = create_slug,
+                        amount = amount,
+                        SAR_link = SAR_link,
+                        AED_link = AED_link,
+                        USD_link = USD_link,
+                        )
+
+                    new_link.save()
+                    messages.success(request, "تم اضافة الرابط هذا بنجاح")
+                    return redirect("banks_and_payments")
+        else:
+            form = forms.AddLinkForm()
+
+
+        context = {
+            'form' : form,
+        }
+    else:        
+        context = {}
+        return redirect("not_have_permissions")
 
     return render(request, 'core/add_new_link.html', context)
 
@@ -860,13 +927,16 @@ def add_payment_link(request):
 
 @login_required(login_url='user-login')
 def delete_payment_link(request, slug):
-    payment_link = models.AddLink.objects.get(slug_link=slug)
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        payment_link = models.AddLink.objects.get(slug_link=slug)
 
 
-    if request.method == "POST":
-        payment_link.delete()
-        messages.success(request, ".تم ازالة هذا الرابط بنجاح")
-        return redirect("banks_and_payments")
+        if request.method == "POST":
+            payment_link.delete()
+            messages.success(request, ".تم ازالة هذا الرابط بنجاح")
+            return redirect("banks_and_payments")
+    else:
+        return redirect("not_have_permissions")
     
     
     return render(request, 'core/payment_link_deletion_confirm.html')
@@ -879,46 +949,52 @@ def delete_payment_link(request, slug):
 # Banks.......
 @login_required(login_url='user-login')
 def show_banks(request):
-    banks = models.BankAccount.objects.all().order_by("-date")
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
 
-    context = {
-        'banks' : banks,
-    }
+        banks = models.BankAccount.objects.all().order_by("-date")
+
+        context = {
+            'banks' : banks,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/banks.html', context)
 
 
 
 @login_required(login_url='user-login')
 def add_bank_account(request):
-    if request.method == "POST":
-        form = forms.BankAccountForm(request.POST)
-        if form.is_valid():
-            bank_name = request.POST.get('bank_name')
-            country = request.POST.get('country')  
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
 
-            card_number = request.POST.get('card_number')  
-            validation_date = request.POST.get('validation_date') 
-            ccv_or_cvc = request.POST.get('ccv_or_cvc') 
+        if request.method == "POST":
+            form = forms.BankAccountForm(request.POST)
+            if form.is_valid():
+                bank_name = request.POST.get('bank_name')
+                country = request.POST.get('country')  
+
+                IBAN = request.POST.get('IBAN')  
+                account_number = request.POST.get('account_number')  
+                swift_code = request.POST.get('swift_code') 
+                beneficiary_name = request.POST.get('beneficiary_name') 
+
+                create_slug = create_slug_code()
 
 
-            create_slug = create_slug_code()
-
-            if len(card_number) < 19:
-                messages.warning(request, "عفواً, رقم الحساب الذى أدخلته يجب ان يتكون من 16 رقم")
-            elif len(ccv_or_cvc) < 3:
-                messages.warning(request, "عفواً, الرقم الثلاثى لهذا الحساب يجب ان يتكون من ثلاثة أرقام")
-            else:
                 try:
-                    bank_account_exists = models.BankAccount.objects.get(card_number=card_number)
+                    bank_account_exists = models.BankAccount.objects.get(IBAN=IBAN, account_number=account_number)
                     messages.warning(request, "عفواً, هذا الحساب البنكى موجود لديك بالفعل يمكنك التعديل عليه أو ازالته")
                     return redirect("show_banks")
                 except ObjectDoesNotExist:
                     new_bank_account = models.BankAccount.objects.create(
                         bank_name = bank_name,
                         country = country,
-                        card_number = card_number,
-                        validation_date = validation_date,
-                        ccv_or_cvc = ccv_or_cvc,
+
+                        IBAN = IBAN,
+                        account_number = account_number,
+                        swift_code = swift_code,
+                        beneficiary_name = beneficiary_name,
+
                         slug_link = create_slug,
                     )
 
@@ -927,87 +1003,95 @@ def add_bank_account(request):
                     return redirect("show_banks")
 
 
+            else:
+                messages.warning(request, "هناك خطأ فى تعبئة البيانات من فضلك حاول مرة أخرى")
+                return redirect("add_bank_account")
         else:
-            messages.warning(request, "هناك خطأ فى تعبئة البيانات من فضلك حاول مرة أخرى")
-            return redirect("add_bank_account")
-    else:
-        form = forms.BankAccountForm()
+            form = forms.BankAccountForm()
 
-    context = {
-        'form' : form,
-    }
+        context = {
+            'form' : form,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/add_bank_account.html', context)
 
 
 @login_required(login_url='user-login')
 def edit_bank_account(request, slug):
-    bank_account = models.BankAccount.objects.get(slug_link = slug)
-    if request.method == "POST":
-        form = forms.BankAccountForm(request.POST, instance=bank_account)
-        if form.is_valid():
-            bank_name = request.POST.get('bank_name')
-            country = request.POST.get('country')  
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
 
-            card_number = request.POST.get('card_number')  
-            validation_date = request.POST.get('validation_date') 
-            ccv_or_cvc = request.POST.get('ccv_or_cvc') 
+        bank_account = models.BankAccount.objects.get(slug_link = slug)
+        if request.method == "POST":
+            form = forms.BankAccountForm(request.POST, instance=bank_account)
+            if form.is_valid():
+                bank_name = request.POST.get('bank_name')
+                country = request.POST.get('country')  
 
-
-
-            if len(card_number) < 19:
-                messages.warning(request, "عفواً, رقم الحساب الذى أدخلته يجب ان يتكون من 16 رقم")
-            elif len(ccv_or_cvc) < 3:
-                messages.warning(request, "عفواً, الرقم الثلاثى لهذا الحساب يجب ان يتكون من ثلاثة أرقام")
-            else:
+                IBAN = request.POST.get('IBAN')  
+                account_number = request.POST.get('account_number')  
+                swift_code = request.POST.get('swift_code') 
+                beneficiary_name = request.POST.get('beneficiary_name') 
                 try:
                     check_account_exists = models.BankAccount.objects.get(bank_name=bank_name, country=country,
-                                                                          card_number=card_number, validation_date=validation_date,
-                                                                          ccv_or_cvc=ccv_or_cvc, slug_link=slug)
+                                                                            IBAN=IBAN, account_number=account_number, swift_code=swift_code,
+                                                                            beneficiary_name=beneficiary_name, slug_link=slug)
                     messages.info(request, "لا يوجد تعديلات لحفظها")
                     return redirect("show_banks")
                 except ObjectDoesNotExist:
-                    bank_account = models.BankAccount.objects.get(slug_link = slug)
 
-                    bank_account.bank_name = bank_name
-                    bank_account.country = country
-                    bank_account.card_number = card_number
-                    bank_account.validation_date = validation_date
-                    bank_account.ccv_or_cvc = ccv_or_cvc
+                    all_bank_accounts = models.BankAccount.objects.all().exclude(slug_link=slug)
 
-                    bank_account.save()
-                    messages.success(request, "لقد تم تعديل بيانات هذا الحساب البنكى بنجاح")
-                    return redirect("show_banks")
+                    for bank_account in all_bank_accounts:
+                        if bank_account.IBAN == IBAN and bank_account.account_number == account_number:
+                            messages.warning(request, "عفواً, الحساب البنكى بهذه المعلومات التى تم ادخالها موجود بالفعل يمكنك التعديل عليه أو ازالته")
+                            return redirect("show_banks")
+                        else:
+                            bank_account = models.BankAccount.objects.get(slug_link = slug)
 
+                            bank_account.bank_name = bank_name
+                            bank_account.country = country
+                            bank_account.IBAN = IBAN
+                            bank_account.account_number = account_number
+                            bank_account.swift_code = swift_code
+                            bank_account.beneficiary_name = beneficiary_name
+                            bank_account.save()
 
+                            messages.success(request, "لقد تم تعديل بيانات هذا الحساب البنكى بنجاح")
+                            return redirect("show_banks")
+            else:
+                messages.warning(request, "هناك خطأ فى تعبئة البيانات من فضلك حاول مرة أخرى")
+                return redirect("add_bank_account")
         else:
-            messages.warning(request, "هناك خطأ فى تعبئة البيانات من فضلك حاول مرة أخرى")
-            return redirect("add_bank_account")
-    else:
-        form = forms.BankAccountForm(instance=bank_account)
+            form = forms.BankAccountForm(instance=bank_account)
 
-    context = {
-        'form' : form,
-    }
+        context = {
+            'form' : form,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/edit_bank_account.html', context)
 
 
 @login_required(login_url='user-login')
 def delete_bank_account(request, slug):
-    bank_account = models.BankAccount.objects.get(slug_link = slug)
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        bank_account = models.BankAccount.objects.get(slug_link = slug)
 
-
-
-    if request.method == "POST":
-        bank_account.delete()
-        messages.success(request, ".تم حذف هذا الحساب البنكى بنجاح")
-        return redirect("show_banks")
-    
+        if request.method == "POST":
+            bank_account.delete()
+            messages.success(request, ".تم حذف هذا الحساب البنكى بنجاح")
+            return redirect("show_banks")
+    else:
+        return redirect("not_have_permissions")
     return render(request, 'core/bank_account_deletion_confirm.html')
 
 
 
 
-
+@login_required(login_url='user-login')
 def show_bank_accounts_to_users(request):
     banks = models.BankAccount.objects.all().order_by('-date')
 
@@ -1020,34 +1104,38 @@ def show_bank_accounts_to_users(request):
 today = datetime.date.today()
 @login_required(login_url='user-login')
 def chart_data(request):
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
 
-    year = today.year
-    month = today.month
-    num_days = calendar.monthrange(year, month)[1]
-    days = [datetime.date(year, month, day) for day in range(1, num_days+1)]
-    
+        year = today.year
+        month = today.month
+        num_days = calendar.monthrange(year, month)[1]
+        days = [datetime.date(year, month, day) for day in range(1, num_days+1)]
+        
 
-    randomlist = []
-    today_in_month = int(today.day)
+        randomlist = []
+        today_in_month = int(today.day)
 
-    for bills_per_day in range(today_in_month):
-        my_bills = models.Bill2.objects.filter(seller=request.user, date__month=month, date__day=str(f"{bills_per_day+1}"))
+        for bills_per_day in range(today_in_month):
+            my_bills = models.Bill2.objects.filter(seller=request.user, date__month=month, date__day=str(f"{bills_per_day+1}"))
 
-        peices = 0
-        for bill in my_bills:
-            peices += bill.pieces_num
-        randomlist.append(peices)
+            peices = 0
+            for bill in my_bills:
+                peices += bill.pieces_num
+            randomlist.append(peices)
 
 
-    labels = days
-    values = randomlist
-    
-    chart_data = {
-        'label': 'خريطة المبيعات الخاصة بك خلال هذا الشهر',
-        'labels': labels,
-        'values': values,
-        'chart_type': 'bar' # any chart type line, bar, ects
-    }
+        labels = days
+        values = randomlist
+        
+        chart_data = {
+            'label': 'خريطة المبيعات الخاصة بك خلال هذا الشهر',
+            'labels': labels,
+            'values': values,
+            'chart_type': 'bar' # any chart type line, bar, ects
+        }
+    else:
+        chart_data = {}
+        return redirect("not_have_permissions")
     
     return JsonResponse(chart_data)
 
@@ -1070,37 +1158,7 @@ def chart_view(request):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        # bills_dict = {} 
-        # for bill in my_bills:
-        #     if bill.seller_phone_number not in bills_dict:
-        #         bills_dict[str(bill.seller_phone_number)] = int(bill.pieces_num)
-        #     else:
-        #         bills_dict[str(bill.seller_phone_number)] += int(bill.pieces_num)
-
-
-
-        # final_salary = 2000
-        # for key, value in bills_dict.items():
-        #     salary = 0
-            
-        #     if value < 10:
-        #         salary = 0
-        #     elif value==10 or value<20:
-        #         salary = value*100 
-        #     elif value==20 or value<30:
-        #         salary = value*150 
-        #     elif value==30 or value>30:
-        #         salary = value*200 
-
-        #     final_salary += salary
-
-
-
-
-
-# phone ------- total_bills ---------- salary_per_each_phone_bills
         final_salary = 2000
-        
         my_phones = models.PhoneNumberr.objects.filter(user=request.user)
         for phone in my_phones:
             account = models.Account.objects.get(phone=phone.phone)
@@ -1124,38 +1182,7 @@ def chart_view(request):
             final_salary += salary
             bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
 
-
-
-
-
-        bills_dict = {} 
-        for bill in my_bills:
-            if bill.seller_phone_number not in bills_dict:
-                bills_dict[str(bill.seller_phone_number)] = int(bill.pieces_num)
-            else:
-                bills_dict[str(bill.seller_phone_number)] += int(bill.pieces_num)
-
-
-
-        final_salary = 2000
-        for key, value in bills_dict.items():
-            salary = 0
-            
-            if value < 10:
-                salary = 0
-            elif value==10 or value<20:
-                salary = value*100 
-            elif value==20 or value<30:
-                salary = value*150 
-            elif value==30 or value>30:
-                salary = value*200 
-
-            final_salary += salary
-
-
-        
-
-
+        # Calculating the number of bills
         total_bills = 0
         for bill in my_bills:
             total_bills += bill.pieces_num
@@ -1178,24 +1205,15 @@ def chart_view(request):
 
     else:
         is_seller = False
-
-
-        my_accounts = models.Account.objects.filter(marketer=request.user)
         page_obj = 0
 
-
-
-
         final_salary = 2000
-        
         my_phones = models.PhoneNumberr.objects.filter(user=request.user)
         for phone in my_phones:
             account = models.Account.objects.get(phone=phone.phone)
             my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
             my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
 
-            print("*" * 100)
-            print(my_bills_count)
             salary = 0
             bills_salary = 0
             if my_bills_count <= 10:
@@ -1214,37 +1232,7 @@ def chart_view(request):
             bills_and_phones_detials.append({'phone': phone.phone,  'seller':account.seller ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
 
 
-
-        bills_dict = {} 
-
-        for account in my_accounts:
-            my_bills = models.Bill2.objects.filter(account=account, date__year=today.year, date__month=today.month).order_by('-date')
-            
-            for bill in my_bills:
-                
-                if bill.seller_phone_number not in bills_dict:
-                    bills_dict[str(bill.seller_phone_number)] = int(bill.pieces_num)
-                else:
-                    bills_dict[str(bill.seller_phone_number)] += int(bill.pieces_num)
-                    
-
-        final_salary = 2000
-        for key, value in bills_dict.items():
-            salary = 0
-            
-            if value < 10:
-                salary = 0
-            elif value==10 or value<20:
-                salary = value*100 
-            elif value==20 or value<30:
-                salary = value*150 
-            elif value==30 or value>30:
-                salary = value*200 
-
-            final_salary += salary
-        
-
-
+        # Calculating the number of bills
         total_bills = 0
         for bill in my_bills:
             total_bills += bill.pieces_num
@@ -1270,7 +1258,6 @@ def chart_view(request):
         'page_obj' : page_obj,
         'total_bills' : total_bills,
 
-        'bills_dict' : bills_dict,
         'total_penality' : total_penality,
         'total_reward' : total_reward,
         'final_salary' : final_salary,
@@ -1528,6 +1515,7 @@ def user_done_task(request, slug):
 
 
 @login_required(login_url='user-login')
+@seller_required
 def online_order(request):
     if request.method == "POST":
         form = forms.OnlineOrder(request.user, request.POST)
@@ -1554,12 +1542,16 @@ def online_order(request):
 
             if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
                 messages.warning(request, ".يجب اختيار رقم العمل الخاص بك")
-                return redirect("online_order")
+                return JsonResponse({'status': 'error'})
+            
+            
             
 
             elif len(check_customer_name) <= 2:
                 messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
-                return redirect("online_order")
+                return JsonResponse({'status': 'error'})
+            
+            
 
             else:
                 try:
@@ -1646,12 +1638,15 @@ def online_order(request):
 
                     except ObjectDoesNotExist:
                         messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
-                        return redirect("online_order")
+                        return JsonResponse({'status': 'error'})
+                    
                     
                 except ObjectDoesNotExist:
                     messages.warning(request, ".هناك خطأ فى ربط البيانات الخاصة بالرقم الذى قُمت باختياره, من فضلك تواصل مع أحد أعضاء الادارة")
-                    return redirect("online_order")
-
+                    return JsonResponse({'status': 'error'})
+        else:
+            messages.warning(request, ".هناك خطأ فى هذا المحتوى, من فضلك تواصل مع أحد أعضاء الادارة")
+            return JsonResponse({'status': 'error'})
 
     else:
         form = forms.OnlineOrder(request.user)

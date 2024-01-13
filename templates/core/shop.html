@@ -96,8 +96,9 @@
             <th scope="col">صورة المنتج</th>
             <th scope="col">السعر</th>
             <th scope="col">العدد المُتاح</th>
-            
-            {% if is_seller %}
+            {% if user.is_authenticated and user.is_superuser and user.is_staff %}
+            <th scope="col">تريد البيع؟</th>
+            {% elif is_seller %}
             <th scope="col">تريد البيع؟</th>
             {% endif %}
           </tr>
@@ -156,8 +157,13 @@
 
                 <td>{{item.price}} SAR</td>
                 <td>{{item.quantity}}</td>
-
-                {% if is_seller %}
+                {% if user.is_authenticated and user.is_superuser and user.is_staff %}
+                <td>
+                  <a href="{% url 'add-to-cart' item.slug %}" class="cart-link"> 
+                    <i class="fa fa-shopping-cart" style="font-size: xx-large;"></i>
+                  </a>
+                </td>
+                {% elif is_seller %}
                   <td>
                     <a href="{% url 'add-to-cart' item.slug %}" class="cart-link"> 
                       <i class="fa fa-shopping-cart" style="font-size: xx-large;"></i>

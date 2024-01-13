@@ -142,6 +142,7 @@
                     } else if (data.status === 'error') {
                         // Handle form validation errors (if any)
                         console.error('Form validation errors:', data.errors);
+                        window.location.href = '/bill2/';
                     }
                 })
                 .catch(error => {

@@ -200,9 +200,12 @@
                   <div style="text-align: center; margin-top: 15px;">
                     <p>{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
                   </div>
-
+                 {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                   
-                  {% if is_seller %}
+                  <div class="add_to_cart_per_product">
+                    <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
+                  </div> 
+                  {% elif is_seller %}
                     <div class="add_to_cart_per_product">
                       <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
                     </div> 

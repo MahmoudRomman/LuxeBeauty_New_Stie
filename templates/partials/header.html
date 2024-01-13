@@ -217,8 +217,20 @@
             <div class="user_option" style="margin-top: 2%; font-size: larger; text-align: center;">
               
                 
+              
+              {% if user.is_authenticated and user.is_superuser and user.is_staff %}
+              <a href="{% url 'order_summary' %}">
+                <i class="fa fa-shopping-bag"></i>
+              </a>
 
-              {% if user.is_authenticated %}
+              <!-- Notification with order count -->
+              {% if cart_count > 0 %}
+                <div style="font-size: medium; margin-bottom: 25px; margin-right: 5px;">
+                    <span class="badge badge-danger">{{cart_count}}</span>
+                </div>
+              {% endif %}
+
+              {% elif user.is_authenticated %}
 
               
               {% if is_seller %}

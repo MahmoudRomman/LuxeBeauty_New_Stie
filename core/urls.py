@@ -6,6 +6,9 @@ from . import views
 urlpatterns = [
     path('welcome/', views.welcome, name='welcome'),
     path('home/', views.home, name="home"),
+    path('not_have_permissions/', views.not_have_permissions, name="not_have_permissions"),
+
+    
     path('item_detail/<slug>/', views.item_detail, name='item_detail'),
     path('have_offer/', views.have_offer, name="have_offer"),
     path('new_arrived/', views.new_arrived, name="new_arrived"),
@@ -52,17 +55,6 @@ urlpatterns = [
     path("add_bank_account/", views.add_bank_account, name="add_bank_account"),
     path("edit_bank_account/<slug>/", views.edit_bank_account, name="edit_bank_account"),
     path("delete_bank_account/<slug>/", views.delete_bank_account, name="delete_bank_account"),
-
-
-
-
-
-
-
-
-
-
-
 
 
 

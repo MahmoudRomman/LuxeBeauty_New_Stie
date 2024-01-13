@@ -6,9 +6,9 @@
 {% block content %}
 
 
+
+
 {% if is_seller %}
-
-
 <h1 class="text-center mb-5 wow fadeInUp mt-5" data-wow-delay="0.1s">احصائياتك هذا الشهر حتى الان</h1>
 
 
@@ -135,13 +135,6 @@
 </section>
 
 
-        
-
-
-
-        
-    
-
 <nav aria-label="Page navigation example" style="margin: auto; margin-top: 10px;">
   <ul class="pagination justify-content-center" style="text-align: center;">
 
@@ -160,58 +153,43 @@
       </li>
     {% endif %}
 
-
-      <!-- <li class="page-item">
-        <a style="color:#F67280;" class="page-link" href="#">
-          {{page_obj.number}}:{{page_obj.paginator.num_pages}}
-        </a>
-      </li> -->
-
       {% for i in page_obj.paginator.page_range %}
-      {% if i == page_obj.number %}
-        <!-- <span class="current">{{ i }}</span> -->
-        <li class="page-item">
-          <a style="color:#F67280;" class="page-link" href="#">
-            {{ i }}
-          </a>
-        </li>
-      {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %}
-        <!-- <a href="?page={{ i }}">{{ i }}</a> -->
+        {% if i == page_obj.number %}
+          <li class="page-item">
+            <a style="color:#F67280;" class="page-link" href="#">
+              {{ i }}
+            </a>
+          </li>
+        {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %}
 
-        <li class="page-item">
-          <a style="color:#F67280;" class="page-link" href="?page={{ i }}">
-            {{ i }}
-          </a>
-        </li>
-      {% elif i == page_obj.paginator.page_range.1|add:'1' or i == page_obj.paginator.page_range.0 %}
-        <span class="dot">...</span>
-      {% endif %}
+          <li class="page-item">
+            <a style="color:#F67280;" class="page-link" href="?page={{ i }}">
+              {{ i }}
+            </a>
+          </li>
+        {% elif i == page_obj.paginator.page_range.1|add:'1' or i == page_obj.paginator.page_range.0 %}
+          <span class="dot">...</span>
+        {% endif %}
       {% endfor %}
 
 
 
   
       {% if page_obj.has_next %}
-      <li class="page-item">
-        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.next_page_number }}">
-          &raquo;
-        </a>
-      </li>
-      {% else %}
-      <li class="page-item disabled">
-        <a class="page-link" href="">
-          &raquo;
-        </a>
-      </li>
+        <li class="page-item">
+          <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.next_page_number }}">
+            &raquo;
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="">
+            &raquo;
+          </a>
+        </li>
       {% endif %}
   </ul>
 </nav>
-
-
-
-    
-        
-
 
 
 
@@ -222,59 +200,18 @@
     <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
         اجمالى عدد الفواتير الخاصة بكل رقم
     </h2>
-    <!-- <table class="table table-striped" dir='rtl'>
+
+    <table class="table table-striped" dir='rtl'>
         <thead style="text-align: center;">
           <tr style="text-align: center; font-size: large;">
             <th scope="col">الترتيب</th>
             <th scope="col">الرقم</th>
+            <th scope="col">اسم المُسوق</th>
             <th scope="col">عدد الفواتير</th>
             <th scope="col">الراتب</th>
 
           </tr>
         </thead>
-        <tbody style="text-align: center;">
-
-          
-          {% for key, value in bills_dict.items %}
-          
-          <tr style="font-size: large;">
-            <th scope="row" class="mt-1">{{forloop.counter}}</th>
-            <td>{{key}}</td>
-            <td>{{value}}</td>
-            
-            {% if value < 10 %}
-              <td>0 EGP</td>
-            {% elif value >= 10 and value < 20 %}
-              <td>{% widthratio value 1 100 %} EGP</td>
-            {% elif value >= 20 and value < 30 %}
-              <td>{% widthratio value 1 150 %} EGP</td>
-            {% elif value >= 30 %}
-              <td>{% widthratio value 1 200 %} EGP</td>
-            {% endif %}
-          </tr>
-          {% empty %}
-          <tr>
-
-            <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
-                <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
-            </td>
-          </tr>
-          {% endfor %} -->
-          
-
-
-
-    <table class="table table-striped" dir='rtl'>
-          <thead style="text-align: center;">
-            <tr style="text-align: center; font-size: large;">
-              <th scope="col">الترتيب</th>
-              <th scope="col">الرقم</th>
-              <th scope="col">اسم المُسوق</th>
-              <th scope="col">عدد الفواتير</th>
-              <th scope="col">الراتب</th>
-  
-            </tr>
-          </thead>
       <tbody style="text-align: center;">
             {% for bill_detail in bills_and_phones_detials %}
                 <tr style="font-size: large;">
@@ -313,7 +250,7 @@
             <td colspan="4"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
             <td><b>{{final_salary}} EGP</b></td>
           </tr>
-      </tbody>
+        </tbody>
     </table>
   </div>
 </div>
@@ -326,12 +263,7 @@
     margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
   }
 </style>
-      
 {% else %}
-
-
-
-
 <div class="container" style="max-width: 85%;">
   <div class="row">
 
@@ -339,58 +271,18 @@
     <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
         اجمالى عدد الفواتير الخاصة بكل رقم
     </h2>
-    <!-- <table class="table table-striped" dir='rtl'>
+      <table class="table table-striped" dir='rtl'>
         <thead style="text-align: center;">
           <tr style="text-align: center; font-size: large;">
             <th scope="col">الترتيب</th>
             <th scope="col">الرقم</th>
+            <th scope="col">اسم البائع</th>
             <th scope="col">عدد الفواتير</th>
             <th scope="col">الراتب</th>
 
           </tr>
-        </thead>
+         </thead>
         <tbody style="text-align: center;">
-
-          
-          {% for key, value in bills_dict.items %}
-          
-          <tr style="font-size: large;">
-            <th scope="row" class="mt-1">{{forloop.counter}}</th>
-            <td>{{key}}</td>
-            <td>{{value}}</td>
-            
-            {% if value < 10 %}
-              <td>0 EGP</td>
-            {% elif value >= 10 and value < 20 %}
-              <td>{% widthratio value 1 100 %} EGP</td>
-            {% elif value >= 20 and value < 30 %}
-              <td>{% widthratio value 1 150 %} EGP</td>
-            {% elif value >= 30 %}
-              <td>{% widthratio value 1 200 %} EGP</td>
-            {% endif %}
-          </tr>
-          {% empty %}
-          <tr>
-
-            <td colspan='18' style="font-size:small">ليس لديك أى فواتير الى الان خلال هذا الشهر
-                <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
-            </td>
-          </tr>
-          {% endfor %} -->
-          
-
-          <table class="table table-striped" dir='rtl'>
-            <thead style="text-align: center;">
-              <tr style="text-align: center; font-size: large;">
-                <th scope="col">الترتيب</th>
-                <th scope="col">الرقم</th>
-                <th scope="col">اسم البائع</th>
-                <th scope="col">عدد الفواتير</th>
-                <th scope="col">الراتب</th>
-    
-              </tr>
-            </thead>
-         <tbody style="text-align: center;">
               {% for bill_detail in bills_and_phones_detials %}
                   <tr style="font-size: large;">
                     <th scope="row" class="mt-1">{{forloop.counter}}</th>
@@ -434,9 +326,6 @@
   </div>
 </div>
 
-
-
-
 <style>
   .pagination a {
     margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
@@ -444,8 +333,5 @@
 </style>
     
 {% endif %}
-  
-
-
 {% endblock content %}
     

@@ -7,9 +7,11 @@
 
     <style>
         body {
+            background: #ECF0F1;
+
+
             margin: 0;
             font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,6 +20,7 @@
             overflow: hidden;
         }
 
+
         .welcome-container {
             text-align: center;
             animation: welcomeAnimation 2s ease-in-out;
@@ -25,23 +28,9 @@
 
         #welcome-text {
             font-size: 4em; /* Increase the font size */
-            color: #468B97;
+            color: #193B48;
         }
 
-        #spinner-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        #spinner {
-            border: 8px solid #468B97;
-            border-top: 8px solid #f0f0f0;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
 
         @keyframes welcomeAnimation {
             0% {
@@ -54,20 +43,62 @@
             }
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .load {
+            position: absolute;
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+        }
+
+        .load hr{
+            border: 0;
+            width: 40%;
+            height: 40%;
+            position: absolute;
+            border-radius: 50%;
+            animation: spin 2s ease infinite;
+        }
+
+        .load :first-child{background: #19A68C;
+        animation-delay: -1.5s;
+        }
+
+        .load :nth-child(2){
+            background: #F63D3A;
+            animation-delay: -1s;
+        }
+
+        .load :nth-child(3){
+            background: #FDA543;
+            animation-delay: -0.5s;
+        }
+
+
+        .load :last-child{
+            background: #193B48;
+        }
+
+        @keyframes spin{
+            0%,100%{transform: translate(0)}
+            25%{transform: translate(160%)}
+            50%{transform: translate(160%, 160%)}
+            75%{transform: translate(0, 160%)}
         }
     </style>
 </head>
 <body>
+
     <div class="welcome-container">
         <h1 id="welcome-text">Welcome {{current_user}} to,</h1>
         <h2 id="welcome-text">LuxeBeauty-IMS</h2>
-
     </div>
-    <div id="spinner-container">
-        <div id="spinner"></div>
+
+
+    <div class="load">
+        <hr/><hr/><hr/><hr/>
     </div>
 
     <script>

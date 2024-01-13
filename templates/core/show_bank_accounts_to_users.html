@@ -28,7 +28,7 @@
                     <td>{{ bank.country }}</td>
                     <td>
                         <span 
-                            class="copy-info" data-info="Card Number: {{bank.card_number}} -- CCV/CVC: {{bank.ccv_or_cvc}} -- Valid True: {{ bank.validation_date|date:'m' }}/{{ bank.validation_date|date:'y' }}" 
+                            class="copy-info" data-info="IBAN: {{bank.IBAN}} -- Swift Code: {{bank.swift_code}} -- Beneficiary Name: {{bank.beneficiary_name}} -- Account Number: {{bank.account_number}}" 
                             style="font-size: xx-large;" onclick="copyInfo(this)">&#x1F4CB;
                         </span>
                     </td>
