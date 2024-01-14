@@ -732,6 +732,14 @@ class AddPhoneNumberForUsersForm(forms.Form):
         # Exclude the current user from the queryset
         self.fields['name'].queryset = User.objects.exclude(id=current_user.id)
 
+
+
+        users = User.objects.exclude(id=current_user.id)
+        # users = User.objects.exclude(is_staff=True)
+
+
+        # self.fields['name'].queryset = users.filter(user_permissions__codename='can_make_order')
+
     name = forms.ModelChoiceField(
         queryset=User.objects.all(), 
         empty_label="اختر أحد المستخدمين ...", 

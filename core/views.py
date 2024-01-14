@@ -29,39 +29,6 @@ from django.views.decorators.http import require_POST
 
 # Create your views here.
 
-# from django.contrib.auth.models import Permission
-# from django.contrib.contenttypes.models import ContentType
-
-
-# content_type = ContentType.objects.get_for_model(accounts_models.Profile)
-# can_make_order_permission = Permission.objects.create(
-#     codename='can_make_order',
-#     name='Can Make Order',
-#     content_type=content_type,
-# )
-
-
-
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
-
-content_type = ContentType.objects.get_for_model(accounts_models.Profile)
-
-existing_permissions = Permission.objects.filter(content_type=content_type, codename='can_make_order')
-
-if not existing_permissions.exists():
-    # Create the permission
-    can_make_order_permission = Permission.objects.create(
-        codename='can_make_order',
-        name='Can Make Order',
-        content_type=content_type,
-    )
-
-    # can_make_order_permission, created = Permission.objects.get_or_create(
-    #     codename='can_make_order',
-    #     name='Can Make Order',
-    #     content_type=content_type,
-    # )
 
 
 
@@ -74,11 +41,7 @@ def seller_required(view_func):
         if request.user.profile.job_type == 'Seller':
             return view_func(request, *args, **kwargs)
         else:
-            # Redirect or show an error message for non-sellers
-            # messages.warning(request, "عفواً, ليس لديك صلاحيات الوصول الى هذه الصفحة")
             return redirect("not_have_permissions")
-            # return HttpResponseForbidden("You do not have permission to access this page.")
-
     return _wrapped_view
 
 
@@ -98,10 +61,13 @@ month = today.month
 
 
 
+from django.contrib.auth.models import Permission
 
 
 @login_required(login_url='user-login')
 def welcome(request):
+
+
     current_user = request.user.username
 
     context = {
@@ -117,6 +83,16 @@ def home(request):
     items = models.Item.objects.all().order_by('-date')[:8]
     today_gift = models.Offer.objects.all().order_by('-date')[0:1]
 
+    # try:
+    #     custom_permission = Permission.objects.get(codename='can_make_order', name='Can Make Order')
+    #     custom_permission.delete()
+    #     print("alreary deleted")
+    # except ObjectDoesNotExist:
+    #     print("permission not founddddddddddddddddd")
+
+
+    # custom_permission = Permission.objects.get(codename='can_make_order', name='Can Make Order')
+    # print(custom_permission)
 
     context = {
         'items' : items,
@@ -200,57 +176,55 @@ def best_seller(request):
 
 @login_required(login_url='user-login')
 def store(request):
-
-    data =models.Item.objects.all().order_by('-date')
-
-    if request.method == "POST":
-        form = forms.ItemForm(request.POST)
-        
-        wig_type = request.POST.get("wig_type")
-        wig_long = request.POST.get("wig_long")
-        scalp_type = request.POST.get("scalp_type")
-        wig_color = request.POST.get("wig_color")
-        density = request.POST.get("density")
-
-        if density=='اختر كثافة الباروكة' and wig_color=='اختر لون الباروكة' and scalp_type=='اختر نوع الفروة' and wig_long=='طول الباروكة' and wig_type=='اختر نوع الباروكة':
-            data = models.Item.objects.all().order_by('-date')
-
-        else:
-            # if density or wig_color or wig_long or wig_type or scalp_type:
-            if (wig_type or wig_long or scalp_type or wig_color or density) and (density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة'):
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        data =models.Item.objects.all().order_by('-date')
+        if request.method == "POST":
+            form = forms.ItemForm(request.POST)
             
-                multiple_query = Q(
-                Q(wig_type__icontains=wig_type) | Q(wig_long__icontains=wig_long) | 
-                Q(scalp_type__icontains=scalp_type) | Q(wig_color__icontains=wig_color) |
-                Q(density__icontains=density)  
-                ) 
+            wig_type = request.POST.get("wig_type")
+            wig_long = request.POST.get("wig_long")
+            scalp_type = request.POST.get("scalp_type")
+            wig_color = request.POST.get("wig_color")
+            density = request.POST.get("density")
 
-                data = models.Item.objects.filter(multiple_query).order_by('-date')
+            if density=='اختر كثافة الباروكة' and wig_color=='اختر لون الباروكة' and scalp_type=='اختر نوع الفروة' and wig_long=='طول الباروكة' and wig_type=='اختر نوع الباروكة':
+                data = models.Item.objects.all().order_by('-date')
+
+            else:
+                # if density or wig_color or wig_long or wig_type or scalp_type:
+                if (wig_type or wig_long or scalp_type or wig_color or density) and (density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة'):
+                
+                    multiple_query = Q(
+                    Q(wig_type__icontains=wig_type) | Q(wig_long__icontains=wig_long) | 
+                    Q(scalp_type__icontains=scalp_type) | Q(wig_color__icontains=wig_color) |
+                    Q(density__icontains=density)  
+                    ) 
+
+                    data = models.Item.objects.filter(multiple_query).order_by('-date')
 
 
-            elif wig_type and wig_long and scalp_type and wig_color and density:
+                elif wig_type and wig_long and scalp_type and wig_color and density:
 
-                multiple_query = Q(
-                Q(wig_type__icontains=wig_type) & Q(wig_long__icontains=wig_long) & 
-                Q(scalp_type__icontains=scalp_type) & Q(wig_color__icontains=wig_color) &
-                Q(density__icontains=density)  
-                ) 
+                    multiple_query = Q(
+                    Q(wig_type__icontains=wig_type) & Q(wig_long__icontains=wig_long) & 
+                    Q(scalp_type__icontains=scalp_type) & Q(wig_color__icontains=wig_color) &
+                    Q(density__icontains=density)  
+                    ) 
 
-                data = models.Item.objects.filter(multiple_query).order_by('-date')
+                    data = models.Item.objects.filter(multiple_query).order_by('-date')
+        else:
+            form = forms.ItemForm()
+        paginator = Paginator(data, 7)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            'page_obj' : page_obj,
+            'form' : form,
+        }
     else:
-        form = forms.ItemForm()
-
-
-
-    paginator = Paginator(data, 7)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'page_obj' : page_obj,
-        'form' : form,
-    }
-
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/store.html', context)
 
 
@@ -258,122 +232,126 @@ def store(request):
 
 @login_required(login_url='user-login')
 def add_item(request):
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        form = forms.ItemForm(request.POST or None, request.FILES or None)
+        if request.method == "POST":
+            if form.is_valid():
+                name = form.cleaned_data.get("name")
+                wig_type = form.cleaned_data.get("wig_type")
+                wig_long = form.cleaned_data.get("wig_long")
+                scalp_type = form.cleaned_data.get("scalp_type")
+                wig_color = form.cleaned_data.get("wig_color")
+                density = form.cleaned_data.get("density")
+                image = form.cleaned_data.get("image")
 
-    form = forms.ItemForm(request.POST or None, request.FILES or None)
+                price = form.cleaned_data.get("price")
+                discount_price = form.cleaned_data.get("discount_price")
+                quantity = form.cleaned_data.get("quantity")
 
-
-    if request.method == "POST":
-        if form.is_valid():
-            name = form.cleaned_data.get("name")
-            wig_type = form.cleaned_data.get("wig_type")
-            wig_long = form.cleaned_data.get("wig_long")
-            scalp_type = form.cleaned_data.get("scalp_type")
-            wig_color = form.cleaned_data.get("wig_color")
-            density = form.cleaned_data.get("density")
-            image = form.cleaned_data.get("image")
-
-            price = form.cleaned_data.get("price")
-            discount_price = form.cleaned_data.get("discount_price")
-            quantity = form.cleaned_data.get("quantity")
-
-            if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
-                 messages.warning(request, "هناك خطأ من فضلك راجع المدخلات مره أخرى")
-            else:
-
-                check_the_item = models.Item.objects.filter(
-                    name = name, wig_type = wig_type,
-                    wig_long = wig_long, scalp_type = scalp_type,
-                    wig_color = wig_color, density = density,
-                    )
-                if len(check_the_item) == 0:
-                    create_slug = create_slug_code()
-                    new_item = models.Item.objects.create(
-                        name = name,
-                        wig_type = wig_type,
-                        wig_long = wig_long,
-                        scalp_type = scalp_type,
-                        wig_color = wig_color,
-                        density = density,
-                        image = image,
-                        price = price,
-                        discount_price = discount_price,
-                        quantity = quantity,
-
-                        slug = create_slug
-                        )
-
-                    new_item.save()
-                    messages.success(request, "تم اضافة المنتج الجديد بنجاح")
-                    return redirect("store")
+                if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
+                    messages.warning(request, "هناك خطأ من فضلك راجع المدخلات مره أخرى")
                 else:
-                    messages.warning(request, ".هذ المنتج موجود بالفعل يمكنك تعديل السعر او الكمية له")
-                    return redirect("store")
 
-    context = {
-        'form' : form,
-    }
+                    check_the_item = models.Item.objects.filter(
+                        name = name, wig_type = wig_type,
+                        wig_long = wig_long, scalp_type = scalp_type,
+                        wig_color = wig_color, density = density,
+                        )
+                    if len(check_the_item) == 0:
+                        create_slug = create_slug_code()
+                        new_item = models.Item.objects.create(
+                            name = name,
+                            wig_type = wig_type,
+                            wig_long = wig_long,
+                            scalp_type = scalp_type,
+                            wig_color = wig_color,
+                            density = density,
+                            image = image,
+                            price = price,
+                            discount_price = discount_price,
+                            quantity = quantity,
 
+                            slug = create_slug
+                            )
+
+                        new_item.save()
+                        messages.success(request, "تم اضافة المنتج الجديد بنجاح")
+                        return redirect("store")
+                    else:
+                        messages.warning(request, ".هذ المنتج موجود بالفعل يمكنك تعديل السعر او الكمية له")
+                        return redirect("store")
+        context = {
+            'form' : form,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/add_item.html', context)
 
 
 
 @login_required(login_url='user-login')
 def edit_item_in_store(request, slug):
-    item = models.Item.objects.get(slug=slug)
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        item = models.Item.objects.get(slug=slug)
+        if request.method == "POST":
+            form = forms.EditItemForm(request.POST, request.FILES, instance=item)
+            if form.is_valid():
+                name = form.cleaned_data.get("name")
+                wig_type = form.cleaned_data.get("wig_type")
+                wig_long = form.cleaned_data.get("wig_long")
+                scalp_type = form.cleaned_data.get("scalp_type")
+                wig_color = form.cleaned_data.get("wig_color")
+                density = form.cleaned_data.get("density")
+                image = form.cleaned_data.get("image")
+                price = form.cleaned_data.get("price")
+                discount_price = form.cleaned_data.get("discount_price")
+                quantity = form.cleaned_data.get("quantity")
 
-    if request.method == "POST":
-        form = forms.EditItemForm(request.POST, request.FILES, instance=item)
-        if form.is_valid():
-            name = form.cleaned_data.get("name")
-            wig_type = form.cleaned_data.get("wig_type")
-            wig_long = form.cleaned_data.get("wig_long")
-            scalp_type = form.cleaned_data.get("scalp_type")
-            wig_color = form.cleaned_data.get("wig_color")
-            density = form.cleaned_data.get("density")
-            image = form.cleaned_data.get("image")
-            price = form.cleaned_data.get("price")
-            discount_price = form.cleaned_data.get("discount_price")
-            quantity = form.cleaned_data.get("quantity")
+                if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
+                    messages.warning(request, "هناك خطأ من فضلك راجع المدخلات مره أخرى")
+                else:
+                    item = models.Item.objects.get(slug=slug)
+                    item.name = name
+                    item.wig_type = wig_type
+                    item.wig_long = wig_long
+                    item.scalp_type = scalp_type
+                    item.wig_color = wig_color
+                    item.density = density
+                    item.image = image
+                    item.price = price
+                    item.discount_price = discount_price
+                    item.quantity = quantity
+                    item.save()
+                    
+                    messages.success(request, "تم تعديل هذا المنتج بنجاح")
+                    return redirect("store")
+        else:
+            form = forms.EditItemForm(instance=item)
 
-            if density=='اختر كثافة الباروكة' or wig_color=='اختر لون الباروكة' or scalp_type=='اختر نوع الفروة' or wig_long=='طول الباروكة' or wig_type=='اختر نوع الباروكة':
-                 messages.warning(request, "هناك خطأ من فضلك راجع المدخلات مره أخرى")
-            else:
-                item = models.Item.objects.get(slug=slug)
-                item.name = name
-                item.wig_type = wig_type
-                item.wig_long = wig_long
-                item.scalp_type = scalp_type
-                item.wig_color = wig_color
-                item.density = density
-                item.image = image
-                item.price = price
-                item.discount_price = discount_price
-                item.quantity = quantity
-                item.save()
-                
-                messages.success(request, "تم تعديل هذا المنتج بنجاح")
-                return redirect("store")
+        context = {
+            'form' : form,
+            'item' : item,
+        }
     else:
-        form = forms.EditItemForm(instance=item)
-
-    context = {
-        'form' : form,
-        'item' : item,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/edit_item.html', context)
 
 
 
 @login_required(login_url='user-login')
 def delete_from_store(request, slug):
-    item = models.Item.objects.get(slug=slug)
-
-    if request.method == "POST":
-        item.delete()
-        messages.success(request, ".تم ازالة هذا المنتج من المخزن")
-        return redirect("store")
-    
-    return render(request, 'core/delete_item_confirm.html')
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        item = models.Item.objects.get(slug=slug)
+        if request.method == "POST":
+            item.delete()
+            messages.success(request, ".تم ازالة هذا المنتج من المخزن")
+            return redirect("store")
+        
+        return render(request, 'core/delete_item_confirm.html')
+    else:
+        return redirect("not_have_permissions")
 
 
 
@@ -381,9 +359,7 @@ def delete_from_store(request, slug):
 
 @login_required(login_url='user-login')
 def shop(request):
-
     data =models.Item.objects.all().order_by('-date')
-
     if request.method == "POST":
         form = forms.ItemForm(request.POST)
         
@@ -775,6 +751,8 @@ def make_bill(request):
 
 from django.db.models import Sum
 
+
+
 @login_required(login_url='user-login')
 @seller_required
 def show_bills(request):
@@ -854,6 +832,7 @@ def show_bills(request):
 
 
 
+# The following function is used for payments operations...
 @login_required(login_url='user-login')
 def show_payments(request):
     if request.method == "POST":
@@ -885,15 +864,10 @@ def add_payment_link(request):
                 SAR_link = form.cleaned_data.get("SAR_link")
                 AED_link = form.cleaned_data.get("AED_link")
                 USD_link = form.cleaned_data.get("USD_link")
-
-                
-
-
-                
                 try:
                     check_payment_link = models.AddLink.objects.get(amount=amount, link_name=link_name)
                     messages.info(request, "هذا الرابط موجود بالفعل بنفس طريقة الدفع ونفس القيمة")
-                    return redirect("banks_and_payments")
+                    return redirect("show_payments")
                 except ObjectDoesNotExist:
                     create_slug = create_slug_code()
 
@@ -908,11 +882,9 @@ def add_payment_link(request):
 
                     new_link.save()
                     messages.success(request, "تم اضافة الرابط هذا بنجاح")
-                    return redirect("banks_and_payments")
+                    return redirect("show_payments")
         else:
             form = forms.AddLinkForm()
-
-
         context = {
             'form' : form,
         }
@@ -929,30 +901,21 @@ def add_payment_link(request):
 def delete_payment_link(request, slug):
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
         payment_link = models.AddLink.objects.get(slug_link=slug)
-
-
         if request.method == "POST":
             payment_link.delete()
             messages.success(request, ".تم ازالة هذا الرابط بنجاح")
-            return redirect("banks_and_payments")
+            return redirect("show_payments")
+        return render(request, 'core/payment_link_deletion_confirm.html')
     else:
         return redirect("not_have_permissions")
-    
-    
-    return render(request, 'core/payment_link_deletion_confirm.html')
 
 
 
-
-
-
-# Banks.......
+# The following function is used for Banks operations...
 @login_required(login_url='user-login')
 def show_banks(request):
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
-
         banks = models.BankAccount.objects.all().order_by("-date")
-
         context = {
             'banks' : banks,
         }
@@ -966,7 +929,6 @@ def show_banks(request):
 @login_required(login_url='user-login')
 def add_bank_account(request):
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
-
         if request.method == "POST":
             form = forms.BankAccountForm(request.POST)
             if form.is_valid():
@@ -979,7 +941,6 @@ def add_bank_account(request):
                 beneficiary_name = request.POST.get('beneficiary_name') 
 
                 create_slug = create_slug_code()
-
 
                 try:
                     bank_account_exists = models.BankAccount.objects.get(IBAN=IBAN, account_number=account_number)
@@ -1001,8 +962,6 @@ def add_bank_account(request):
                     new_bank_account.save()
                     messages.success(request, "لقد تم حفظ بيانات هذا الحساب البنكى بنجاح")
                     return redirect("show_banks")
-
-
             else:
                 messages.warning(request, "هناك خطأ فى تعبئة البيانات من فضلك حاول مرة أخرى")
                 return redirect("add_bank_account")
@@ -1021,7 +980,6 @@ def add_bank_account(request):
 @login_required(login_url='user-login')
 def edit_bank_account(request, slug):
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
-
         bank_account = models.BankAccount.objects.get(slug_link = slug)
         if request.method == "POST":
             form = forms.BankAccountForm(request.POST, instance=bank_account)
@@ -1104,49 +1062,43 @@ def show_bank_accounts_to_users(request):
 today = datetime.date.today()
 @login_required(login_url='user-login')
 def chart_data(request):
-    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+    year = today.year
+    month = today.month
+    num_days = calendar.monthrange(year, month)[1]
+    days = [datetime.date(year, month, day) for day in range(1, num_days+1)]
+    
 
-        year = today.year
-        month = today.month
-        num_days = calendar.monthrange(year, month)[1]
-        days = [datetime.date(year, month, day) for day in range(1, num_days+1)]
-        
+    randomlist = []
+    today_in_month = int(today.day)
 
-        randomlist = []
-        today_in_month = int(today.day)
+    for bills_per_day in range(today_in_month):
+        my_bills = models.Bill2.objects.filter(seller=request.user, date__month=month, date__day=str(f"{bills_per_day+1}"))
 
-        for bills_per_day in range(today_in_month):
-            my_bills = models.Bill2.objects.filter(seller=request.user, date__month=month, date__day=str(f"{bills_per_day+1}"))
-
-            peices = 0
-            for bill in my_bills:
-                peices += bill.pieces_num
-            randomlist.append(peices)
+        peices = 0
+        for bill in my_bills:
+            peices += bill.pieces_num
+        randomlist.append(peices)
 
 
-        labels = days
-        values = randomlist
-        
-        chart_data = {
-            'label': 'خريطة المبيعات الخاصة بك خلال هذا الشهر',
-            'labels': labels,
-            'values': values,
-            'chart_type': 'bar' # any chart type line, bar, ects
-        }
-    else:
-        chart_data = {}
-        return redirect("not_have_permissions")
+    labels = days
+    values = randomlist
+    
+    chart_data = {
+        'label': 'خريطة المبيعات الخاصة بك خلال هذا الشهر',
+        'labels': labels,
+        'values': values,
+        'chart_type': 'bar' # any chart type line, bar, ects
+    }
+
     
     return JsonResponse(chart_data)
 
 
 
 
-
+# The following function is divide into permissions in the template...
 @login_required(login_url='user-login')
 def chart_view(request):
-
-
     user_profile = accounts_models.Profile.objects.get(staff=request.user)
     bills_and_phones_detials = []
     
@@ -1160,32 +1112,41 @@ def chart_view(request):
 
         final_salary = 2000
         my_phones = models.PhoneNumberr.objects.filter(user=request.user)
-        for phone in my_phones:
-            account = models.Account.objects.get(phone=phone.phone)
-            my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
-            my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-          
-            salary = 0
-            bills_salary = 0
-            if my_bills_count <= 10:
-                salary = final_salary
-                bills_salary = 0
-            elif my_bills_count > 10 and my_bills_count <20:
-                salary = (my_bills_count * 100) + final_salary
-                bills_salary = my_bills_count * 100
-            elif my_bills_count >= 20 and my_bills_count < 30:
-                salary = (my_bills_count * 150) + final_salary
-                bills_salary = my_bills_count * 150
-            elif my_bills_count >= 30:
-                salary = (my_bills_count * 200) + final_salary
-                bills_salary = my_bills_count * 200
-            final_salary += salary
-            bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+        if len(my_phones):
+            for phone in my_phones:
+                try:
+                    account = models.Account.objects.get(phone=phone.phone)
+                    my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+                    my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                
+                    salary = 0
+                    bills_salary = 0
+                    if my_bills_count <= 10:
+                        salary = final_salary
+                        bills_salary = 0
+                    elif my_bills_count > 10 and my_bills_count <20:
+                        salary = (my_bills_count * 100) + final_salary
+                        bills_salary = my_bills_count * 100
+                    elif my_bills_count >= 20 and my_bills_count < 30:
+                        salary = (my_bills_count * 150) + final_salary
+                        bills_salary = my_bills_count * 150
+                    elif my_bills_count >= 30:
+                        salary = (my_bills_count * 200) + final_salary
+                        bills_salary = my_bills_count * 200
+                    # final_salary += salary
+                    bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+                except ObjectDoesNotExist:
+                    messages.warning(request, "عفواً, ليس لديك مُسوق بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+                    return redirect("home")
+                
+            # Calculating the number of bills
+            total_bills = 0
+            for bill in my_bills:
+                total_bills += bill.pieces_num
 
-        # Calculating the number of bills
-        total_bills = 0
-        for bill in my_bills:
-            total_bills += bill.pieces_num
+        else:
+            messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+            return redirect("home")
 
         # Calculate the penalities
         penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
@@ -1201,6 +1162,7 @@ def chart_view(request):
         for reward in rewards:
             total_reward += reward.price
 
+        final_salary = salary
         final_salary = final_salary - total_penality + total_reward
 
     else:
@@ -1208,34 +1170,45 @@ def chart_view(request):
         page_obj = 0
 
         final_salary = 2000
+        # salary = 0
         my_phones = models.PhoneNumberr.objects.filter(user=request.user)
-        for phone in my_phones:
-            account = models.Account.objects.get(phone=phone.phone)
-            my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
-            my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
 
-            salary = 0
-            bills_salary = 0
-            if my_bills_count <= 10:
-                salary = final_salary
-                bills_salary = 0
-            elif my_bills_count > 10 and my_bills_count <20:
-                salary = (my_bills_count * 100) + final_salary
-                bills_salary = my_bills_count * 100
-            elif my_bills_count >= 20 and my_bills_count < 30:
-                salary = (my_bills_count * 150) + final_salary
-                bills_salary = my_bills_count * 150
-            elif my_bills_count >= 30:
-                salary = (my_bills_count * 200) + final_salary
-                bills_salary = my_bills_count * 200
-            final_salary += salary
-            bills_and_phones_detials.append({'phone': phone.phone,  'seller':account.seller ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+        if len(my_phones):
+            for phone in my_phones:
+                try:
+                    account = models.Account.objects.get(phone=phone.phone)
+
+                    my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+                    my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                
+                    salary = 0
+                    bills_salary = 0
+                    if my_bills_count <= 10:
+                        bills_salary = 0
+                        final_salary = final_salary
+                    elif my_bills_count > 10 and my_bills_count <20:
+                        bills_salary = my_bills_count * 100
+                        final_salary += my_bills_count * 100
+                    elif my_bills_count >= 20 and my_bills_count < 30:
+                        bills_salary = my_bills_count * 150
+                        final_salary += my_bills_count * 150
+                    elif my_bills_count >= 30:
+                        bills_salary = my_bills_count * 200
+                        final_salary += my_bills_count * 200
 
 
-        # Calculating the number of bills
-        total_bills = 0
-        for bill in my_bills:
-            total_bills += bill.pieces_num
+                    bills_and_phones_detials.append({'phone': phone.phone,  'seller':account.seller ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+                except ObjectDoesNotExist:
+                    messages.warning(request, "عفواً, ليس لديك حساب تسويقى مُفعل بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+                    return redirect("home")
+
+            # Calculating the number of bills
+            total_bills = 0
+            for bill in my_bills:
+                total_bills += bill.pieces_num
+        else:
+            messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+            return redirect("home")
 
         # Calculate the penalities
         penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
@@ -1250,6 +1223,7 @@ def chart_view(request):
         total_reward = 0
         for reward in rewards:
             total_reward += reward.price
+
 
         final_salary = final_salary - total_penality + total_reward
 
@@ -1271,48 +1245,55 @@ def chart_view(request):
 
 @login_required(login_url='user-login')
 def show_all_penalities(request):
-    penalities = models.Penality.objects.filter(date__month=today.month).order_by('-date')
-
-    context = {
-        'penalities' : penalities,
-    }
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        penalities = models.Penality.objects.filter(date__month=today.month, date__year=today.year).order_by('-date')
+        context = {
+            'penalities' : penalities,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/penalities.html', context)
 
 
 
 @login_required(login_url='user-login')
 def penality(request):
-    if request.method == "POST":
-        form = forms.PenalityForm(request.user, request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get("name")
-            message = form.cleaned_data.get("message")
-            days_num = form.cleaned_data.get("days_num")
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        if request.method == "POST":
+            form = forms.PenalityForm(request.user, request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get("name")
+                message = form.cleaned_data.get("message")
+                days_num = form.cleaned_data.get("days_num")
 
-            create_slug = create_slug_code()
+                create_slug = create_slug_code()
 
-            new_user_penality = models.Penality.objects.create(
-                name = name,
-                message = message,
-                days_num = days_num,
-                slug_link = create_slug,
-            )
+                new_user_penality = models.Penality.objects.create(
+                    name = name,
+                    message = message,
+                    days_num = days_num,
+                    slug_link = create_slug,
+                )
 
-            new_user_penality.save()
-            messages.success(request, ".تم اضافة الخَصم لهذا المستخدم بنجاح")
-            return redirect("show_all_penalities")
+                new_user_penality.save()
+                messages.success(request, ".تم اضافة الخَصم لهذا المستخدم بنجاح")
+                return redirect("show_all_penalities")
+        else:
+            form = forms.PenalityForm(request.user)
+
+        context = {
+            'form' : form,
+        }
     else:
-        form = forms.PenalityForm(request.user)
-
-    context = {
-        'form' : form,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/add_penality.html', context)
 
 
 @login_required(login_url='user-login')
 def user_penality(request):
-    my_penalities = models.Penality.objects.filter(name=request.user, date__month=today.month).order_by('-date')
+    my_penalities = models.Penality.objects.filter(name=request.user, date__month=today.month, date__year=today.year).order_by('-date')
 
 
     context = {
@@ -1324,10 +1305,13 @@ def user_penality(request):
 
 @login_required(login_url='user-login')
 def delete_penality(request, slug):
-    penality = models.Penality.objects.filter(slug_link=slug)
-    penality.delete()
-    messages.success(request, ".تم ازالة الخَصم لهذا المستخدم بنجاح")
-    return redirect("show_all_penalities")
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        penality = models.Penality.objects.filter(slug_link=slug)
+        penality.delete()
+        messages.success(request, ".تم ازالة الخَصم لهذا المستخدم بنجاح")
+        return redirect("show_all_penalities")
+    else:
+        return redirect("not_have_permissions")
 
 
 
@@ -1335,49 +1319,59 @@ def delete_penality(request, slug):
 
 @login_required(login_url='user-login')
 def show_all_rewards(request):
-    rewards = models.Reward.objects.filter(date__month=today.month).order_by('-date')
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
 
-    context = {
-        'rewards' : rewards,
-    }
+        rewards = models.Reward.objects.filter(date__month=today.month, date__year=today.year).order_by('-date')
+
+        context = {
+            'rewards' : rewards,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
+    
     return render(request, 'core/rewards.html', context)
 
 
 
 @login_required(login_url='user-login')
 def reward(request):
-    if request.method == "POST":
-        form = forms.RewardForm(request.user, request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get("name")
-            message = form.cleaned_data.get("message")
-            price = form.cleaned_data.get("price")
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        if request.method == "POST":
+            form = forms.RewardForm(request.user, request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get("name")
+                message = form.cleaned_data.get("message")
+                price = form.cleaned_data.get("price")
 
-            create_slug = create_slug_code()
+                create_slug = create_slug_code()
 
-            new_user_penality = models.Reward.objects.create(
-                name = name,
-                message = message,
-                price = price,
-                slug_link = create_slug,
-            )
+                new_user_penality = models.Reward.objects.create(
+                    name = name,
+                    message = message,
+                    price = price,
+                    slug_link = create_slug,
+                )
 
-            new_user_penality.save()
-            messages.success(request, ".تم اضافة المكافأة لهذا المستخدم بنجاح")
-            return redirect("show_all_rewards")
+                new_user_penality.save()
+                messages.success(request, ".تم اضافة المكافأة لهذا المستخدم بنجاح")
+                return redirect("show_all_rewards")
+        else:
+            form = forms.RewardForm(request.user)
+
+        context = {
+            'form' : form,
+        }
     else:
-        form = forms.RewardForm(request.user)
-
-    context = {
-        'form' : form,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/add_reward.html', context)
 
 
 
 @login_required(login_url='user-login')
 def user_reward(request):
-    my_rewards = models.Reward.objects.filter(name=request.user, date__month=today.month).order_by('-date')
+    my_rewards = models.Reward.objects.filter(name=request.user, date__month=today.month, date__year=today.year).order_by('-date')
 
 
     context = {
@@ -1391,23 +1385,31 @@ def user_reward(request):
 
 @login_required(login_url='user-login')
 def delete_reward(request, slug):
-    reward = models.Reward.objects.filter(slug_link=slug)
-    reward.delete()
-    messages.success(request, ".تم ازالة المكافأة لهذا المستخدم بنجاح")
-    return redirect("show_all_rewards")
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+
+        reward = models.Reward.objects.filter(slug_link=slug)
+        reward.delete()
+        messages.success(request, ".تم ازالة المكافأة لهذا المستخدم بنجاح")
+        return redirect("show_all_rewards")
+    else:
+        return redirect("not_have_permissions")
 
 
 
 @login_required(login_url='user-login')
 def show_all_tasks(request):
-    try:
-        tasks = models.Tasks.objects.filter(status=False).order_by('-ordered_date')
-    except ObjectDoesNotExist:
-        tasks = {}
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        try:
+            tasks = models.Tasks.objects.filter(status=False).order_by('-ordered_date')
+        except ObjectDoesNotExist:
+            tasks = {}
 
-    context = {
-        'tasks' : tasks,
-    }
+        context = {
+            'tasks' : tasks,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/tasks.html', context)
 
 
@@ -1415,73 +1417,83 @@ def show_all_tasks(request):
 
 @login_required(login_url='user-login')
 def done_tasks(request):
-    try:
-        done_tasks = models.Tasks.objects.filter(status=True).order_by('-done_date')
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        try:
+            done_tasks = models.Tasks.objects.filter(status=True).order_by('-done_date')
 
-        paginator = Paginator(done_tasks, 5)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
+            paginator = Paginator(done_tasks, 5)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
 
-        # Change the done_task_is_read to 'True' to delete the notification number showen in the dropdown list after the admin open it 
-        for each_task in done_tasks:
-            each_task.done_task_is_read = True
-            each_task.save()
+            # Change the done_task_is_read to 'True' to delete the notification number showen in the dropdown list after the admin open it 
+            for each_task in done_tasks:
+                each_task.done_task_is_read = True
+                each_task.save()
 
-    except ObjectDoesNotExist:
-        done_tasks = {}
-        page_obj = {}
+        except ObjectDoesNotExist:
+            done_tasks = {}
+            page_obj = {}
 
-    context = {
-        'done_tasks' : done_tasks,
-        'page_obj' : page_obj,
-    }
+        context = {
+            'done_tasks' : done_tasks,
+            'page_obj' : page_obj,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/done_tasks.html', context)
 
 
 
 @login_required(login_url='user-login')
 def add_task(request):
-    if request.method == "POST":
-        form = forms.TaskForm(request.user, request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get("name")
-            message = form.cleaned_data.get("message")
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        if request.method == "POST":
+            form = forms.TaskForm(request.user, request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get("name")
+                message = form.cleaned_data.get("message")
 
-            create_slug = create_slug_code()
+                create_slug = create_slug_code()
 
-            new_user_task = models.Tasks.objects.create(
-                name = name,
-                message = message,
-                status = False,
-                slug_link = create_slug,
-                ordered_date = datetime.datetime.now(),
-            )
+                new_user_task = models.Tasks.objects.create(
+                    name = name,
+                    message = message,
+                    status = False,
+                    slug_link = create_slug,
+                    ordered_date = datetime.datetime.now(),
+                )
 
-            new_user_task.save()
-            messages.success(request, ".تم اضافة وارسال المهمة لهذا المستخدم بنجاح")
-            return redirect("show_all_tasks")
+                new_user_task.save()
+                messages.success(request, ".تم اضافة وارسال المهمة لهذا المستخدم بنجاح")
+                return redirect("show_all_tasks")
+        else:
+            form = forms.TaskForm(request.user)
+
+
+        context = {
+            'form' : form,
+        }
     else:
-        form = forms.TaskForm(request.user)
-
-
-    context = {
-        'form' : form,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/add_task.html', context)
 
 
 @login_required(login_url='user-login')
 def delete_task(request, slug):
-    task = models.Tasks.objects.filter(slug_link=slug)
-    task.delete()
-    messages.success(request, ".تم ازالة المهمة لهذا المستخدم بنجاح")
-    return redirect("show_all_tasks")
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        task = models.Tasks.objects.filter(slug_link=slug)
+        task.delete()
+        messages.success(request, ".تم ازالة المهمة لهذا المستخدم بنجاح")
+        return redirect("show_all_tasks")
+    else:
+        return redirect("not_have_permissions")
 
 
 @login_required(login_url='user-login')
 def user_task(request):
     my_tasks = models.Tasks.objects.filter(name=request.user, status=False).order_by('-ordered_date')
-
 
     context = {
         'my_tasks' : my_tasks,
@@ -1492,7 +1504,6 @@ def user_task(request):
 
 @login_required(login_url='user-login')
 def user_done_task(request, slug):
-
     try:
         task = models.Tasks.objects.get(name=request.user, status=False, slug_link=slug)
 
@@ -1550,9 +1561,6 @@ def online_order(request):
             elif len(check_customer_name) <= 2:
                 messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
                 return JsonResponse({'status': 'error'})
-            
-            
-
             else:
                 try:
                     phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
@@ -1662,7 +1670,10 @@ def online_order(request):
 
 
 def manage_phone_and_account(request):
-    return render(request, 'core/phone_and_account_manage.html')
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        return render(request, 'core/phone_and_account_manage.html')
+    else:
+        return redirect("not_have_permissions")
 
 
 
@@ -1670,69 +1681,75 @@ def manage_phone_and_account(request):
 # This function used to show all phones and also to add more phones to the database...
 @login_required(login_url='user-login')
 def show_all_phones(request):
-    phones = models.Phones.objects.all().order_by('date')
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        phones = models.Phones.objects.all().order_by('date')
+        if request.method == "POST":
+            form = forms.AddPhoneForm(request.POST)
+            if form.is_valid():
+                phone = form.cleaned_data.get("phone")
 
 
-    if request.method == "POST":
-        form = forms.AddPhoneForm(request.POST)
-        if form.is_valid():
-            phone = form.cleaned_data.get("phone")
+                create_slug = create_slug_code()
+
+                new_phone = models.Phones.objects.create(
+                    phone = phone,
+                    slug_link = create_slug,
+                )
+
+                new_phone.save()
+
+                messages.success(request, ".تم اضافة رقم الهاتف بنجاح")
+                return redirect("all_phones")
+        else:
+            form = forms.AddPhoneForm()
 
 
-            create_slug = create_slug_code()
-
-            new_phone = models.Phones.objects.create(
-                phone = phone,
-                slug_link = create_slug,
-            )
-
-            new_phone.save()
-
-            messages.success(request, ".تم اضافة رقم الهاتف بنجاح")
-            return redirect("all_phones")
+        context = {
+            'phones' : phones,
+            'form' : form,
+            'add_phone' : True,
+        }
     else:
-        form = forms.AddPhoneForm()
-
-
-    context = {
-        'phones' : phones,
-        'form' : form,
-        'add_phone' : True,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/phones_add_edit_delete.html', context)
 
 
 
 @login_required(login_url='user-login')
 def edit_phone(request, slug):
-    phone = models.Phones.objects.get(slug_link=slug)
-    phones = models.Phones.objects.all().order_by('date')
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        phone = models.Phones.objects.get(slug_link=slug)
+        phones = models.Phones.objects.all().order_by('date')
 
 
-    if request.method == "POST":
-        form = forms.EditPhoneForm(request.POST, instance=phone)
-        if form.is_valid():
-            phone = form.cleaned_data.get("phone")
+        if request.method == "POST":
+            form = forms.EditPhoneForm(request.POST, instance=phone)
+            if form.is_valid():
+                phone = form.cleaned_data.get("phone")
 
 
-            phone_edit = models.Phones.objects.get(slug_link=slug)
+                phone_edit = models.Phones.objects.get(slug_link=slug)
 
 
-            phone_edit.phone = phone
-            phone_edit.save()
-            
-            messages.success(request, "تم تعديل هذا الرقم بنجاح")
-            return redirect("all_phones")
+                phone_edit.phone = phone
+                phone_edit.save()
+                
+                messages.success(request, "تم تعديل هذا الرقم بنجاح")
+                return redirect("all_phones")
+        else:
+            form = forms.EditPhoneForm(instance=phone)
+
+
+        context = {
+            'form' : form,
+            'phone' : phone,
+            'phones' : phones,
+            'edit_phone' : True,
+        }
     else:
-        form = forms.EditPhoneForm(instance=phone)
-
-
-    context = {
-        'form' : form,
-        'phone' : phone,
-        'phones' : phones,
-        'edit_phone' : True,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/phones_add_edit_delete.html', context)
 
 
@@ -1743,125 +1760,137 @@ def edit_phone(request, slug):
 
 @login_required(login_url='user-login')
 def delete_phone(request, slug):
-
-    phone = models.Phones.objects.filter(slug_link=slug)
-
-
-    if request.method == "POST":
-        phone.delete()
-        messages.success(request, ".تم حذف هذا الرقم بنجاح")
-        return redirect("all_phones")
-    
-    return render(request, 'core/phone_deletion_confirm.html')
-
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        phone = models.Phones.objects.filter(slug_link=slug)
+        if request.method == "POST":
+            phone.delete()
+            messages.success(request, ".تم حذف هذا الرقم بنجاح")
+            return redirect("all_phones")
+        
+        return render(request, 'core/phone_deletion_confirm.html')
+    else:
+        return redirect("not_have_permissions")
 
 
 
 
 
 # This function used to show all phones and also to add more phones to the database...
+    # I'll stop this function in this version and only admin can edit this functionality, to be activated later...
 @login_required(login_url='user-login')
 def show_all_user_phones(request):
-    users_phones = models.PhoneNumberr.objects.all().order_by('-date')
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        users_phones = models.PhoneNumberr.objects.all().order_by('-date')
 
 
-    context = {
-        'users_phones' : users_phones,
-        
-    }
+        context = {
+            'users_phones' : users_phones,
+            
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/all_users_phones.html', context)
 
 
 @login_required(login_url='user-login')
 def add_phone_to_user(request):
-    if request.method == "POST":
-        form = forms.AddPhoneNumberForUsersForm(request.user ,request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get("name")
-            phones = form.cleaned_data.get("phone")
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        if request.method == "POST":
+            form = forms.AddPhoneNumberForUsersForm(request.user ,request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get("name")
+                phones = form.cleaned_data.get("phone")
 
-            print("*" * 100)
-            print("name = ", name)
-            for phone in phones:
-                print(phone)
+                print("*" * 100)
+                print("name = ", name)
+                for phone in phones:
+                    print(phone)
 
-            for phone in phones:
-                create_slug = create_slug_code()
-                new_phone_user = models.PhoneNumberr.objects.create(
-                    user = name,
-                    phone = phone,
-                    slug_link = create_slug,
-                )
-                new_phone_user.save()
+                for phone in phones:
+                    create_slug = create_slug_code()
+                    new_phone_user = models.PhoneNumberr.objects.create(
+                        user = name,
+                        phone = phone,
+                        slug_link = create_slug,
+                    )
+                    new_phone_user.save()
 
-            messages.success(request, "تم حفظ الارقام الى هذا المستخدم بنجاح")
-            return redirect("users_phones")
-            
+                messages.success(request, "تم حفظ الارقام الى هذا المستخدم بنجاح")
+                return redirect("users_phones")
+                
 
+        else:
+            form = forms.AddPhoneNumberForUsersForm(request.user)
+
+        context = {
+            'form' : form,
+        }
     else:
-        form = forms.AddPhoneNumberForUsersForm(request.user)
-
-    context = {
-        'form' : form,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/add_phone_to_user.html', context)
 
 
 
 @login_required(login_url='user-login')
 def edit_user_phone(request, slug):
-    phonenumber = models.PhoneNumberr.objects.get(slug_link=slug)
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        phonenumber = models.PhoneNumberr.objects.get(slug_link=slug)
 
 
-    if request.method == "POST":
-        form = forms.ActualEditPhoneNumberForUsersForm(request.POST)
+        if request.method == "POST":
+            form = forms.ActualEditPhoneNumberForUsersForm(request.POST)
 
 
-        if form.is_valid():
-            phones = form.cleaned_data['phone']
+            if form.is_valid():
+                phones = form.cleaned_data['phone']
 
-            phone_edit = models.PhoneNumberr.objects.get(slug_link=slug)
-            phone_user = phone_edit.user
+                phone_edit = models.PhoneNumberr.objects.get(slug_link=slug)
+                phone_user = phone_edit.user
 
-            for phone in phones:
-                try:
-                    check_phone = models.PhoneNumberr.objects.get(user=phone_user, phone=phone)
-                except ObjectDoesNotExist:
-                    create_slug = create_slug_code()
-                    new_phone_user = models.PhoneNumberr.objects.create(
-                        user = phone_user,
-                        phone = phone,
-                        slug_link = create_slug,
-                    )
-                    new_phone_user.save()
+                for phone in phones:
+                    try:
+                        check_phone = models.PhoneNumberr.objects.get(user=phone_user, phone=phone)
+                    except ObjectDoesNotExist:
+                        create_slug = create_slug_code()
+                        new_phone_user = models.PhoneNumberr.objects.create(
+                            user = phone_user,
+                            phone = phone,
+                            slug_link = create_slug,
+                        )
+                        new_phone_user.save()
 
 
-            
-            messages.success(request, "تم تعديل الارقام الخاصه بهذا المستخدم بنجاح")
-            return redirect("users_phones")
+                
+                messages.success(request, "تم تعديل الارقام الخاصه بهذا المستخدم بنجاح")
+                return redirect("users_phones")
 
+        else:
+            form = forms.EditPhoneNumberForUsersForm(instance=phonenumber)
+        context = {
+            'form' : form,
+        }
     else:
-        form = forms.EditPhoneNumberForUsersForm(instance=phonenumber)
-
-
-
-    context = {
-        'form' : form,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/edit_user_phone.html', context)
 
 
 @login_required(login_url='user-login')
 def delete_user_phone(request, slug):
-    phone = models.PhoneNumberr.objects.get(slug_link=slug)
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        phone = models.PhoneNumberr.objects.get(slug_link=slug)
 
-    if request.method == "POST":
-        phone.delete()
-        messages.success(request, ".تم ازالة الرقم من الملف الشخصى لهذا المستخدم بنجاح")
-        return redirect("users_phones")
-    
-    
-    return render(request, 'core/user_phone_deletion_confirm.html')
+        if request.method == "POST":
+            phone.delete()
+            messages.success(request, ".تم ازالة الرقم من الملف الشخصى لهذا المستخدم بنجاح")
+            return redirect("users_phones")
+        
+        
+        return render(request, 'core/user_phone_deletion_confirm.html')
+    else:
+        return redirect("not_have_permissions")
 
 
 
@@ -1870,13 +1899,14 @@ def delete_user_phone(request, slug):
 # This function used to show all phones and also to add more phones to the database...
 @login_required(login_url='user-login')
 def show_all_user_accounts(request):
-    users_accounts = models.Account.objects.all().order_by('-date')
-
-
-    context = {
-        'users_accounts' : users_accounts,
-        
-    }
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        users_accounts = models.Account.objects.all().order_by('-date')
+        context = {
+            'users_accounts' : users_accounts,
+        }
+    else:
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/all_users_accounts.html', context)
 
 
@@ -1885,90 +1915,97 @@ def show_all_user_accounts(request):
 # Activate the following function
 @login_required(login_url='user-login')
 def create_new_account(request):
-    if request.method == "POST":
-        form = forms.CreateAccountForm(request.user ,request.POST)
-        if form.is_valid():
-            marketer = form.cleaned_data['marketer']
-            seller = form.cleaned_data['seller']
-            phone = form.cleaned_data['phone']
-            account_name = form.cleaned_data['account_name']
-            tiktok_account_link = form.cleaned_data['tiktok_account_link']
-            instagram_account_link = form.cleaned_data['instagram_account_link']
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        if request.method == "POST":
+            form = forms.CreateAccountForm(request.user ,request.POST)
+            if form.is_valid():
+                marketer = form.cleaned_data['marketer']
+                seller = form.cleaned_data['seller']
+                phone = form.cleaned_data['phone']
+                account_name = form.cleaned_data['account_name']
+                tiktok_account_link = form.cleaned_data['tiktok_account_link']
+                instagram_account_link = form.cleaned_data['instagram_account_link']
 
-            create_slug = create_slug_code()
+                create_slug = create_slug_code()
 
-            try:
-                user_account = models.Account.objects.get(phone=phone)
-                messages.warning(request, "هذا المُسوق لدية حساب بالفعل على هذا الرقم, يمكنك التعديل عليه أو ازالته")
-
-            except ObjectDoesNotExist:
                 try:
-                    user_account_name = models.Account.objects.get(account_name=account_name)
-                    messages.warning(request, "يوجد لديك فى البيانات حساب يحمل نفس اسم الحساب الذى ادخلته, من فضلك قم بتغير اسم الحساب")
+                    user_account = models.Account.objects.get(phone=phone)
+                    messages.warning(request, "هذا المُسوق لدية حساب بالفعل على هذا الرقم, يمكنك التعديل عليه أو ازالته")
+
                 except ObjectDoesNotExist:
-                    new_account = models.Account.objects.create(
-                        marketer = marketer,
-                        seller = seller,
-                        # phonenumber = phone.phone,
-                        phone = phone,
-                        account_name = account_name,
-                        tiktok_account_link = tiktok_account_link,
-                        instagram_account_link = instagram_account_link,
-                        slug_link = create_slug,
-                    )
+                    try:
+                        user_account_name = models.Account.objects.get(account_name=account_name)
+                        messages.warning(request, "يوجد لديك فى البيانات حساب يحمل نفس اسم الحساب الذى ادخلته, من فضلك قم بتغير اسم الحساب")
+                    except ObjectDoesNotExist:
+                        new_account = models.Account.objects.create(
+                            marketer = marketer,
+                            seller = seller,
+                            # phonenumber = phone.phone,
+                            phone = phone,
+                            account_name = account_name,
+                            tiktok_account_link = tiktok_account_link,
+                            instagram_account_link = instagram_account_link,
+                            slug_link = create_slug,
+                        )
 
-                    new_account.save()
+                        new_account.save()
 
-                    
-                    messages.success(request, "تم انشاء حساب مُسوق بنجاح لهذا المُستخدم")
-                    return redirect("users_accounts")
+                        
+                        messages.success(request, "تم انشاء حساب مُسوق بنجاح لهذا المُستخدم")
+                        return redirect("users_accounts")
+        else:
+            form = forms.CreateAccountForm(request.user)
+        context = {
+            'form' : form,
+        }
     else:
-        form = forms.CreateAccountForm(request.user)
-
-    context = {
-        'form' : form,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/create_new_account.html', context)
 
 
 @login_required(login_url='user-login')
 def edit_user_account(request, slug):
-    account = models.Account.objects.get(slug_link = slug)
-    if request.method == "POST":
-        form = forms.EditAccountForm(request.POST, instance=account)
-        if form.is_valid():
-            account_name = form.cleaned_data['account_name']
-            tiktok_account_link = form.cleaned_data['tiktok_account_link']
-            instagram_account_link = form.cleaned_data['instagram_account_link']
-            
-            try:
-                account_with_same_info = models.Account.objects.get(
-                    slug_link=slug,
-                    account_name = account_name,
-                    tiktok_account_link = tiktok_account_link,
-                    instagram_account_link = instagram_account_link,
-                    )
-                messages.info(request, "لا يوجد بيانات تم تغيرها")
-                return redirect("users_accounts")
-            except ObjectDoesNotExist:
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        account = models.Account.objects.get(slug_link = slug)
+        if request.method == "POST":
+            form = forms.EditAccountForm(request.POST, instance=account)
+            if form.is_valid():
+                account_name = form.cleaned_data['account_name']
+                tiktok_account_link = form.cleaned_data['tiktok_account_link']
+                instagram_account_link = form.cleaned_data['instagram_account_link']
+                
                 try:
-                    account = models.Account.objects.get(account_name = account_name)
-                    messages.warning(request, "يوجد لديك فى البيانات حساب يحمل نفس اسم الحساب الذى ادخلته, من فضلك قم بتغير اسم الحساب")
-                except:
-                    account = models.Account.objects.filter(slug_link = slug)
-                    account.update(
+                    account_with_same_info = models.Account.objects.get(
+                        slug_link=slug,
                         account_name = account_name,
                         tiktok_account_link = tiktok_account_link,
-                        instagram_account_link = instagram_account_link
-                    )
-
-                    messages.success(request, "تم تعديل الحساب لهذا المُستخدم بنجاح")
+                        instagram_account_link = instagram_account_link,
+                        )
+                    messages.info(request, "لا يوجد بيانات تم تغيرها")
                     return redirect("users_accounts")
+                except ObjectDoesNotExist:
+                    try:
+                        account = models.Account.objects.get(account_name = account_name)
+                        messages.warning(request, "يوجد لديك فى البيانات حساب يحمل نفس اسم الحساب الذى ادخلته, من فضلك قم بتغير اسم الحساب")
+                    except:
+                        account = models.Account.objects.filter(slug_link = slug)
+                        account.update(
+                            account_name = account_name,
+                            tiktok_account_link = tiktok_account_link,
+                            instagram_account_link = instagram_account_link
+                        )
+
+                        messages.success(request, "تم تعديل الحساب لهذا المُستخدم بنجاح")
+                        return redirect("users_accounts")
+        else:
+            form = forms.EditAccountForm(instance=account)
+        context = {
+            'form' : form,
+        }
     else:
-        form = forms.EditAccountForm(instance=account)
-    context = {
-        'form' : form,
-    }
+        context = {}
+        return redirect("not_have_permissions")
     return render(request, 'core/edit_user_account.html', context)
 
 
@@ -1976,12 +2013,13 @@ def edit_user_account(request, slug):
 
 @login_required(login_url='user-login')
 def delete_user_account(request, slug):
-    account = models.Account.objects.get(slug_link=slug)
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        account = models.Account.objects.get(slug_link=slug)
 
-    if request.method == "POST":
-        account.delete()
-        messages.success(request, ".تم ازالة هذا الحساب بنجاح")
-        return redirect("users_accounts")
-    
-    
-    return render(request, 'core/user_account_deletion_confirm.html')
+        if request.method == "POST":
+            account.delete()
+            messages.success(request, ".تم ازالة هذا الحساب بنجاح")
+            return redirect("users_accounts")
+        return render(request, 'core/user_account_deletion_confirm.html')
+    else:
+        return redirect("not_have_permissions")
