@@ -1119,20 +1119,19 @@ def chart_view(request):
                     my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
                     my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
                 
-                    salary = 0
                     bills_salary = 0
                     if my_bills_count <= 10:
-                        salary = final_salary
                         bills_salary = 0
+                        final_salary = final_salary
                     elif my_bills_count > 10 and my_bills_count <20:
-                        salary = (my_bills_count * 100) + final_salary
                         bills_salary = my_bills_count * 100
+                        final_salary += my_bills_count * 100
                     elif my_bills_count >= 20 and my_bills_count < 30:
-                        salary = (my_bills_count * 150) + final_salary
                         bills_salary = my_bills_count * 150
+                        final_salary += my_bills_count * 150
                     elif my_bills_count >= 30:
-                        salary = (my_bills_count * 200) + final_salary
                         bills_salary = my_bills_count * 200
+                        final_salary += my_bills_count * 200
                     # final_salary += salary
                     bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
                 except ObjectDoesNotExist:
@@ -1162,7 +1161,6 @@ def chart_view(request):
         for reward in rewards:
             total_reward += reward.price
 
-        final_salary = salary
         final_salary = final_salary - total_penality + total_reward
 
     else:
@@ -1178,10 +1176,10 @@ def chart_view(request):
                 try:
                     account = models.Account.objects.get(phone=phone.phone)
 
-                    my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+                    # my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
                     my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
                 
-                    salary = 0
+                    # salary = 0
                     bills_salary = 0
                     if my_bills_count <= 10:
                         bills_salary = 0
@@ -1203,9 +1201,10 @@ def chart_view(request):
                     return redirect("home")
 
             # Calculating the number of bills
-            total_bills = 0
-            for bill in my_bills:
-                total_bills += bill.pieces_num
+            # total_bills = 0
+            # for bill in my_bills:
+            #     total_bills += bill.pieces_num
+                total_bills = 0
         else:
             messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
             return redirect("home")

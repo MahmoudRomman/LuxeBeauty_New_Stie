@@ -1,9 +1,25 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"); */
+
+/* @import url("https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&amp;display=swap"); */
+
 @import url("font-awesome.min.css");
 body {
-  font-family: "poppins", sans-serif;
+  /* font-family: "poppins", sans-serif; */
+  
+
+  /* font-family: 'Quicksand', sans-serif; */
+  font-family: 'Almarai', sans-serif;
+
+
   color: #101010;
   background-color: #ffffff;
+}
+
+h1, h2, p {
+  /* font-family: 'Quicksand', sans-serif; */
+
+  font-family: 'Almarai', sans-serif;
+
 }
 
 .layout_padding {

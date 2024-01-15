@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Sum
 from . import models
 from accounts import models as accounts_models
 
@@ -37,13 +38,31 @@ def reward_notification(request):
     return context
 
 def mybills_notification(request):
+    today = timezone.now().date()
     if request.user.is_authenticated:
-        today = timezone.now().date()
-        my_bills = models.Bill2.objects.filter(seller=request.user, date__month=today.month)
-    
-        mybills_count = 0
-        for bill in my_bills:
-            mybills_count += bill.pieces_num
+        user_profile = accounts_models.Profile.objects.get(staff=request.user)
+
+        if user_profile.job_type == "Seller":
+            today = timezone.now().date()
+            my_bills = models.Bill2.objects.filter(seller=request.user, date__month=today.month)
+        
+            mybills_count = 0
+            for bill in my_bills:
+                mybills_count += bill.pieces_num
+        else:
+            mybills_count = 0
+            bills_and_phones_detials = []   # list to include the all bills count from all numbers
+            my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+            if len(my_phones):
+                for phone in my_phones:
+                    account = models.Account.objects.get(phone=phone.phone)
+
+                    my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                    bills_and_phones_detials.append(my_bills_count)
+                for cnt in bills_and_phones_detials:
+                    mybills_count += bills_and_phones_detials[0]
+            else:
+                mybills_count = 0
     else:
         mybills_count = 0
     
@@ -52,6 +71,15 @@ def mybills_notification(request):
     }
 
     return context
+
+
+
+
+
+
+
+
+
 
 
 
