@@ -881,7 +881,7 @@ def add_payment_link(request):
                         )
 
                     new_link.save()
-                    messages.success(request, "تم اضافة الرابط هذا بنجاح")
+                    messages.success(request, "تم اضافة هذا الرابط بنجاح")
                     return redirect("show_payments")
         else:
             form = forms.AddLinkForm()
@@ -1152,7 +1152,7 @@ def chart_view(request):
         days = 0
         for penality in penalities:
             days += penality.days_num
-        total_penality = (final_salary // 30) * days
+        total_penality = (final_salary / 30) * days
 
 
         # Calculate the rewards
@@ -1215,6 +1215,10 @@ def chart_view(request):
         for penality in penalities:
             days += penality.days_num
         total_penality = (final_salary // 30) * days
+        # total_penality = (final_salary / 30) * days
+        total_penality = (final_salary / 30) * days
+        total_penality = round(total_penality, 0)
+        
 
 
         # Calculate the rewards
@@ -1225,6 +1229,7 @@ def chart_view(request):
 
 
         final_salary = final_salary - total_penality + total_reward
+
 
 
     context = {

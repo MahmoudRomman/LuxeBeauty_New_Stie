@@ -1143,6 +1143,41 @@ button {
 
 
 
+.add_more_bank_accounts {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  font-size: larger;  
+}
+
+
+.add_more_bank_accounts a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #f16179;
+  color: #ffffff;
+  border: 1px solid #f16179;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  width: 350px;
+  
+}
+
+
+
+.add_more_bank_accounts a:hover {
+  background-color: transparent;
+  color: #f16179;
+  border-radius: 10px 20px;
+}
+
+
+
 
 .penality_btn {
   display: -webkit-box;
@@ -1453,6 +1488,51 @@ button {
 
 
 .btn_bill_search input:hover {
+  background-color: transparent;
+  color: #27AE60;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.btn_payment_linl_search {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: large;
+
+
+}
+
+
+.btn_payment_linl_search input {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #27AE60;
+  color: #ffffff;
+  border: 1px solid #27AE60;
+  border-radius: 10px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  height: 40px;
+}
+
+
+
+.btn_payment_linl_search input:hover {
   background-color: transparent;
   color: #27AE60;
 }
@@ -2823,6 +2903,7 @@ font-size: larger;
   background-color: #2d2d2d;
   color: #ffffff;
   margin: 45px 45px;
+
 }
 
 .info_section .social_container {

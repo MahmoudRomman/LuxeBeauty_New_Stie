@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <!-- <html> -->
-<html lang="ar"></html>
+<html lang="ar">
 
 <head>
   <!-- Basic -->
@@ -14,7 +14,9 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <link rel="shortcut icon" href="{% static 'images/wig.png' %}" type="image/x-icon">
+  <!-- <link rel="shortcut icon" href="{% static 'images/wig.png' %}" type="image/x-icon"> -->
+  <link rel="shortcut icon" href="{% static 'images/favicon-5.png' %}" type="image/x-icon">
+  
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -32,7 +34,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
   <title>
-    Luxebeauty
+    LuxeBeauty-IMS
   </title>
 
   <!-- slider stylesheet -->
@@ -70,8 +72,7 @@
 
   <!-- The new font family -->
 
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap">
   <style>
       body {
           font-family: 'Almarai', sans-serif;
@@ -80,8 +81,10 @@
       .arabic-text {
           font-family: 'Almarai', sans-serif;
       }
-  </style>
 
+</style>
+
+<!-- Django Messages Script -->
 
 
   <!-- start of the auth pages -->  
@@ -113,23 +116,28 @@
 
     {% include 'partials/header.html' %}
     <!-- end header section -->
-    {% if messages %}
-        {% for message in messages %}
-        
-            <div class="message alert alert-{{ message.tags }} alert-dismissible fade show  mt-3" style="font-size: large; text-align: right; margin-left: 5%; margin-right: 2%; border-radius: 10px;">
-                <a class="close" href="#" data-dismiss="alert">×</a>
-                  <div style="text-align: right;">
-                    {{ message }}
-                  </div>
-                <!-- <a href="#" class="del-msg">&times;</a> -->
-                <a href="#" class="del-msg"></a>
 
-            </div>
 
-        {% endfor %}
-    {% endif %} 
   </div>
   <!-- end hero area -->
+
+
+  {% if messages %}
+  {% for message in messages %}
+  
+      <div class="message alert alert-{{ message.tags }} alert-dismissible fade show  mt-3" style="font-size: large; text-align: right; margin-left: 5%; margin-right: 2%; border-radius: 10px;">
+          <a class="close" href="#" data-dismiss="alert">×</a>
+            <div style="text-align: right;">
+              {{ message }}
+            </div>
+          <a href="#" class="del-msg"></a>
+
+      </div>
+
+  {% endfor %}
+{% endif %} 
+
+
 
 
 {% block content %}
@@ -174,6 +182,7 @@
         })
     });
   </script>
+
 </body>
 
 </html>

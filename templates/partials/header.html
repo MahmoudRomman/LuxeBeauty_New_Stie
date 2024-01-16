@@ -86,11 +86,12 @@
                       </a>
 
                       <div class="dropdown-menu" style="text-align: right;">
-                            <a class="dropdown-item" href="{% url 'show_bank_accounts_to_users' %}">الحسابات البنكية</a>  
+                            <a class="dropdown-item" href="{% url 'show_bank_accounts_to_users' %}">الحسابات البنكية
+                              <i class="fa fa-bank"></i>
+                            </a>  
 
                             <a class="dropdown-item" href="{% url 'show_payments' %}">روابط الدفع
-                              <i class="fa fa-money-bill"></i>
-                              
+                              <i class="fa fa-link"></i>
                             </a>
                       
                       </div>
@@ -106,9 +107,11 @@
 
                       {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"> 
-                          {% if done_task_count or ordered_task_count %}
-                              {% with result=done_task_count|add:ordered_task_count %}
-                              <span class="badge badge-danger" style="font-size: small; border-radius: 100%; ">{{result}}</span>
+                          {% if done_task_count or ordered_task_count or bills_count_for_admin %}
+                              {% with result=done_task_count|add:ordered_task_count|add:bills_count_for_admin %}
+
+                              <span class="badge badge-danger" style="font-size: small; margin-left: -12px; color: white; padding: 5px 10px;">{{result}}</span>
+
                               {% endwith %}
                           {% endif %}
 
@@ -119,7 +122,7 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"> 
                           {% if penality_count or reward_count or mybills_count or user_ordered_task_count%}
                               {% with result=penality_count|add:reward_count|add:mybills_count|add:user_ordered_task_count %}
-                              <span class="badge badge-danger" style="font-size: small; border-radius: 100%; ">{{result}}</span>
+                              <span class="badge badge-danger" style="font-size: small; margin-left: -12px; color: white; padding: 5px 10px;">{{result}}</span>
                               {% endwith %}
                           {% endif %}
 
@@ -144,9 +147,26 @@
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                             <a class="dropdown-item" href="{% url 'phone_and_account_manage' %}">الارقام والحسابات</a>    
-                            <a class="dropdown-item" href="{% url 'all_bills' %}">كل الفواتير</a>    
-                            <a class="dropdown-item" href="{% url 'show_all_penalities' %}">الخصومات</a>  
-                            <a class="dropdown-item" href="{% url 'show_all_rewards' %}">المكافأت</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="{% url 'chart_view' %}">
+                            <a class="dropdown-item" href="{% url 'all_bills' %}">
+
+                              {% if bills_count_for_admin > 0 %}
+                              <span class="badge badge-danger">{{bills_count_for_admin}}</span>
+                              {% endif %}
+                              كل الفواتير
+                              <i class="fa fa-money-bill"></i>
+                            </a>
+
+                            <a class="dropdown-item" href="{% url 'show_all_penalities' %}">الخصومات
+                              <i class="fa fa-ban"></i>
+                            </a>  
+
+                            <a class="dropdown-item" href="{% url 'show_all_rewards' %}">المكافأت
+                            <i class="fa-solid fa-award"></i>
+                            </a>
                             
                             
                             <a class="dropdown-item" href="{% url 'show_all_tasks' %}">
@@ -322,4 +342,8 @@
     /* .dropdown:hover .dropdown-menu {
       display: block;
     } */
+
+
+
+
 </style>

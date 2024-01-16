@@ -25,7 +25,7 @@
                               </div>
                           </div>
 
-                          <div class="btn_bill_search col-12 col-sm-2" style="font-size: large;">
+                          <div class="btn_payment_linl_search col-12 col-sm-2">
                               <input type="submit" value="بحث">
                           </div>
 
@@ -109,6 +109,9 @@
                 <tr>
                     <td colspan='8' style="font-size:large">ليس لديك اى روابط دفع</td>
                 </tr>
+
+              {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+
                 <tr>
                     <td colspan="8">
 
@@ -120,6 +123,7 @@
 
                     </td>
                 </tr>
+              {% endif %}
                 {% endfor %}
             </tbody>
         </table>
@@ -127,11 +131,14 @@
 
     
     {% if links_data %}
+    {% if user.is_authenticated and user.is_staff and user.is_superuser %}
         <div class="add_more_payments_link_btn">
             <a href="{% url 'add_new_payment_link' %}">
             اضافة المزيد من الروابط 
             </a>
         </div> 
+    {% endif %}
+
     {% endif %}
 
 

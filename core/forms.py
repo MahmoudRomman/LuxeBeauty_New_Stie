@@ -900,71 +900,52 @@ class BankAccountForm(forms.ModelForm):
         model = models.BankAccount
         # fields = ['bank_name', 'country', 'IBAN', 'account_number', 'swift_code', 'beneficiary_name', 'card_number', 'validation_date', 'ccv_or_cvc']
         fields = ['bank_name', 'country', 'IBAN', 'account_number', 'swift_code', 'beneficiary_name']
+        labels = {
+            'bank_name' : "Bank Name",
+            'country' : "Choose Country",
+            'IBAN' : "IBAN",
+            'account_number' : "Account Number",
+            'swift_code' : "Swift Code",
+            'beneficiary_name' : "Beneficiary Name",
+
+        }
+
+
 
         widgets = {
             'bank_name': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'style': 'border-color:wightblack; border-radius: 15px;',
-                'placeholder': 'bank name',
+                'placeholder': 'Enter Bank Name',
                 }),
 
 
             'IBAN': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'style': 'border-color:wightblack; border-radius: 15px;',
-                'placeholder': 'IBAN',
+                'placeholder': 'Enter IBAN',
                 }),
 
 
             'account_number': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'style': 'border-color:wightblack; border-radius: 15px;',
-                'placeholder': 'Account Number',
+                'placeholder': 'Enter Account Number',
                 }),
 
 
             'swift_code': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'style': 'border-color:wightblack; border-radius: 15px;',
-                'placeholder': 'Swift Code',
+                'placeholder': 'Enter Swift Code',
                 }),
 
 
             'beneficiary_name': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'style': 'border-color:wightblack; border-radius: 15px;',
-                'placeholder': 'Beneficiary Name',
+                'placeholder': 'Enter Beneficiary Name',
                 }),
-
-
-            # 'card_number': forms.TextInput(attrs={
-            #     'class': 'form-control',
-            #     'placeholder': 'XXXX XXXX XXXX XXXX',
-            #     'style': 'border-color:wightblack; border-radius: 15px;',
-            #     'required' : 'True',
-            #     'id' : 'id_card_number',
-            #     }),
-
-            # 'ccv_or_cvc': forms.TextInput(attrs={
-            #     'class': 'form-control',
-            #     'placeholder': 'Enter CVC/CCV:',
-            #     'style': 'border-color:wightblack; border-radius: 15px;',
-            #     'required' : 'True',
-            #     'id' : 'cvc',
-            #     'oninput' : 'restrictToThreeDigits(this)',
-            #     'type' : 'text',
-            #     'title' : 'Only numeric characters',
-            #     'pattern' : '\d*',
-            #     }),
-
-
-
-
-            # 'validation_date': forms.DateInput(attrs={
-            #     'class': 'form-control', 
-            #     'style': 'border-color:wightblack; border-radius: 15px;',
-            #     'type' : 'date',
-            #     }),
         }
 
 

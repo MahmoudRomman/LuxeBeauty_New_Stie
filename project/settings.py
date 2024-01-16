@@ -93,6 +93,7 @@ TEMPLATES = [
                 'core.context_processors.done_task_notification',
                 'core.context_processors.user_ordered_task_notification',
                 'core.context_processors.check_user_job_type',
+                'core.context_processors.bills_notification_for_admin',
                 'accounts.context_processors.check_user_job_type',
 
                 
