@@ -140,20 +140,34 @@ def register(request):
 def profile(request):
     profile = models.Profile.objects.get(staff=request.user)
     my_phones = core_models.PhoneNumberr.objects.filter(user=request.user)
+    if (len(my_phones)):
+        # For marketer details
+        marketer_phones_details = []
+        for phone in my_phones:
+            account = core_models.Account.objects.filter(phone=phone.phone)
+            if len(account):
+                account = core_models.Account.objects.get(phone=phone.phone)
+                marketer_phones_details.append({'phone': phone.phone, 'seller': account.seller.username})
+            else:
+                marketer_phones_details = []
+                marketer_phones_details.append({'phone': phone.phone, 'seller': "لا يوجد الى الان"})
 
 
-    # For marketer details
-    marketer_phones_details = []
-    for phone in my_phones:
-        account = core_models.Account.objects.get(phone=phone.phone)
-        marketer_phones_details.append({'phone': phone.phone, 'seller': account.seller.username})
+        # For seller details
+        seller_phones_details = []
+        for phone in my_phones:
+            account = core_models.Account.objects.filter(phone=phone.phone)
+            if len(account):
+                account = core_models.Account.objects.get(phone=phone.phone)
+                seller_phones_details.append({'phone': phone.phone, 'marketer': account.marketer.username})
+            else:
+                seller_phones_details.append({'phone': phone.phone, 'marketer': "لا يوجد الى الان"})
 
-    # For seller details
-    seller_phones_details = []
-    for phone in my_phones:
-        account = core_models.Account.objects.get(phone=phone.phone)
-        seller_phones_details.append({'phone': phone.phone, 'marketer': account.marketer.username})
-       
+    else:
+        my_phones = []
+        marketer_phones_details = []
+        seller_phones_details = []
+        
 
 
     context = {
@@ -171,6 +185,8 @@ def profile_update(request):
     if request.method == 'POST':
         user_form = forms.UserUpdateForm(request.POST, instance=request.user)
         profile_form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+
+        current_user_profile = models.Profile.objects.get(staff=request.user)
 
         # if profile_form.is_valid():
         #     image = profile_form.cleaned_data.get('image')
@@ -196,12 +212,34 @@ def profile_update(request):
             job_type = profile_form.cleaned_data.get("job_type")
             if job_type == "Choose Job Type":
                 messages.warning(request, ".من فضلك أختر نوع العمل")
-                return redirect('user-profile-update')
             else:
-                user_form.save()
-                profile_form.save()
-                messages.success(request, "تم حفظ التعديلات")
-                return redirect('user-profile')
+                if job_type != current_user_profile.job_type:
+                    my_phones = core_models.PhoneNumberr.objects.filter(user=request.user)
+                    if(len(my_phones)):
+                        if current_user_profile.job_type == "Seller":
+                            messages.warning(request, "عفواً, لا يمكن تغيير نوع العمل, لديك أرقام خاصة تم تعينها لك")
+                            return redirect('user-profile-update')
+                        else:
+                            my_accounts = core_models.Account.objects.filter(marketer=request.user)
+                            if (len(my_accounts)):
+                                messages.warning(request, "عفواً, لا يمكن تغيير نوع العمل, لديك أرقام خاصة تم تعينها لك و لديك حساب مُسوق خاص بك")
+                                return redirect('user-profile-update')
+
+                            else:
+                                messages.warning(request, "عفواً, لا يمكن تغيير نوع العمل, لديك أرقام خاصة تم تعينها لك")
+                                return redirect('user-profile-update')
+
+
+                    else:
+                        user_form.save()
+                        profile_form.save()
+                        messages.success(request, "تم حفظ التعديلات")
+                        return redirect('user-profile')
+                else: 
+                    user_form.save()
+                    profile_form.save()
+                    messages.success(request, "تم حفظ التعديلات")
+                    return redirect('user-profile')
     else:
         user_form = forms.UserUpdateForm(instance=request.user)
         profile_form = forms.ProfileUpdateForm(instance=request.user.profile)

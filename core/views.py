@@ -83,17 +83,6 @@ def home(request):
     items = models.Item.objects.all().order_by('-date')[:8]
     today_gift = models.Offer.objects.all().order_by('-date')[0:1]
 
-    # try:
-    #     custom_permission = Permission.objects.get(codename='can_make_order', name='Can Make Order')
-    #     custom_permission.delete()
-    #     print("alreary deleted")
-    # except ObjectDoesNotExist:
-    #     print("permission not founddddddddddddddddd")
-
-
-    # custom_permission = Permission.objects.get(codename='can_make_order', name='Can Make Order')
-    # print(custom_permission)
-
     context = {
         'items' : items,
 
@@ -605,7 +594,7 @@ def order_summary(request):
 
    
 
-
+from django.http import QueryDict
 
 @login_required(login_url='user-login')
 @seller_required
@@ -766,25 +755,25 @@ def show_bills(request):
         social_accounts = models.Account.objects.all()
         bills_per_account = []
 
-        for account in social_accounts:
-            bill_seller = models.Bill2.objects.filter(account_name=account.account_name, date__year = year, date__month = month)
-            total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-            # bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
-            
-            bills_per_account.append({'seller': account.seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phone.phone, 'bills_count': total_pieces})
-            
-            # if len(bill_seller) == 0:
-            #     bills_per_account.append({'seller': "-----", 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
-            # else:
-            #     bills_per_account.append({'seller': bill_seller[0].seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phonenumber1.phone, 'bills_count': total_pieces})
+        if len(social_accounts):
+            for account in social_accounts:
+                total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                bills_per_account.append({'seller': account.seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phone.phone, 'bills_count': total_pieces})
+        else:
+            bills_per_account = []
+
 
 
         # Script to calculate the total number of bills for all accounts in this month...
         data = models.Bill2.objects.filter(date__year = year, date__month = month).order_by("-date")
         bills_num_this_month = 0
 
-        for bill in data:
-            bills_num_this_month += bill.pieces_num
+
+        if len(data):
+            for bill in data:
+                bills_num_this_month += bill.pieces_num
+        else:
+            bills_num_this_month = 0
 
 
         # To start activate filter if the POST method is exists(activate the form) with no pagination , if not activate the pagination...

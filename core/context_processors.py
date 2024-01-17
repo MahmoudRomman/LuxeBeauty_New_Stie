@@ -55,10 +55,14 @@ def mybills_notification(request):
             my_phones = models.PhoneNumberr.objects.filter(user=request.user)
             if len(my_phones):
                 for phone in my_phones:
-                    account = models.Account.objects.get(phone=phone.phone)
-
-                    my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-                    bills_and_phones_detials.append(my_bills_count)
+                    account = models.Account.objects.filter(phone=phone.phone)
+                    if len(account):
+                        account = models.Account.objects.get(phone=phone.phone)
+                        my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                        bills_and_phones_detials.append(my_bills_count)
+                    else:
+                        bills_and_phones_detials.append(0)
+                        
                 for cnt in bills_and_phones_detials:
                     mybills_count += bills_and_phones_detials[0]
             else:
@@ -79,20 +83,49 @@ def mybills_notification(request):
 
 
 
+# def bills_notification_for_admin(request):
+#     today = timezone.now().date()
+#     if request.user.is_authenticated:
+#         bills_count = 0
+#         bills_and_phones_detials = []   # list to include the all bills count from all numbers
+#         all_phones = models.PhoneNumberr.objects.all()
+#         if len(all_phones):
+#             for phone in all_phones:
+#                 account = models.Account.objects.filter(phone=phone.phone)
+#                 if (len(account)):
+#                     account = models.Account.objects.get(phone=phone.phone)
+#                     my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+#                     bills_and_phones_detials.append(my_bills_count)
+#                 else:
+#                     bills_and_phones_detials = 0
+#             if bills_and_phones_detials != 0:
+#                 for cnt in bills_and_phones_detials:
+#                     bills_count += bills_and_phones_detials[0]
+#             else:
+#                 bills_count=0
+#         else:
+#             bills_count = 0
+#     else:
+#         bills_count = 0
+    
+#     context = {
+#         "bills_count_for_admin" : bills_count,
+#     }
+
+#     return context
+
+
+
+
 def bills_notification_for_admin(request):
     today = timezone.now().date()
     if request.user.is_authenticated:
         bills_count = 0
-        bills_and_phones_detials = []   # list to include the all bills count from all numbers
-        all_phones = models.PhoneNumberr.objects.all()
-        if len(all_phones):
-            for phone in all_phones:
-                account = models.Account.objects.get(phone=phone.phone)
+        all_bills_this_month = models.Bill2.objects.filter(date__year = today.year, date__month = today.month).order_by("-date")
 
-                my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-                bills_and_phones_detials.append(my_bills_count)
-            for cnt in bills_and_phones_detials:
-                bills_count += bills_and_phones_detials[0]
+        if len(all_bills_this_month):
+            for bill in all_bills_this_month:
+                bills_count += bill.pieces_num
         else:
             bills_count = 0
     else:
