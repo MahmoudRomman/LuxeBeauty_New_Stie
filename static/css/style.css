@@ -1971,9 +1971,11 @@ margin: auto;
   background-color: #f16179;
   color: #ffffff;
   border: 1px solid #f16179;
-  border-radius: 5px;
+  border-radius: 10px;
   -webkit-transition: all .3s;
   transition: all .3s;
+
+  width: 300px;
   
 }
 
@@ -1982,6 +1984,7 @@ margin: auto;
 .btn_penality_add input:hover {
   background-color: transparent;
   color: #f16179;
+  border-radius: 10px 20px;
 }
 
 

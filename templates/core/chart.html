@@ -49,6 +49,42 @@
 
 
 
+<div class="container-xxl py-5">
+  <div class="container" style="max-width: 85%;">
+      <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+          
+          <div class="tab-content">
+              <div id="tab-1" class="tab-pane fade show p-0 active">
+
+
+                <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
+                  {% csrf_token %}
+                  <div class="row g-3">
+                      <div class="col-12 col-sm-2">
+                          <div class="form-group">
+                              {{seller_bill_filter_form.bill_search}}
+                          </div>
+                      </div>
+
+                      <div class="btn_bill_search col-12 col-sm-2" style="font-size: large;">
+                          <input type="submit" value="بحث">
+                      </div>
+
+                  </div>
+                </form>
+
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<br> 
+
+
+
+    
 <section class="shop_section layout_padding" style="margin-top: -8%;">
     <div class="container" style="max-width: 85%;">
       <div class="row">
@@ -61,12 +97,12 @@
           <thead style="text-align: center;">
             <tr style="text-align: center; font-size: large;">
               <th scope="col">الترتيب</th>
-              <th scope="col">اسم البائع</th>
-              <th scope="col">رقم الهاتف </th>
+              <!-- <th scope="col">اسم البائع</th> -->
+              <th scope="col">هاتف البائع</th>
               <th scope="col">الدولة</th>
               <th scope="col">العنوان</th>
               <th scope="col">اسم العميل</th>
-              <th scope="col">رقم هاتف العميل</th>
+              <th scope="col">هاتف العميل</th>
               <th scope="col">اسم الحساب</th>
               <th scope="col">  التاريخ</th>
   
@@ -80,16 +116,20 @@
               <th scope="col">عدد القطع</th>
               <th scope="col">سعر القطعة</th>
               <th scope="col">السعر الكلى</th>
+
+              <th scope="col">كود الاسترجاع</th>
+              <th scope="col">استرجاع؟</th>
+
+
   
             </tr>
           </thead>
           <tbody style="text-align: center;">
-  
             
             {% for bill in page_obj %}
             <tr style="font-size: small;">
               <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
-              <td>{{bill.seller}}</td>
+              <!-- <td>{{bill.seller}}</td> -->
               <td>{{bill.seller_phone_number}}</td>
               <td>{{bill.country}}</td>
               <td>{{bill.address}}</td>
@@ -107,23 +147,29 @@
               <td>{{bill.pieces_num}}</td>
               <td>{{bill.price}}</td>
               <td>{{bill.total_price}}</td>
+
+              <td>{{bill.slug_code}}</td>
+
+              <td style="font-size: large;">
+                <a href="{% url 'item_refund' bill.slug_code %}">
+                  <i class="fa fa-undo" aria-hidden="true"></i>
+                </a>
+              </td>
+
               
-  
-  
             </tr>
   
             {% empty %}
             <tr>
-
-              <td colspan='18' style="font-size:medium">ليس لديك أى فواتير الى الان خلال هذا الشهر
-                  <img width="25" height="25" src="https://img.icons8.com/external-smashingstocks-flat-smashing-stocks/25/external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4.png" alt="external-Disappointed-smileys-smashingstocks-flat-smashing-stocks-4"/>
+              <td colspan='18' style="font-size:medium">
+                لا يوجد لديك أى بيانات
               </td>
             </tr>
             {% endfor %}
 
             {% if page_obj %}
             <tr>
-                <td colspan="16" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
+                <td colspan="17" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
                 <td><b>{{total_bills}}</b></td>
             </tr>
             {% endif %} 
@@ -133,6 +179,8 @@
     </div>
   </div>
 </section>
+
+
 
 
 <nav aria-label="Page navigation example" style="margin: auto; margin-top: 10px;">

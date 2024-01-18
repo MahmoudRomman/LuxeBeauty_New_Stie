@@ -106,6 +106,9 @@ urlpatterns = [
     path('delete_user_account/<slug>/', views.delete_user_account, name='delete_user_account'),
 
 
+    path("item-refund/<slug>/", views.item_refund, name="item_refund"),
+    path("user-refunds", views.user_refunds, name="user_refunds"),
+
 
 
 

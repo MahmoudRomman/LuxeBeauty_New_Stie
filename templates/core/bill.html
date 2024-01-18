@@ -113,6 +113,7 @@
             const loaderWrapper = document.getElementById('loader-wrapper');
             const emailForm = document.getElementById('emailForm');
 
+
             emailForm.addEventListener('submit', function (event) {
                 event.preventDefault();
 
@@ -139,12 +140,14 @@
                         // Redirect to the specified URL on success
                         const redirectUrl = emailForm.getAttribute('data-redirect-url');
                         window.location.href = redirectUrl;
+
                     } else if (data.status === 'error') {
 
                         // Handle form validation errors (if any)
                         console.error('Form validation errors:', data.errors);
                         window.location.href = '/bill2/';  
                     }
+
                 })
                 .catch(error => {
                     console.error('Error:', error);

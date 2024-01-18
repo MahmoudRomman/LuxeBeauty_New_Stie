@@ -1,0 +1,123 @@
+{% extends 'partials/base.html' %}
+
+
+
+
+
+{% block content %}
+<!-- item refund section -->
+
+
+<section class="shop_section layout_padding" >
+    <div class="container" style="max-width: 85%;">
+      <div class="row">
+
+
+        <h2 style="margin: auto; margin-bottom: 20px;">
+          تفاصيل بيانات المنتج المُراد استرجاعه
+      </h2>
+      <table class="table table-striped" dir='rtl'>
+          <thead style="text-align: center;">
+            <tr style="text-align: center; font-size: large;">
+              <th scope="col">هاتف البائع</th>
+              <th scope="col">الدولة</th>
+              <th scope="col">العنوان</th>
+              <th scope="col">اسم العميل</th>
+              <th scope="col">هاتف العميل</th>
+              <th scope="col">اسم الحساب</th>
+              <th scope="col">  التاريخ</th>
+  
+              <th scope="col">نوع الباروكه</th>
+              <th scope="col">الطول</th>
+              <th scope="col">نوع الفروة</th>
+              <th scope="col">اللون</th>
+              <th scope="col">الكثافة</th>
+  
+  
+              <th scope="col">عدد القطع</th>
+              <th scope="col">سعر القطعة</th>
+              <th scope="col">السعر الكلى</th>
+
+  
+            </tr>
+          </thead>
+          <tbody style="text-align: center;">
+            
+            <tr style="font-size: small;">
+                <td>{{item.seller_phone_number}}</td>
+                <td>{{item.country}}</td>
+                <td>{{item.address}}</td>
+                <td>{{item.customer_name}}</td>
+                <td>{{item.customer_phone}}</td>
+                <td>{{item.account_name}}</td>
+                <td>{{item.date|date}}</td>
+
+
+                <td>{{item.wig_type}}</td>
+                <td>{{item.wig_long}}</td>
+                <td>{{item.scalp_type}}</td>
+                <td>{{item.wig_color}}</td>
+                <td>{{item.density}}</td>
+                <td>{{item.pieces_num}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.total_price}}</td>
+            </tr>
+  
+  
+          </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+<div class="container" >
+    <div class="row">
+        <div class="col-md-12">
+            <div class="border bg-white p-3">
+                <h1 class="has-text-centered mb-5 is-size-3" style="text-align: center;">استرجاع هذا المنتج</h1>
+
+                <hr>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+
+                            <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
+                                {% csrf_token %}
+                                <div class="row g-3" style="row-gap: 13px;">
+        
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group">
+                                            {{form.pieces_num}}
+                                        </div>
+                                    </div>
+
+        
+                                    <div class="btn_penality_add">
+                                        <input type="submit" value="استرجاع المنتج" style="font-size:large">
+                                    </div>
+        
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+    
+        
+    
+
+<!-- item refund section -->
+{% endblock content %}
+  

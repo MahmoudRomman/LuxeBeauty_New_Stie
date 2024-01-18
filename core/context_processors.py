@@ -83,6 +83,45 @@ def mybills_notification(request):
 
 
 
+def my_refunds_notification(request):
+    today = timezone.now().date()
+    if request.user.is_authenticated:
+        user_profile = accounts_models.Profile.objects.get(staff=request.user)
+
+        if user_profile.job_type == "Seller":
+            today = timezone.now().date()
+            my_refunds = models.Refund.objects.filter(seller=request.user, date__month=today.month)
+        
+            my_refunds_count = 0
+            for refund in my_refunds:
+                my_refunds_count += refund.pieces_num
+        else:
+            my_refunds_count = 0
+            bills_and_phones_detials = []   # list to include the all bills count from all numbers
+            my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+            if len(my_phones):
+                for phone in my_phones:
+                    account = models.Account.objects.filter(phone=phone.phone)
+                    if len(account):
+                        account = models.Account.objects.get(phone=phone.phone)
+                        my_refunds = models.Refund.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month)
+
+                        for refund in my_refunds:
+                            my_refunds_count += refund.pieces_num
+                    else:
+                        my_refunds_count = 0
+            else:
+                my_refunds_count = 0
+    else:
+        my_refunds_count = 0
+    
+    context = {
+        "my_refunds_count" : my_refunds_count,
+    }
+
+    return context
+
+
 # def bills_notification_for_admin(request):
 #     today = timezone.now().date()
 #     if request.user.is_authenticated:

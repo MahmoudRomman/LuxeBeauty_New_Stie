@@ -94,6 +94,9 @@ TEMPLATES = [
                 'core.context_processors.user_ordered_task_notification',
                 'core.context_processors.check_user_job_type',
                 'core.context_processors.bills_notification_for_admin',
+                'core.context_processors.my_refunds_notification',
+
+                
                 'accounts.context_processors.check_user_job_type',
 
                 

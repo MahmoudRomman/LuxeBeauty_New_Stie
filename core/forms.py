@@ -317,7 +317,7 @@ class BillForm2(forms.Form):
             widget = forms.Select(attrs={
             'class': 'form-control',
             'type' : 'radio',
-            'style': 'border-color:wightblack; border-radius: 15px;',            
+            'style': 'border-color:wightblack; border-radius: 15px;',
         }))
 
 
@@ -327,7 +327,7 @@ class BillForm2(forms.Form):
                 'class': 'form-control',
                 'name' : 'country',
                 'type' : 'radio',
-                'style': 'border-color:wightblack; border-radius: 15px;'
+                'style': 'border-color:wightblack; border-radius: 15px;',
                 }))
     
         self.fields["address"] = forms.CharField(required=True, widget=forms.TextInput(attrs={
@@ -335,7 +335,7 @@ class BillForm2(forms.Form):
             'type' : 'text',
             'size': "200",
             'placeholder': "ادخل العنوان",
-            'style': 'border-color:wightblack; border-radius: 15px;'
+            'style': 'border-color:wightblack; border-radius: 15px;',
         }))
 
 
@@ -362,6 +362,33 @@ class BillForm2(forms.Form):
 
 
 
+class SellerBillFiter(forms.Form):
+    bill_search = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'type' : 'text',
+        'size': "500",
+        'placeholder': "البحث عن فاتورة",
+        'style': 'border-color:wightblack; border-radius: 15px;',
+    }))
+
+
+
+
+class ItemRefundForm(forms.Form):
+    # slug_code = forms.CharField(required=True, widget=forms.TextInput(attrs={
+    #     'class': 'form-control',
+    #     'type' : 'text',
+    #     'size': "18",
+    #     'placeholder': "البحث عن فاتورة",
+    #     'style': 'border-color:wightblack; border-radius: 15px;',
+    # }))
+
+    pieces_num = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+        'class': 'form-control',
+        'type' : 'number',
+        'placeholder': "ادخل الكمية المراد استرجاعها بشرط ألا تزيد عن عدد القطع المُباعة" ,
+        'style': 'border-color:wightblack; border-radius: 15px;',
+        }))
 
 
 

@@ -120,8 +120,8 @@
 
                       {% else %}
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"> 
-                          {% if penality_count or reward_count or mybills_count or user_ordered_task_count%}
-                              {% with result=penality_count|add:reward_count|add:mybills_count|add:user_ordered_task_count %}
+                          {% if penality_count or reward_count or mybills_count or user_ordered_task_count or my_refunds_count%}
+                              {% with result=penality_count|add:reward_count|add:mybills_count|add:user_ordered_task_count|add:my_refunds_count %}
                               <span class="badge badge-danger" style="font-size: small; margin-left: -12px; color: white; padding: 5px 10px;">{{result}}</span>
                               {% endwith %}
                           {% endif %}
@@ -143,6 +143,17 @@
                               فواتيرى
                               <i class="fa fa-money-bill"></i>
                             </a>
+
+                            
+
+                            <a class="dropdown-item" href="{% url 'user_refunds' %}">
+
+                              {% if my_refunds_count > 0 %}
+                              <span class="badge badge-danger">{{my_refunds_count}}</span>
+                              {% endif %}
+                              المُسترجعات
+                              <i class="fa fa-undo"></i>
+                            </a>
                         {% endif %}
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
@@ -150,7 +161,7 @@
                             
                             
                             
-                            <a class="dropdown-item" href="{% url 'chart_view' %}">
+                            <!-- <a class="dropdown-item" href="{% url 'chart_view' %}"> -->
                             <a class="dropdown-item" href="{% url 'all_bills' %}">
 
                               {% if bills_count_for_admin > 0 %}
@@ -158,6 +169,16 @@
                               {% endif %}
                               كل الفواتير
                               <i class="fa fa-money-bill"></i>
+                            </a>
+
+
+                            <a class="dropdown-item" href="#">
+
+                              {% if bills_count_for_admin > 0 %}
+                              <span class="badge badge-danger">0</span>
+                              {% endif %}
+                              كل المُسترجعات
+                              <i class="fa fa-undo"></i>
                             </a>
 
                             <a class="dropdown-item" href="{% url 'show_all_penalities' %}">الخصومات

@@ -56,6 +56,18 @@ def create_slug_code():
 
 
 
+def create_slug_code_for_refund():
+    # Define the characters to choose from
+    characters = string.ascii_uppercase + string.digits
+
+    # Generate a random string of 20 characters
+    random_string = ''.join(random.choice(characters) for _ in range(15))
+
+    # Insert a hyphen (-) between every 4 characters
+    formatted_string = '-'.join([random_string[i:i+5] for i in range(0, len(random_string), 5)])
+
+    return formatted_string
+
 today = datetime.date.today()
 month = today.month
 
@@ -66,8 +78,6 @@ from django.contrib.auth.models import Permission
 
 @login_required(login_url='user-login')
 def welcome(request):
-
-
     current_user = request.user.username
 
     context = {
@@ -618,7 +628,7 @@ def make_bill(request):
             elif len(check_customer_name) <= 2:
                 messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
                 return JsonResponse({'status': 'error'})
-
+        
             else:
                 try:
                     order = models.Order.objects.get(user=request.user, ordered=False)
@@ -630,6 +640,7 @@ def make_bill(request):
                             account = models.Account.objects.get(phone = phone.phone)
 
                             for order_item in  order.items.all():
+                                slug_code = create_slug_code_for_refund()
                                 new_bill2 = models.Bill2.objects.create(
                                     seller = request.user,
                                     seller_phone_number = str(phone.phone),
@@ -646,7 +657,8 @@ def make_bill(request):
                                     density = order_item.item.density,
                                     price = order_item.item.price,
                                     pieces_num = order_item.quantity,
-                                    account = account
+                                    account = account,
+                                    slug_code = slug_code,
                                 )
 
                                 new_bill2.save()
@@ -736,6 +748,8 @@ def make_bill(request):
         'form' : form,
     }
     return render(request, 'core/bill.html', context)
+
+
 
 
 from django.db.models import Sum
@@ -1085,6 +1099,166 @@ def chart_data(request):
 
 
 
+# # The following function is divide into permissions in the template...
+# @login_required(login_url='user-login')
+# def chart_view(request):
+#     user_profile = accounts_models.Profile.objects.get(staff=request.user)
+#     seller_bill_filter_form = forms.SellerBillFiter()
+#     bills_and_phones_detials = []
+    
+#     if user_profile.job_type == "Seller":
+#         is_seller = True
+
+#         my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+#         paginator = Paginator(my_bills, 10)
+#         page_number = request.GET.get('page')
+#         page_obj = paginator.get_page(page_number)
+
+#         final_salary = 2000
+#         my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+#         if len(my_phones):
+#             for phone in my_phones:
+#                 try:
+#                     account = models.Account.objects.get(phone=phone.phone)
+#                     my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+#                     my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                
+#                     bills_salary = 0
+#                     if my_bills_count <= 10:
+#                         bills_salary = 0
+#                         final_salary = final_salary
+#                     elif my_bills_count > 10 and my_bills_count <20:
+#                         bills_salary = my_bills_count * 100
+#                         final_salary += my_bills_count * 100
+#                     elif my_bills_count >= 20 and my_bills_count < 30:
+#                         bills_salary = my_bills_count * 150
+#                         final_salary += my_bills_count * 150
+#                     elif my_bills_count >= 30:
+#                         bills_salary = my_bills_count * 200
+#                         final_salary += my_bills_count * 200
+#                     # final_salary += salary
+#                     bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+#                 except ObjectDoesNotExist:
+#                     messages.warning(request, "عفواً, ليس لديك مُسوق بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+#                     return redirect("home")
+                
+#             # Calculating the number of bills
+#             total_bills = 0
+#             for bill in my_bills:
+#                 total_bills += bill.pieces_num
+
+#         else:
+#             messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+#             return redirect("home")
+
+#         # Calculate the penalities
+#         penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+#         days = 0
+#         for penality in penalities:
+#             days += penality.days_num
+
+#         total_penality = (final_salary / 30) * days
+#         total_penality = round(total_penality, 0)
+
+
+#         # Calculate the rewards
+#         rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+#         total_reward = 0
+#         for reward in rewards:
+#             total_reward += reward.price
+
+#         final_salary = final_salary - total_penality + total_reward
+
+#     else:
+#         is_seller = False
+#         page_obj = 0
+
+#         final_salary = 2000
+#         # salary = 0
+#         my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+
+#         if len(my_phones):
+#             for phone in my_phones:
+#                 try:
+#                     account = models.Account.objects.get(phone=phone.phone)
+
+#                     # my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+#                     my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                
+#                     # salary = 0
+#                     bills_salary = 0
+#                     if my_bills_count <= 10:
+#                         bills_salary = 0
+#                         final_salary = final_salary
+#                     elif my_bills_count > 10 and my_bills_count <20:
+#                         bills_salary = my_bills_count * 100
+#                         final_salary += my_bills_count * 100
+#                     elif my_bills_count >= 20 and my_bills_count < 30:
+#                         bills_salary = my_bills_count * 150
+#                         final_salary += my_bills_count * 150
+#                     elif my_bills_count >= 30:
+#                         bills_salary = my_bills_count * 200
+#                         final_salary += my_bills_count * 200
+
+
+#                     bills_and_phones_detials.append({'phone': phone.phone,  'seller':account.seller ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+#                 except ObjectDoesNotExist:
+#                     messages.warning(request, "عفواً, ليس لديك حساب تسويقى مُفعل بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+#                     return redirect("home")
+
+#             # Calculating the number of bills
+#             # total_bills = 0
+#             # for bill in my_bills:
+#             #     total_bills += bill.pieces_num
+#                 total_bills = 0
+#         else:
+#             messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+#             return redirect("home")
+
+#         # Calculate the penalities
+#         penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+#         days = 0
+#         for penality in penalities:
+#             days += penality.days_num
+#         total_penality = (final_salary / 30) * days
+
+#         total_penality = round(total_penality, 0)
+        
+
+
+#         # Calculate the rewards
+#         rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+#         total_reward = 0
+#         for reward in rewards:
+#             total_reward += reward.price
+
+
+#         final_salary = final_salary - total_penality + total_reward
+
+
+
+#     context = {
+#         'page_obj' : page_obj,
+#         'total_bills' : total_bills,
+
+#         'total_penality' : total_penality,
+#         'total_reward' : total_reward,
+#         'final_salary' : final_salary,
+
+#         'bills_and_phones_detials' : bills_and_phones_detials,
+#         'is_seller' : is_seller,
+#         'seller_bill_filter_form' : seller_bill_filter_form,
+#     }
+#     return render(request, 'core/chart.html', context)
+
+
+
+
+
+
+
+
+
 # The following function is divide into permissions in the template...
 @login_required(login_url='user-login')
 def chart_view(request):
@@ -1093,68 +1267,146 @@ def chart_view(request):
     
     if user_profile.job_type == "Seller":
         is_seller = True
-
         my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
-        paginator = Paginator(my_bills, 10)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
 
-        final_salary = 2000
-        my_phones = models.PhoneNumberr.objects.filter(user=request.user)
-        if len(my_phones):
-            for phone in my_phones:
-                try:
-                    account = models.Account.objects.get(phone=phone.phone)
-                    my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
-                    my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+        
+        if request.method == "POST":
+            seller_bill_filter_form = forms.SellerBillFiter(request.POST)
+            if seller_bill_filter_form.is_valid():
+                search_kewords = seller_bill_filter_form.cleaned_data.get('bill_search')
+
+                multiple_query = Q(Q(slug_code__icontains=search_kewords) |
+                                    Q(customer_name__icontains=search_kewords) |
+                                    Q(customer_phone__icontains=search_kewords))
                 
-                    bills_salary = 0
-                    if my_bills_count <= 10:
+                my_bills = models.Bill2.objects.filter(multiple_query, seller=request.user).order_by('-date')
+
+                paginator = Paginator(my_bills, 10)
+                page_number = request.GET.get('page')
+                page_obj = paginator.get_page(page_number)
+
+                # To clear the data of the form fields
+                seller_bill_filter_form = forms.SellerBillFiter()
+
+
+                final_salary = 2000
+                my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+                for phone in my_phones:
+                    try:
+                        account = models.Account.objects.get(phone=phone.phone)
+                        my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+                        my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                    
                         bills_salary = 0
-                        final_salary = final_salary
-                    elif my_bills_count > 10 and my_bills_count <20:
-                        bills_salary = my_bills_count * 100
-                        final_salary += my_bills_count * 100
-                    elif my_bills_count >= 20 and my_bills_count < 30:
-                        bills_salary = my_bills_count * 150
-                        final_salary += my_bills_count * 150
-                    elif my_bills_count >= 30:
-                        bills_salary = my_bills_count * 200
-                        final_salary += my_bills_count * 200
-                    # final_salary += salary
-                    bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
-                except ObjectDoesNotExist:
-                    messages.warning(request, "عفواً, ليس لديك مُسوق بعد, من فضلك تواصل مع أحد أعضاء الادارة")
-                    return redirect("home")
-                
-            # Calculating the number of bills
-            total_bills = 0
-            for bill in my_bills:
-                total_bills += bill.pieces_num
+                        if my_bills_count <= 10:
+                            bills_salary = 0
+                            final_salary = final_salary
+                        elif my_bills_count > 10 and my_bills_count <20:
+                            bills_salary = my_bills_count * 100
+                            final_salary += my_bills_count * 100
+                        elif my_bills_count >= 20 and my_bills_count < 30:
+                            bills_salary = my_bills_count * 150
+                            final_salary += my_bills_count * 150
+                        elif my_bills_count >= 30:
+                            bills_salary = my_bills_count * 200
+                            final_salary += my_bills_count * 200
+                        # final_salary += salary
+                        bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+                    except ObjectDoesNotExist:
+                        messages.warning(request, "عفواً, ليس لديك مُسوق بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+                        return redirect("home")
+                    
+                # Calculating the number of bills
+                total_bills = 0
+                for bill in my_bills:
+                    total_bills += bill.pieces_num
+
+
+
+                # Calculate the penalities
+                penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+                days = 0
+                for penality in penalities:
+                    days += penality.days_num
+
+                total_penality = (final_salary / 30) * days
+                total_penality = round(total_penality, 0)
+
+
+                # Calculate the rewards
+                rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+                total_reward = 0
+                for reward in rewards:
+                    total_reward += reward.price
+
+                final_salary = final_salary - total_penality + total_reward
 
         else:
-            messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
-            return redirect("home")
+            seller_bill_filter_form = forms.SellerBillFiter()
 
-        # Calculate the penalities
-        penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
-        days = 0
-        for penality in penalities:
-            days += penality.days_num
-        total_penality = (final_salary / 30) * days
+            paginator = Paginator(my_bills, 10)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+
+            final_salary = 2000
+            my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+            if len(my_phones):
+                for phone in my_phones:
+                    try:
+                        account = models.Account.objects.get(phone=phone.phone)
+                        my_bills = models.Bill2.objects.filter(seller=request.user, date__year=today.year, date__month=today.month).order_by('-date')
+                        my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                    
+                        bills_salary = 0
+                        if my_bills_count <= 10:
+                            bills_salary = 0
+                            final_salary = final_salary
+                        elif my_bills_count > 10 and my_bills_count <20:
+                            bills_salary = my_bills_count * 100
+                            final_salary += my_bills_count * 100
+                        elif my_bills_count >= 20 and my_bills_count < 30:
+                            bills_salary = my_bills_count * 150
+                            final_salary += my_bills_count * 150
+                        elif my_bills_count >= 30:
+                            bills_salary = my_bills_count * 200
+                            final_salary += my_bills_count * 200
+                        # final_salary += salary
+                        bills_and_phones_detials.append({'phone': phone.phone,  'marketer':account.marketer ,'total_bills_per_phone' : my_bills_count, 'bills_salary': bills_salary})
+                    except ObjectDoesNotExist:
+                        messages.warning(request, "عفواً, ليس لديك مُسوق بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+                        return redirect("home")
+                    
+                # Calculating the number of bills
+                total_bills = 0
+                for bill in my_bills:
+                    total_bills += bill.pieces_num
+
+            else:
+                messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+                return redirect("home")
+
+            # Calculate the penalities
+            penalities = models.Penality.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+            days = 0
+            for penality in penalities:
+                days += penality.days_num
+
+            total_penality = (final_salary / 30) * days
+            total_penality = round(total_penality, 0)
 
 
-        # Calculate the rewards
-        rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
-        total_reward = 0
-        for reward in rewards:
-            total_reward += reward.price
+            # Calculate the rewards
+            rewards = models.Reward.objects.filter(name=request.user, date__year=today.year, date__month=today.month)
+            total_reward = 0
+            for reward in rewards:
+                total_reward += reward.price
 
-        final_salary = final_salary - total_penality + total_reward
+            final_salary = final_salary - total_penality + total_reward
 
     else:
         is_seller = False
         page_obj = 0
+        seller_bill_filter_form = 0
 
         final_salary = 2000
         # salary = 0
@@ -1189,10 +1441,6 @@ def chart_view(request):
                     messages.warning(request, "عفواً, ليس لديك حساب تسويقى مُفعل بعد, من فضلك تواصل مع أحد أعضاء الادارة")
                     return redirect("home")
 
-            # Calculating the number of bills
-            # total_bills = 0
-            # for bill in my_bills:
-            #     total_bills += bill.pieces_num
                 total_bills = 0
         else:
             messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
@@ -1203,9 +1451,8 @@ def chart_view(request):
         days = 0
         for penality in penalities:
             days += penality.days_num
-        total_penality = (final_salary // 30) * days
-        # total_penality = (final_salary / 30) * days
         total_penality = (final_salary / 30) * days
+
         total_penality = round(total_penality, 0)
         
 
@@ -1231,8 +1478,11 @@ def chart_view(request):
 
         'bills_and_phones_detials' : bills_and_phones_detials,
         'is_seller' : is_seller,
+        'seller_bill_filter_form' : seller_bill_filter_form,
     }
     return render(request, 'core/chart.html', context)
+
+
 
 
 
@@ -1561,6 +1811,9 @@ def online_order(request):
                         account = models.Account.objects.get(phone = phone.phone)
 
                         ## Create new instance for the bill and save it to the database in the bill model...
+                        slug_code = create_slug_code_for_refund()
+
+
                         new_bill = models.Bill2.objects.create(
                             seller = request.user,
                             seller_phone_number = str(phone.phone),
@@ -1577,7 +1830,8 @@ def online_order(request):
                             density = density,
                             price = price,
                             pieces_num = pieces_num,
-                            account = account
+                            account = account,
+                            slug_code = slug_code,
                         )
 
                         new_bill.save()
@@ -1614,10 +1868,12 @@ def online_order(request):
                             "address" : address,
                             "customer_name" : customer_name,
                             "customer_phone" : customer_phone,
+
+                            'slug_code' : slug_code,
                         }
 
                         html_body = render_to_string("core/bill_mail.html", merge_data)
-                        subject = "Bill From LuxeBeauty Site"
+                        subject = "Bill From LuxeBeauty-IMS Site"
                         
                         # email = request.user.email
 
@@ -1662,13 +1918,177 @@ def online_order(request):
 
 
 
+    
+@login_required(login_url='user-login')
+@seller_required
+def item_refund(request, slug):
+    item = models.Bill2.objects.get(slug_code=slug)
+    if request.method == "POST":
+        form = forms.ItemRefundForm(request.POST)
+        if form.is_valid():
+            item_refund_pieces_num = form.cleaned_data.get('pieces_num')
+
+            if item.pieces_num == item_refund_pieces_num:
+                new_refund = models.Refund.objects.create(
+                    seller = item.seller,
+                    seller_phone_number = item.seller_phone_number,
+                    country = item.country,
+                    address = item.address,
+                    customer_phone = item.customer_phone,
+                    customer_name = item.customer_name,
+                    account_name = item.account.account_name,
+
+                    wig_type = item.wig_type,
+                    wig_long = item.wig_long,
+                    scalp_type = item.scalp_type,
+                    wig_color = item.wig_color,
+                    density = item.density,
+                    price = item.price,
+                    pieces_num = item_refund_pieces_num,
+                    total_price = (item_refund_pieces_num * item.price),
+                    account = item.account,
+                )
+
+                new_refund.save()
+                item.delete()
+
+                messages.success(request, "تم استرجاع هذا المنتج بنجاح")
+                return redirect("chart_view")
+            elif item_refund_pieces_num < item.pieces_num:
+                new_refund = models.Refund.objects.create(
+                    seller = item.seller,
+                    seller_phone_number = item.seller_phone_number,
+                    country = item.country,
+                    address = item.address,
+                    customer_phone = item.customer_phone,
+                    customer_name = item.customer_name,
+                    account_name = item.account.account_name,
+
+                    wig_type = item.wig_type,
+                    wig_long = item.wig_long,
+                    scalp_type = item.scalp_type,
+                    wig_color = item.wig_color,
+                    density = item.density,
+                    price = item.price,
+                    pieces_num = item_refund_pieces_num,
+                    total_price = (item_refund_pieces_num * item.price),
+                    account = item.account,
+                )
+
+                new_refund.save()
+
+                item.pieces_num = item.pieces_num - item_refund_pieces_num
+                item.save()
+
+                messages.success(request, "تم استرجاع الكمية المطلوبة لهذا المنتج بنجاح")
+                return redirect("chart_view")
+            
+            else:
+                messages.warning(request, "عفواً, عدد القطع المراد استرجاعها تزيد عن عدد القطع المُباعة لهذا المنتج")
+                return redirect("item_refund", slug)
+
+    else:
+        form = forms.ItemRefundForm()
+
+
+    context = {
+        'form' : form,
+        'item' : item,
+    }
+    return render(request, 'core/item_refund.html', context)
+
+
+@login_required(login_url='user-login')
+def user_refunds(request):
+    user_profile = accounts_models.Profile.objects.get(staff=request.user)
+    refunds_details = []
+
+    
+    if user_profile.job_type == "Seller":
+        is_seller = True
+
+        my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+        if len(my_phones):
+            for phone in my_phones:
+                try:
+                    account = models.Account.objects.get(phone=phone.phone)
+                    data = models.Refund.objects.filter(seller=request.user, date__month=today.month, date__year=today.year).order_by('-date')
+
+
+                    my_refunds = models.Refund.objects.filter(seller_phone_number=phone.phone, date__month=today.month, date__year=today.year).order_by('-date')
+                    all_refunds_this_month = 0
+                    for each_refund in my_refunds:
+                        all_refunds_this_month += each_refund.pieces_num
+
+
+
+                    refunds_details.append({'phone': phone.phone,  'marketer':account.marketer , 'all_refunds_this_month': all_refunds_this_month})
+
+                    all_refunds = 0
+                    for cnt in range(len(refunds_details)):
+                        all_refunds += refunds_details[cnt]['all_refunds_this_month']
+
+                
+                except ObjectDoesNotExist:
+                    messages.warning(request, "عفواً, ليس لديك مُسوق بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+                    return redirect("home")
+        else:
+            messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+            return redirect("home")
+    
+        
+    else:
+        is_seller = False
+        data = 0
+        my_phones = models.PhoneNumberr.objects.filter(user=request.user)
+
+        if len(my_phones):
+            for phone in my_phones:
+                try:
+                    account = models.Account.objects.get(phone=phone.phone)
+                    my_refunds = models.Refund.objects.filter(seller_phone_number=phone.phone, date__month=today.month, date__year=today.year).order_by('-date')
+                    all_refunds_this_month = 0
+                    for each_refund in my_refunds:
+                        all_refunds_this_month += each_refund.pieces_num
+
+                    refunds_details.append({'phone': phone.phone,  'seller':account.seller , 'all_refunds_this_month': all_refunds_this_month})
+
+                    print("*" * 100)
+                    print(refunds_details)
+                    all_refunds = 0
+                    for cnt in range(len(refunds_details)):
+                        all_refunds += refunds_details[cnt]['all_refunds_this_month']
+
+
+
+
+                except ObjectDoesNotExist:
+                    messages.warning(request, "عفواً, ليس لديك حساب تسويقى مُفعل بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+                    return redirect("home")
+
+        else:
+            messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
+            return redirect("home")
+
+
+    context = {
+        'data' : data,
+        # 'all_refunds_this_month' : all_refunds_this_month,
+        'is_seller' : is_seller,
+        'refunds_details' : refunds_details,
+        'all_refunds' : all_refunds,
+    }
+    return render(request, 'core/show_user_refunds.html', context)
+
+
+
+
+@login_required(login_url='user-login')
 def manage_phone_and_account(request):
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
         return render(request, 'core/phone_and_account_manage.html')
     else:
         return redirect("not_have_permissions")
-
-
 
 
 # This function used to show all phones and also to add more phones to the database...

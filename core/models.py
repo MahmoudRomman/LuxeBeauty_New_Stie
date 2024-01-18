@@ -208,6 +208,8 @@ class Bill2(models.Model):
     pieces_num = models.PositiveIntegerField(default=0)
     account = models.ForeignKey("Account", on_delete=models.CASCADE)
 
+    slug_code = models.SlugField()
+
     class Meta:
         # verbose_name = 'Bills'
         verbose_name_plural = 'All Bills'
@@ -219,6 +221,49 @@ class Bill2(models.Model):
     def total_price(self):
         total = self.price * self.pieces_num
         return total
+    
+
+
+
+
+
+
+
+
+
+
+class Refund(models.Model):
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    seller_phone_number = models.CharField(max_length=31, null=True, blank=True)
+    country = CountryField(multiple=False, blank_label="(select country)")
+    address = models.CharField(max_length=200)
+    customer_name = models.CharField(max_length=200)
+    customer_phone = models.CharField(max_length=31)
+    date = models.DateTimeField(auto_now_add=True)
+    account_name = models.CharField(max_length=150, null=True, blank=True)
+
+    #Item details
+    wig_type = models.CharField(max_length=150, choices=wig_type, null=False)
+    wig_long = models.CharField(max_length=150, choices=wig_long, null=False)
+    scalp_type = models.CharField(max_length=150, choices=scalp_type, null=False)
+    wig_color = models.CharField(max_length=150, choices=wig_color, null=False)
+    density = models.CharField(max_length=150, choices=density, null=False)
+    price = models.IntegerField()
+    pieces_num = models.PositiveIntegerField(default=0)
+
+    total_price = models.IntegerField()
+    account = models.ForeignKey("Account", on_delete=models.CASCADE)
+
+    # slug_code = models.SlugField()
+
+    class Meta:
+        # verbose_name = 'Bills'
+        verbose_name_plural = 'All Refunds'
+
+    def __str__(self):
+        return f"{self.seller}"
+    
+    
 
     
 
