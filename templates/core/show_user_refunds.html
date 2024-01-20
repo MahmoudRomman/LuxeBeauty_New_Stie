@@ -12,14 +12,14 @@
 
 
 <section class="shop_section layout_padding">
-    <div class="container" style="max-width: 85%;">
+    <div class="container">
       <div class="row">
 
 
         <h2 style="margin: auto; margin-bottom: 20px;">
             تفصيل بيانات المسترجعات الخاصة بك خلال هذا الشهر
         </h2>
-        <table class="table table-striped" dir='rtl'>
+        <table class="table table-bordered" dir='rtl'>
             <thead style="text-align: center;">
               <tr style="text-align: center; font-size: large;">
                 <th scope="col">الترتيب</th>
@@ -92,7 +92,7 @@
 
 
 
-<div class="container" style="max-width: 85%;">
+<div class="container">
   <div class="row">
 
 
@@ -100,7 +100,7 @@
         اجمالى عدد المسترجعات الخاصة بكل رقم
     </h2>
 
-    <table class="table table-striped" dir='rtl'>
+    <table class="table table-bordered" dir='rtl'>
         <thead style="text-align: center;">
           <tr style="text-align: center; font-size: large;">
             <th scope="col">الترتيب</th>
@@ -139,14 +139,14 @@
 
 {% else %}
 
-<div class="container" style="max-width: 85%;">
+<div class="container">
     <div class="row">
   
   
       <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
           اجمالى عدد الفواتير الخاصة بكل رقم
       </h2>
-        <table class="table table-striped" dir='rtl'>
+        <table class="table table-bordered" dir='rtl'>
           <thead style="text-align: center;">
             <tr style="text-align: center; font-size: large;">
               <th scope="col">الترتيب</th>
@@ -189,6 +189,37 @@
     
 
 
+
+<style>
+
+  
+.container {
+            max-width: 95%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+        }
+
+        table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+</style>
 
 
 

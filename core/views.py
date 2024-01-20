@@ -52,21 +52,20 @@ def not_have_permissions(request):
 
 # Very important function to create a random code of lenth 25 to be used in the slug field of different models
 def create_slug_code():
-    return "".join(random.choices(string.ascii_lowercase + string.digits, k=25))
+    # return "".join(random.choices(string.ascii_lowercase + string.digits, k=25))
 
-
-
-def create_slug_code_for_refund():
     # Define the characters to choose from
     characters = string.ascii_uppercase + string.digits
 
     # Generate a random string of 20 characters
-    random_string = ''.join(random.choice(characters) for _ in range(15))
+    random_string = ''.join(random.choice(characters) for _ in range(20))
 
     # Insert a hyphen (-) between every 4 characters
     formatted_string = '-'.join([random_string[i:i+5] for i in range(0, len(random_string), 5)])
 
     return formatted_string
+
+
 
 today = datetime.date.today()
 month = today.month
@@ -640,7 +639,7 @@ def make_bill(request):
                             account = models.Account.objects.get(phone = phone.phone)
 
                             for order_item in  order.items.all():
-                                slug_code = create_slug_code_for_refund()
+                                slug_code = create_slug_code()
                                 new_bill2 = models.Bill2.objects.create(
                                     seller = request.user,
                                     seller_phone_number = str(phone.phone),
@@ -1811,7 +1810,7 @@ def online_order(request):
                         account = models.Account.objects.get(phone = phone.phone)
 
                         ## Create new instance for the bill and save it to the database in the bill model...
-                        slug_code = create_slug_code_for_refund()
+                        slug_code = create_slug_code()
 
 
                         new_bill = models.Bill2.objects.create(
@@ -2079,6 +2078,58 @@ def user_refunds(request):
         'all_refunds' : all_refunds,
     }
     return render(request, 'core/show_user_refunds.html', context)
+
+
+
+
+def show_all_refunds_to_admin(request):
+    if request.user.is_staff:
+        today = datetime.date.today()
+
+        # To activate the pagination...
+        data = models.Refund.objects.filter(date__month=today.month, date__year=today.year).order_by('-date')
+        paginator = Paginator(data, 7)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+
+        # Script to calculate the number of bills per account in this month...
+        social_accounts = models.Account.objects.all()
+        refunds_per_account = []
+
+        if len(social_accounts):
+            for account in social_accounts:
+                total_pieces = models.Refund.objects.filter(account=account, date__month=today.month, date__year=today.year).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                refunds_per_account.append({'seller': account.seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phone.phone, 'refunds_count': total_pieces})
+        else:
+            refunds_per_account = []
+
+
+
+
+
+        # To calculate the total number of refunds...
+        refunds_num_this_month = 0
+
+        if len(data):
+            for bill in data:
+                refunds_num_this_month += bill.pieces_num
+        else:
+            refunds_num_this_month = 0
+
+
+        context = {
+            'page_obj' : page_obj,
+            'data' : data,
+            'refunds_num_this_month' : refunds_num_this_month,
+            'refunds_per_account' : refunds_per_account,
+
+            }
+
+        return render(request, 'core/show_refunds_to_admin.html', context)
+    else:
+        return redirect('not_have_permissions')
+
 
 
 

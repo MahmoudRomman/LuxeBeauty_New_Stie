@@ -179,6 +179,29 @@ def bills_notification_for_admin(request):
 
 
 
+def refunds_notification_for_admin(request):
+    today = timezone.now().date()
+    if request.user.is_authenticated:
+        refunds_count = 0
+        all_refunds_this_month = models.Refund.objects.filter(date__year = today.year, date__month = today.month).order_by("-date")
+
+        if len(all_refunds_this_month):
+            for each_refund in all_refunds_this_month:
+                refunds_count += each_refund.pieces_num
+        else:
+            refunds_count = 0
+    else:
+        refunds_count = 0
+    
+    context = {
+        "refunds_count_for_admin" : refunds_count,
+    }
+
+    return context
+
+
+
+
 
 
 

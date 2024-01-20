@@ -20,7 +20,7 @@ from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist
 
 
-from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordChangeView
+from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.urls import reverse_lazy
 
 
@@ -73,9 +73,10 @@ def register(request):
 
             if User.objects.filter(email=email).exists():
                 messages.warning(request, ".الايميل الذى قمت بتسجيله موجود بالفعل, من فضلك أعد التسجيل بعنوان ايميل أخر")
-                # return redirect('user-register')
+                return redirect("user-register")
             elif job_type == "Choose Job Type":
                 messages.warning(request, ".من فضلك أختر نوع العمل")
+                return redirect("user-register")
             else:
 
                 form.save()
@@ -188,30 +189,12 @@ def profile_update(request):
 
         current_user_profile = models.Profile.objects.get(staff=request.user)
 
-        # if profile_form.is_valid():
-        #     image = profile_form.cleaned_data.get('image')
-        #     profile = models.Profile.objects.get(staff=request.user)
-        #     profile.image = image
-        #     profile.save()
-        #     messages.success(request, "تم حفظ الصورة الشخصية")
-
-
-        # if user_form.is_valid() and profile_form.is_valid():
-        #     job_type = profile_form.cleaned_data.get("job_type")
-        #     if job_type == "Choose Job Type":
-        #         messages.warning(request, ".من فضلك أختر نوع العمل")
-        #     else:
-        #         user_form.save()
-        #         profile_form.save()
-        #         messages.success(request, "تم حفظ التعديلات")
-        #         return redirect('user-profile')
-
-
-
         if user_form.is_valid() and profile_form.is_valid():
             job_type = profile_form.cleaned_data.get("job_type")
+            new_email = user_form.cleaned_data.get("email")
             if job_type == "Choose Job Type":
                 messages.warning(request, ".من فضلك أختر نوع العمل")
+                return redirect("user-profile-update")
             else:
                 if job_type != current_user_profile.job_type:
                     my_phones = core_models.PhoneNumberr.objects.filter(user=request.user)
@@ -231,11 +214,30 @@ def profile_update(request):
 
 
                     else:
+
+                        all_users = User.objects.all().exclude(id=request.user.id)
+
+                        for each_user in all_users:
+                            user_email_lower = str(each_user.email).lower()
+                            new_email_lower = str(new_email).lower()
+                            if user_email_lower == new_email_lower:
+                                messages.warning(request, ".الايميل الذى قمت بتسجيله موجود بالفعل, من فضلك أعد التسجيل بعنوان ايميل أخر")
+                                return redirect('user-profile-update')
+                            
                         user_form.save()
                         profile_form.save()
                         messages.success(request, "تم حفظ التعديلات")
                         return redirect('user-profile')
                 else: 
+                    all_users = User.objects.all().exclude(id=request.user.id)
+
+                    for each_user in all_users:
+                        user_email_lower = str(each_user.email).lower()
+                        new_email_lower = str(new_email).lower()
+                        if user_email_lower == new_email_lower:
+                            messages.warning(request, ".الايميل الذى قمت بتسجيله موجود بالفعل, من فضلك أعد التسجيل بعنوان ايميل أخر")
+                            return redirect('user-profile-update')
+
                     user_form.save()
                     profile_form.save()
                     messages.success(request, "تم حفظ التعديلات")
@@ -311,13 +313,7 @@ from django.shortcuts import redirect
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     form_class = forms.CustomPasswordChangeForm
     success_url = reverse_lazy('user-logout')
-    # success_url = '/password_change_complete/'
 
-
-    # def post_change_redirect(self, request, user):
-    #     # Log the user out to invalidate the session
-    #     logout(user)
-    #     return redirect(self.success_url)
 
 
 

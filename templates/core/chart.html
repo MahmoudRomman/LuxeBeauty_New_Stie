@@ -50,7 +50,7 @@
 
 
 <div class="container-xxl py-5">
-  <div class="container" style="max-width: 85%;">
+  <div class="container" style="max-width: 85%; margin-top: -4%;">
       <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
           
           <div class="tab-content">
@@ -80,105 +80,94 @@
 </div>
 
 
-<br> 
 
 
+<div class="container">
+  <div class="row">
 
-    
-<section class="shop_section layout_padding" style="margin-top: -8%;">
-    <div class="container" style="max-width: 85%;">
-      <div class="row">
+    <h2 style="margin: auto; margin-bottom: 20px;">
+      تفصيل بيانات الفواتير الخاصة بك خلال هذا الشهر
+    </h2>
 
+  <table class="table table-bordered" dir='rtl'>
+      <thead>
+        <tr style="font-size: large;">
+          <th scope="col">الترتيب</th>
+          <!-- <th scope="col">اسم البائع</th> -->
+          <th scope="col">هاتف البائع</th>
+          <th scope="col">الدولة</th>
+          <th scope="col">العنوان</th>
+          <th scope="col">اسم العميل</th>
+          <th scope="col">هاتف العميل</th>
+          <th scope="col">اسم الحساب</th>
+          <th scope="col">  التاريخ</th>
 
-        <h2 style="margin: auto; margin-bottom: 20px;">
-          تفصيل بيانات الفواتير الخاصة بك خلال هذا الشهر
-      </h2>
-      <table class="table table-striped" dir='rtl'>
-          <thead style="text-align: center;">
-            <tr style="text-align: center; font-size: large;">
-              <th scope="col">الترتيب</th>
-              <!-- <th scope="col">اسم البائع</th> -->
-              <th scope="col">هاتف البائع</th>
-              <th scope="col">الدولة</th>
-              <th scope="col">العنوان</th>
-              <th scope="col">اسم العميل</th>
-              <th scope="col">هاتف العميل</th>
-              <th scope="col">اسم الحساب</th>
-              <th scope="col">  التاريخ</th>
-  
-              <th scope="col">نوع الباروكه</th>
-              <th scope="col">الطول</th>
-              <th scope="col">نوع الفروة</th>
-              <th scope="col">اللون</th>
-              <th scope="col">الكثافة</th>
-  
-  
-              <th scope="col">عدد القطع</th>
-              <th scope="col">سعر القطعة</th>
-              <th scope="col">السعر الكلى</th>
-
-              <th scope="col">كود الاسترجاع</th>
-              <th scope="col">استرجاع؟</th>
+          <th scope="col">نوع الباروكه</th>
+          <th scope="col">الطول</th>
+          <th scope="col">نوع الفروة</th>
+          <th scope="col">اللون</th>
+          <th scope="col">الكثافة</th>
 
 
-  
-            </tr>
-          </thead>
-          <tbody style="text-align: center;">
-            
-            {% for bill in page_obj %}
-            <tr style="font-size: small;">
-              <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
-              <!-- <td>{{bill.seller}}</td> -->
-              <td>{{bill.seller_phone_number}}</td>
-              <td>{{bill.country}}</td>
-              <td>{{bill.address}}</td>
-              <td>{{bill.customer_name}}</td>
-              <td>{{bill.customer_phone}}</td>
-              <td>{{bill.account_name}}</td>
-              <td>{{bill.date|date}}</td>
-  
-  
-              <td>{{bill.wig_type}}</td>
-              <td>{{bill.wig_long}}</td>
-              <td>{{bill.scalp_type}}</td>
-              <td>{{bill.wig_color}}</td>
-              <td>{{bill.density}}</td>
-              <td>{{bill.pieces_num}}</td>
-              <td>{{bill.price}}</td>
-              <td>{{bill.total_price}}</td>
+          <th scope="col">عدد القطع</th>
+          <th scope="col">سعر القطعة</th>
+          <th scope="col">السعر الكلى</th>
+          <th scope="col">استرجاع؟</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        {% for bill in page_obj %}
+        <tr style="font-size: small;">
+          <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
+          <!-- <td>{{bill.seller}}</td> -->
+          <td>{{bill.seller_phone_number}}</td>
+          <td>{{bill.country}}</td>
+          <td>{{bill.address}}</td>
+          <td>{{bill.customer_name}}</td>
+          <td>{{bill.customer_phone}}</td>
+          <td>{{bill.account_name}}</td>
+          <td>{{bill.date|date}}</td>
 
-              <td>{{bill.slug_code}}</td>
 
-              <td style="font-size: large;">
-                <a href="{% url 'item_refund' bill.slug_code %}">
-                  <i class="fa fa-undo" aria-hidden="true"></i>
-                </a>
-              </td>
+          <td>{{bill.wig_type}}</td>
+          <td>{{bill.wig_long}}</td>
+          <td>{{bill.scalp_type}}</td>
+          <td>{{bill.wig_color}}</td>
+          <td>{{bill.density}}</td>
+          <td>{{bill.pieces_num}}</td>
+          <td>{{bill.price}}</td>
+          <td>{{bill.total_price}}</td>
 
-              
-            </tr>
-  
-            {% empty %}
-            <tr>
-              <td colspan='18' style="font-size:medium">
-                لا يوجد لديك أى بيانات
-              </td>
-            </tr>
-            {% endfor %}
 
-            {% if page_obj %}
-            <tr>
-                <td colspan="17" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
-                <td><b>{{total_bills}}</b></td>
-            </tr>
-            {% endif %} 
-  
-          </tbody>
-      </table>
-    </div>
+          <td style="font-size: xx-large;">
+            <a href="{% url 'item_refund' bill.slug_code %}" class="item_refund">
+              <i class="fa fa-undo" aria-hidden="true"></i>
+            </a>
+          </td>
+
+          
+        </tr>
+
+        {% empty %}
+        <tr>
+          <td colspan='17' style="font-size:medium">
+            لا يوجد لديك أى بيانات
+          </td>
+        </tr>
+        {% endfor %}
+
+        {% if page_obj %}
+        <tr>
+            <td colspan="16" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
+            <td><b>{{total_bills}}</b></td>
+        </tr>
+        {% endif %} 
+
+      </tbody>
+  </table>
   </div>
-</section>
+</div>
 
 
 
@@ -241,7 +230,7 @@
 
 
 
-<div class="container" style="max-width: 85%;">
+<div class="container">
   <div class="row">
 
 
@@ -249,9 +238,9 @@
         اجمالى عدد الفواتير الخاصة بكل رقم
     </h2>
 
-    <table class="table table-striped" dir='rtl'>
-        <thead style="text-align: center;">
-          <tr style="text-align: center; font-size: large;">
+    <table class="table table-bordered" dir='rtl'>
+        <thead>
+          <tr style="font-size: large;">
             <th scope="col">الترتيب</th>
             <th scope="col">الرقم</th>
             <th scope="col">اسم المُسوق</th>
@@ -260,7 +249,7 @@
 
           </tr>
         </thead>
-      <tbody style="text-align: center;">
+      <tbody>
             {% for bill_detail in bills_and_phones_detials %}
                 <tr style="font-size: large;">
                   <th scope="row" class="mt-1">{{forloop.counter}}</th>
@@ -306,26 +295,22 @@
 
 
 
-<style>
-  .pagination a {
-    margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
-  }
-</style>
 
 
 {% else %}
 
 
-<div class="container" style="max-width: 85%;">
+
+<div class="container">
   <div class="row">
 
 
     <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
         اجمالى عدد الفواتير الخاصة بكل رقم
     </h2>
-      <table class="table table-striped" dir='rtl'>
-        <thead style="text-align: center;">
-          <tr style="text-align: center; font-size: large;">
+        <table class="table table-bordered" dir='rtl'>
+        <thead">
+          <tr style="font-size: large;">
             <th scope="col">الترتيب</th>
             <th scope="col">الرقم</th>
             <th scope="col">اسم البائع</th>
@@ -334,7 +319,7 @@
 
           </tr>
          </thead>
-        <tbody style="text-align: center;">
+        <tbody>
               {% for bill_detail in bills_and_phones_detials %}
                   <tr style="font-size: large;">
                     <th scope="row" class="mt-1">{{forloop.counter}}</th>
@@ -378,12 +363,43 @@
   </div>
 </div>
 
+
+    
+{% endif %}
+
 <style>
   .pagination a {
     margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
   }
+
+
+  .container {
+            max-width: 95%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+        }
+
+        table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+
 </style>
-    
-{% endif %}
 {% endblock content %}
     

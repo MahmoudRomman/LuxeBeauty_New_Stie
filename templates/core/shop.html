@@ -13,8 +13,7 @@
 
   
 <div class="container-xxl py-5">
-  <div class="container" style="max-width: 85%;">
-      <!-- <h1 class="text-center mb-4 wow fadeInUp" data-wow-delay="0.1s">اضافة منتج جديد الى المخزن</h1> -->
+  <div class="container">
       <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
           
           <div class="tab-content">
@@ -74,7 +73,7 @@
 
 
 <section class="shop_section layout_padding" style="margin-top: -5%;">
-  <div class="container" style="max-width: 85%;">
+  <div class="container">
     <div class="heading_container heading_center">
       <h2>
         المنتجات المتاحة
@@ -298,6 +297,33 @@
   .pagination a {
       margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
     }
+
+
+    .container {
+            max-width: 95%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+        }
+
+        table {
+            width: 100%;
+            table-layout: fixed;
+
+        }
+
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            th, td {
+                max-width: none; /* Remove max-width on smaller screens */
+            }
+        }
   </style>
 
 {% endblock content %}

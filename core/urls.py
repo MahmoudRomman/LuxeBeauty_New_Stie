@@ -108,6 +108,7 @@ urlpatterns = [
 
     path("item-refund/<slug>/", views.item_refund, name="item_refund"),
     path("user-refunds", views.user_refunds, name="user_refunds"),
+    path("all-refunds/", views.show_all_refunds_to_admin, name="show_all_refunds_to_admin")
 
 
 

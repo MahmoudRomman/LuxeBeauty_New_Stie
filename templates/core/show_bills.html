@@ -17,7 +17,7 @@
 
 
 <div class="container-xxl py-5">
-  <div class="container" style="max-width: 85%;">
+  <div class="container">
       <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
           
           <div class="tab-content">
@@ -52,8 +52,8 @@
 
 
 
-<section class="shop_section layout_padding" style="margin-top: -4%;">
-  <div class="container" style="max-width: 85%;">
+<section class="shop_section layout_padding" style="margin-top: -6%;">
+  <div class="container">
 
 
     <div class="heading_container heading_center">
@@ -62,7 +62,7 @@
     <div class="row">
 
 
-      <table class="table table-striped" dir='rtl'>
+      <table class="table table-bordered" dir='rtl' style="width: 100%; table-layout: fixed;">
         <thead style="text-align: center;">
           <tr style="text-align: center; font-size: large;">
             <th scope="col">الترتيب</th>
@@ -124,7 +124,7 @@
               {% endfor %}
           {% elif page_obj %}
               {% for bill in page_obj %}
-              <tr style="font-size: medium;">
+              <tr style="font-size: small;">
                 <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
                 <td>{{bill.seller}}</td>
                 <td>{{bill.seller_phone_number}}</td>
@@ -163,10 +163,24 @@
 
     </div>
   </div>
-<!-- <h2 style="text-align: center;">{{bills_num_this_month}} : عدد الفواتير خلال هذا الشهر</h2> -->
-
-
 </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 {% if page_obj %}
@@ -237,7 +251,7 @@
 
 
 <section class="shop_section layout_padding mt-3" style="margin-top: -4%;">
-  <div class="container" style="max-width: 85%;">
+  <div class="container">
 
 
     <div class="heading_container heading_center">
@@ -246,13 +260,13 @@
     <div class="row">
 
 
-      <table class="table table-striped" dir='rtl'>
+      <table class="table table-bordered" dir='rtl'>
         <thead style="text-align: center;">
           <tr style="text-align: center; font-size: large;">
             <th scope="col">الترتيب</th>
+            <th scope="col">اسم الحساب</th>
             <th scope="col">اسم البائع</th>
             <th scope="col">اسم المُسوق</th>
-            <th scope="col">اسم الحساب</th>
             <th scope="col">رقم الهاتف</th>
             <th scope="col">عدد الفواتير</th>
           </tr>
@@ -262,11 +276,16 @@
             {% for bill in bills_per_account %}
             <tr style="font-size: medium;">
               <th scope="row" class="mt-1">{{forloop.counter}}</th>
+              <td>{{bill.account_name}}</td>
               <td>{{bill.seller}}</td>
               <td>{{bill.marketer}}</td>
-              <td>{{bill.account_name}}</td>
               <td>{{bill.phonenumber}}</td>
+
+              {% if bill.bills_count %}
               <td>{{bill.bills_count}}</td>
+              {% else %}
+              <td>لا يوجد</td>
+              {% endif %}
             </tr>
             
             {% empty %}
@@ -276,7 +295,13 @@
             {% endfor %}
             <tr>
               <td colspan="5"><b>اجمالى عدد الفواتير خلال هذا الشهر</b></td>
+              {% if bills_num_this_month %}
               <td><b>{{bills_num_this_month}}</b></td>
+                
+              {% else %}
+              <td><b>0</b></td>
+
+              {% endif %}
             </tr>
 
 
@@ -302,7 +327,42 @@
     .pagination a {
       margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
     }
-</style>
+
+    .container {
+            max-width: 95%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+        }
+
+        table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+
+            max-width: 300px; /* Set a max-width to prevent extremely long content from stretching the table */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            th, td {
+                max-width: none; /* Remove max-width on smaller screens */
+            }
+        }
+    </style>
 
 {% endblock content %}
   

@@ -107,8 +107,8 @@
 
                       {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"> 
-                          {% if done_task_count or ordered_task_count or bills_count_for_admin %}
-                              {% with result=done_task_count|add:ordered_task_count|add:bills_count_for_admin %}
+                          {% if done_task_count or ordered_task_count or bills_count_for_admin or refunds_count_for_admin%}
+                              {% with result=done_task_count|add:ordered_task_count|add:bills_count_for_admin|add:refunds_count_for_admin %}
 
                               <span class="badge badge-danger" style="font-size: small; margin-left: -12px; color: white; padding: 5px 10px;">{{result}}</span>
 
@@ -172,10 +172,10 @@
                             </a>
 
 
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{% url 'show_all_refunds_to_admin' %}">
 
-                              {% if bills_count_for_admin > 0 %}
-                              <span class="badge badge-danger">0</span>
+                              {% if refunds_count_for_admin > 0 %}
+                              <span class="badge badge-danger">{{refunds_count_for_admin}}</span>
                               {% endif %}
                               كل المُسترجعات
                               <i class="fa fa-undo"></i>

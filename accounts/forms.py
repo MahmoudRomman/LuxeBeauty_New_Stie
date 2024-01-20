@@ -132,7 +132,13 @@ class CustomPasswordResetForm(PasswordResetForm):
 
 
 
+
+
+
+    
+
 class CustomPasswordResetConfirmForm(SetPasswordForm):
+
 
     error_messages = {
         'password_mismatch': "كلمتى المرور التى قمت بادخالهما غير متشابهين",
@@ -161,6 +167,10 @@ class CustomPasswordResetConfirmForm(SetPasswordForm):
             'style': 'border-color:wightblack; border-radius: 10px;',
             }),
     )
+
+    class Meta:
+        model = User
+        fields = ("new_password1", "new_password2")
 
 
 
@@ -227,13 +237,25 @@ class UserUpdateForm(forms.ModelForm):
     }), label="Username")
 
 
-    email = forms.CharField(widget=forms.TextInput(attrs={
-        "class" : "input",
-        "type" : "email",
-        "placeholder" : "ادخل البريد الالكترونى",
-        'style': 'border-color:wightblack; border-radius: 10px;',
-    }))
+    # email = forms.CharField(widget=forms.TextInput(attrs={
+    #     "class" : "input",
+    #     "type" : "email",
+    #     "placeholder" : "ادخل البريد الالكترونى",
+    #     'style': 'border-color:wightblack; border-radius: 10px;',
+    # }))
 
+
+    email = forms.EmailField(
+        label="Custom Email Label",
+        max_length=254,
+        widget=forms.EmailInput(attrs={
+            'autocomplete': 'email',
+            "class": "input",
+            "type": "email",
+            "placeholder": "ادخل عنوان البريد الالكترونى",
+            'style': 'border-color:wightblack; border-radius: 10px;'
+            }),
+    )
     class Meta:
         model = User
         fields = ['username', 'email']

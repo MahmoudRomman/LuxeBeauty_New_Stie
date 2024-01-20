@@ -1,0 +1,300 @@
+{% extends 'partials/base.html' %}
+
+
+
+
+{% block content %}
+
+
+<section class="shop_section layout_padding" >
+  <div class="container">
+
+
+    <div class="heading_container heading_center">
+        <h2 class="has-text-centered is-size-3" style="text-align: center;">جميع المرتجعات خلال هذا الشهر </h2>
+    </div>
+    <div class="row">
+
+
+        <table class="table table-bordered" dir='rtl'>
+            <thead style="text-align: center;">
+              <tr style="font-size: large;">
+                <th scope="col">الترتيب</th>
+                <th scope="col">اسم البائع</th>
+                <th scope="col">هاتف البائع</th>
+                <th scope="col">الدولة</th>
+                <th scope="col">العنوان</th>
+                <th scope="col">اسم العميل</th>
+                <th scope="col">هاتف العميل</th>
+                <th scope="col">اسم الحساب</th>
+                <th scope="col">  التاريخ</th>
+    
+                <th scope="col">نوع الباروكه</th>
+                <th scope="col">الطول</th>
+                <th scope="col">نوع الفروة</th>
+                <th scope="col">اللون</th>
+                <th scope="col">الكثافة</th>
+    
+    
+                <th scope="col">عدد القطع</th>
+                <th scope="col">سعر القطعة</th>
+                <th scope="col">السعر الكلى</th>
+              </tr>
+            </thead>
+            <tbody style="text-align: center;">
+              
+              {% for item in page_obj %}
+              <tr style="font-size: small;">
+                <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
+                <td>{{item.seller}}</td>
+                <td>{{item.seller_phone_number}}</td>
+                <td>{{item.country}}</td>
+                <td>{{item.address}}</td>
+                <td>{{item.customer_name}}</td>
+                <td>{{item.customer_phone}}</td>
+                <td>{{item.account_name}}</td>
+                <td>{{item.date|date}}</td>
+    
+    
+                <td>{{item.wig_type}}</td>
+                <td>{{item.wig_long}}</td>
+                <td>{{item.scalp_type}}</td>
+                <td>{{item.wig_color}}</td>
+                <td>{{item.density}}</td>
+                <td>{{item.pieces_num}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.total_price}}</td>
+  
+                
+              </tr>
+    
+              {% empty %}
+              <tr>
+                <td colspan='18' style="font-size:medium">
+                  لا يوجد لديك أى مرتجعات
+                </td>
+              </tr>
+              {% endfor %}
+  
+
+    
+            </tbody>
+        </table>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% if page_obj %}
+<nav aria-label="Page navigation example" style="margin: auto; margin-top: -50px;">
+  <ul class="pagination justify-content-center" style="text-align: center;">
+
+
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.previous_page_number }}">
+          &laquo;
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a  class="page-link" href="">
+          &laquo;
+        </a>
+      </li>
+    {% endif %}
+
+
+      {% for i in page_obj.paginator.page_range %}
+      {% if i == page_obj.number %}
+        <li class="page-item">
+          <a style="color:#F67280;" class="page-link" href="#">
+            {{ i }}
+          </a>
+        </li>
+      {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %}
+
+        <li class="page-item">
+          <a style="color:#F67280;" class="page-link" href="?page={{ i }}">
+            {{ i }}
+          </a>
+        </li>
+      {% elif i == page_obj.paginator.page_range.1|add:'1' or i == page_obj.paginator.page_range.0 %}
+        <span class="dot">...</span>
+      {% endif %}
+      {% endfor %}
+
+
+
+  
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a style="color:#F67280;" class="page-link" href="?page={{ page_obj.next_page_number }}">
+          &raquo;
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="">
+          &raquo;
+        </a>
+      </li>
+      {% endif %}
+
+
+  </ul>
+</nav>
+{% endif %}
+
+
+
+
+
+
+
+<section class="shop_section layout_padding">
+  <div class="container">
+
+
+    <div class="heading_container heading_center">
+      <h2 class="has-text-centered is-size-3" style="text-align: center;">عدد المرتجعات الخاصة بكل حساب هذا الشهر</h2>
+    </div>
+    <div class="row">
+
+
+      <table class="table table-bordered" dir='rtl'>
+        <thead style="text-align: center;">
+          <tr style="text-align: center; font-size: large;">
+
+            <th scope="col">الترتيب</th>
+            <th scope="col">اسم الحساب</th>
+
+            <th scope="col">اسم البائع</th>
+            <th scope="col">اسم المُسوق</th>
+            <th scope="col">رقم الهاتف</th>
+            <th scope="col">عدد الفواتير</th>
+          </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            
+            {% for refund in refunds_per_account %}
+            <tr style="font-size: medium;">
+              <th scope="row" class="mt-1">{{forloop.counter}}</th>
+              <td>{{refund.account_name}}</td>
+              <td>{{refund.seller}}</td>
+              <td>{{refund.marketer}}</td>
+              <td>{{refund.phonenumber}}</td>
+              
+              {% if refund.refunds_count %}
+              <td>{{refund.refunds_count}}</td>
+              {% else %}
+              <td>لا يوجد</td>
+              {% endif %}
+                
+            </tr>
+            
+            {% empty %}
+            <tr>
+              <td colspan='12' style="font-size:large">لا يوجد أى مرتجعات</td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td colspan="5"><b>اجمالى عدد المرتجعات خلال هذا الشهر</b></td>
+              
+              {% if refunds_num_this_month %}
+              <td><b>{{refunds_num_this_month}}</b></td>
+                
+              {% else %}
+              <td><b>0</b></td>
+
+              {% endif %}
+                
+            </tr>
+
+
+        </tbody>
+    </table>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</section>
+
+
+
+
+<style>
+    .pagination a {
+      margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
+    }
+
+    .container {
+            max-width: 95%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+        }
+
+        table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+
+            max-width: 300px; /* Set a max-width to prevent extremely long content from stretching the table */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            th, td {
+                max-width: none; /* Remove max-width on smaller screens */
+            }
+        }
+
+
+    </style>
+
+  
+
+{% endblock content %}
+    
