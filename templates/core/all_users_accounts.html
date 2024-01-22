@@ -7,7 +7,7 @@
   
 
   <section class="shop_section layout_padding">
-    <div class="container" style="max-width: 85%;">
+    <div class="container">
       <div class="heading_container heading_center">
 
         <h2 class="has-text-centered mb-5 is-size-3" style="text-align: center;">جميع الحسابات التى تم ربطها بأرقام هواتف المستخدمين</h2>
@@ -15,7 +15,7 @@
       </div>
       <div class="row">
 
-        <table class="table table-striped" dir='rtl' style="text-align: center; width: 100%; table-layout: fixed;">
+        <table class="table table-bordered" dir='rtl' style="text-align: center; width: 100%; table-layout: fixed;">
             <thead>
               <tr>
                 <th scope="col">الترتيب</th>
@@ -66,7 +66,6 @@
 
                     <td>
                       <p>{{user_account.date|date}}</p>
-                      <p>{{user_account.date|time}}</p>
                     </td>
 
   
@@ -86,32 +85,18 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan='8' style="font-size:large">لا يوجد أى حسابات تم انشائها الى المستخدمين</td>
-                </tr>
-
-                <tr>
-                  <td colspan="15">
-
-                      <div class="create_social_account_a_tag">
-                          <a href="{% url 'create_new_account' %}">
-                            عمل حساب جديد
-                          </a>
-                      </div>
-
-                  </td>
+                    <td colspan='6' style="font-size:large">لا يوجد أى حسابات تم انشائها الى المستخدمين</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
       </div>
 
-      {% if users_accounts %}
-        <div class="create_social_account_a_tag">
-            <a href="{% url 'create_new_account' %}">
-                عمل حساب جديد
-            </a>
-        </div> 
-      {% endif %}
+      <div class="create_social_account_a_tag" style="margin-top: 15px;">
+          <a href="{% url 'create_new_account' %}">
+              عمل حساب جديد
+          </a>
+      </div> 
     </div>
   </section>
 
@@ -137,7 +122,55 @@
     font-size: 30px;
     }
 
-  </style>
+
+
+    .container {
+          max-width: 85%;
+          width: 100%;
+          padding: 20px;
+          box-sizing: border-box;
+          table-layout: fixed;
+          overflow-x: auto;
+
+      }
+
+      table {
+          width: 100%;
+
+          border-radius: 1em;
+          overflow: hidden;
+          border-collapse: separate;
+          border-spacing: 0;
+      }
+
+      thead {
+        background-color: #D3D3D3;
+      }
+      
+      th, td {
+          padding: 8px;
+          text-align: center;
+          word-wrap: break-word;
+
+          max-width: 300px; /* Set a max-width to prevent extremely long content from stretching the table */
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
+
+
+
+      @media only screen and (max-width: 600px) {
+          .container {
+              max-width: 100%;
+          }
+
+          th, td {
+              max-width: none; /* Remove max-width on smaller screens */
+          }
+      }
+
+</style>
+
 
 {% endblock content %}
   

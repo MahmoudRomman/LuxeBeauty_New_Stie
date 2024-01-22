@@ -73,7 +73,7 @@
     
               {% empty %}
               <tr>
-                <td colspan='18' style="font-size:medium">
+                <td colspan='16' style="font-size:large">
                   لا يوجد لديك أى مسترجعات
                 </td>
               </tr>
@@ -116,11 +116,18 @@
                   <th scope="row" class="mt-1">{{forloop.counter}}</th>
                   <td>{{refund_detail.phone}}</td>
                   <td>{{refund_detail.marketer}}</td>
+                  
+                  {% if all_refunds_this_month %}
                   <td>{{refund_detail.all_refunds_this_month}}</td>
+                  {% else %}
+                  <td>لا يوجد</td>
+
+                  {% endif %}
+                    
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan='8' style="font-size:medium">
+                    <td colspan='5' style="font-size:medium">
                             لا يوجد لديك أى مسترجعات
                     </td>
                 </tr>
@@ -162,11 +169,18 @@
                       <th scope="row" class="mt-1">{{forloop.counter}}</th>
                       <td>{{refund_detail.phone}}</td>
                       <td>{{refund_detail.seller}}</td>
+
+                      {% if all_refunds_this_month %}
                       <td>{{refund_detail.all_refunds_this_month}}</td>
+                      {% else %}
+                      <td>لا يوجد</td>
+    
+                      {% endif %}
+
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan='18' style="font-size:medium">
+                        <td colspan='5' style="font-size:medium">
                                 لا يوجد لديك أى مسترجعات
                         </td>
                     </tr>
@@ -199,13 +213,21 @@
             padding: 20px;
             box-sizing: border-box;
             table-layout: fixed;
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
-            table-layout: fixed;
-        }
 
+            border-radius: 1em;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        thead {
+        background-color: #D3D3D3;
+        }
+        
         th, td {
             padding: 8px;
             text-align: center;
@@ -216,6 +238,10 @@
         @media only screen and (max-width: 600px) {
             .container {
                 max-width: 100%;
+            }
+
+            th, td {
+                max-width: none; /* Remove max-width on smaller screens */
             }
         }
 

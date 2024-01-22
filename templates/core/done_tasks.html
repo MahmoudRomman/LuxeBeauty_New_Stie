@@ -13,7 +13,7 @@
       </div>
       <div class="row">
 
-        <table class="table table-striped" dir='rtl' style="text-align: center;">
+        <table class="table table-bordered" dir='rtl'>
             <thead>
               <tr>
                 <th scope="col">الترتيب</th>
@@ -38,7 +38,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan='12' style="font-size:large">لا يوجد أى مهام تم تنفيذها</td>
+                    <td colspan='6' style="font-size:larger">لا يوجد أى مهام تم تنفيذها</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -68,13 +68,6 @@
         </a>
       </li>
     {% endif %}
-
-
-      <!-- <li class="page-item">
-        <a style="color:#F67280;" class="page-link" href="#">
-          {{page_obj.number}}:{{page_obj.paginator.num_pages}}
-        </a>
-      </li> -->
 
       {% for i in page_obj.paginator.page_range %}
       {% if i == page_obj.number %}
@@ -123,6 +116,49 @@
     .pagination a {
       margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
     }
+
+
+    .container {
+            max-width: 95%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+            overflow-x: auto;
+
+        }
+
+        table {
+            width: 100%;
+
+            border-radius: 1em;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead {
+        background-color: #D3D3D3;
+      }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+            th, td {
+              max-width: none; /* Remove max-width on smaller screens */
+          }
+        }
+
+
+
 </style>
 {% endblock content %}
   

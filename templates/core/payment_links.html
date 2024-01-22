@@ -39,14 +39,14 @@
 
 
 
-  <section class="shop_section layout_padding" style="margin-top: -5%;">
-    <div class="container" style="max-width: 85%;">
+  <section class="shop_section layout_padding" style="margin-top: -8%;">
+    <div class="container">
       <div class="heading_container heading_center">
         <h2 class="has-text-centered is-size-3" style="text-align: center;">روابط الدفع المتاحة</h2>
       </div>
       <div class="row">
 
-        <table class="table table-striped" dir='rtl' style="text-align: center; font-size: large;">
+        <table class="table table-bordered" dir='rtl' style="text-align: center; font-size: large;">
             <thead>
               <tr>
                 <th scope="col">الترتيب</th>
@@ -106,40 +106,35 @@
 
                 </tr>
                 {% empty %}
-                <tr>
-                    <td colspan='8' style="font-size:large">ليس لديك اى روابط دفع</td>
-                </tr>
-
-              {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+                
+                {% if user.is_authenticated and user.is_staff and user.is_superuser %}
 
                 <tr>
-                    <td colspan="8">
-
-                        <div class="add_more_payments_link_btn">
-                            <a href="{% url 'add_new_payment_link' %}">
-                              اضافة المزيد من الروابط 
-                            </a>
-                        </div>
-
-                    </td>
+                  <td colspan='8' style="font-size:larger">ليس لديك اى روابط دفع</td>
                 </tr>
-              {% endif %}
+                {% else %}
+                
+                <tr>
+                  <td colspan='7' style="font-size:larger">لا يوجد أى روابط دفع مُتاحة</td>
+                </tr>
+                {% endif %}
+                  
+
+
                 {% endfor %}
             </tbody>
         </table>
       </div>
 
     
-    {% if links_data %}
     {% if user.is_authenticated and user.is_staff and user.is_superuser %}
-        <div class="add_more_payments_link_btn">
+        <div class="add_more_payments_link_btn" style="margin-top: 15px;">
             <a href="{% url 'add_new_payment_link' %}">
             اضافة المزيد من الروابط 
             </a>
         </div> 
     {% endif %}
 
-    {% endif %}
 
 
 
@@ -166,6 +161,50 @@
   .copied-message {
       display: none;
   }
+
+  .container {
+            max-width: 85%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-radius: 1em;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        thead {
+        background-color: #D3D3D3;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+
+            max-width: 300px; /* Set a max-width to prevent extremely long content from stretching the table */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            th, td {
+                max-width: none; /* Remove max-width on smaller screens */
+            }
+        }
+
 </style>
 
 

@@ -19,7 +19,7 @@
           <div class="carousel-inner">
             <div class="carousel-item active">
               <div class="container-fluid">
-                <div class="row">
+                <div class="row" dir="rtl">
                   <div class="col-md-7">
                     <div class="detail-box">
                       <h1>
@@ -44,7 +44,7 @@
             </div>
             <div class="carousel-item ">
               <div class="container-fluid">
-                <div class="row">
+                <div class="row" dir="rtl">
                   <div class="col-md-7">
                     <div class="detail-box">
                       <h1>
@@ -69,7 +69,7 @@
             </div>
             <div class="carousel-item ">
               <div class="container-fluid">
-                <div class="row">
+                <div class="row" dir="rtl">
                   <div class="col-md-7">
                     <div class="detail-box">
                       <h1>
@@ -159,8 +159,8 @@
 
 
         {% for item in items.all %}
-            <div class="col-xl-3 col-12 col-sm-6 col-md-4" style="padding: 10px;">
-              <div class="box item_box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px;">
+            <div class="col-xl-3 col-12 col-sm-6 col-lg-4" style="padding: 10px;">
+              <div class="box item_box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px; width: 100%">
                 
                   <div class="img-box">
                     <a href="{% url 'item_detail' item.slug %}">
@@ -189,16 +189,11 @@
                        <span style="font-weight: bold;">منتج خارج المخزن</span>
                     {% endif %}
 
-
-
-                      
-
-
                     </p>
                   </div>
 
                   <div style="text-align: center; margin-top: 15px;">
-                    <p>{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
+                    <p style="width: 93%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-inline: auto;">{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
                   </div>
                  {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                   
@@ -310,7 +305,7 @@
         /* Add other styles as needed */
         transition: transform 0.3s ease; /* Add smooth transition effect for transform property */
         width: 320px;
-        height: 450px;
+        height: 432px;  
 
     }
 

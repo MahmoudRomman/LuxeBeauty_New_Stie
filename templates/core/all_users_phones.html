@@ -7,13 +7,13 @@
   
 
   <section class="shop_section layout_padding">
-    <div class="container" style="max-width: 85%;">
+    <div class="container">
       <div class="heading_container heading_center">
         <h2 class="has-text-centered mb-5 is-size-3" style="text-align: center;">جميع أرقام الهواتف التى تم ربطها بالمستخدمين</h2>
       </div>
       <div class="row">
 
-        <table class="table table-striped" dir='rtl' style="text-align: center; width: 100%; table-layout: fixed;">
+        <table class="table table-bordered" dir='rtl' style="text-align: center; width: 100%; table-layout: fixed;">
             <thead>
               <tr>
                 <th scope="col">الترتيب</th>
@@ -32,8 +32,7 @@
                     <td>{{ phone_user.user.username }}</td>
                     <td>{{ phone_user.phone.phone }}</td>
                     <td>
-                      <p>{{phone_user.date|date}}</p>
-                      <p>{{phone_user.date|time}}</p>
+                      <p>{{phone_user.date}}</p>
                     </td>
 
   
@@ -53,34 +52,68 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan='8' style="font-size:large">لا يوجد أرقام تم تعينها الى المستخدمين</td>
+                    <td colspan='6' style="font-size:large">لا يوجد أرقام تم تعينها الى المستخدمين</td>
                 </tr>
 
-                <tr>
-                  <td colspan="15">
-
-                      <div class="btn">
-                          <a href="{% url 'add_phone_to_user' %}">
-                            اضافة رقم الى مستخدم
-                          </a>
-                      </div>
-
-                  </td>
-                </tr>
                 {% endfor %}
             </tbody>
         </table>
       </div>
-
-      {% if users_phones %}
-        <div class="penality_btn">
+        <div class="penality_btn" style="margin-top: 15px;">
             <a href="{% url 'add_phone_to_user' %}">
                 اضافة رقم الى مستخدم
             </a>
         </div> 
-      {% endif %}
     </div>
   </section>
+
+
+
+  <style>
+    .container {
+          max-width: 85%;
+          width: 100%;
+          padding: 20px;
+          box-sizing: border-box;
+          table-layout: fixed;
+          overflow-x: auto;
+      }
+
+      table {
+          width: 100%;
+
+          border-radius: 1em;
+          overflow: hidden;
+          border-collapse: separate;
+          border-spacing: 0;
+      }
+
+      thead {
+        background-color: #D3D3D3;
+      }
+      th, td {
+          padding: 8px;
+          text-align: center;
+          word-wrap: break-word;
+
+          max-width: 300px; /* Set a max-width to prevent extremely long content from stretching the table */
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
+
+
+
+      @media only screen and (max-width: 600px) {
+          .container {
+              max-width: 100%;
+          }
+
+          th, td {
+              max-width: none; /* Remove max-width on smaller screens */
+          }
+      }
+
+</style>
 
 
 {% endblock content %}

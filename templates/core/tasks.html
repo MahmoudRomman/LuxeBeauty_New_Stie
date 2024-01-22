@@ -7,7 +7,7 @@
   <!-- shop section -->
 
   <section class="shop_section layout_padding">
-    <div class="container" style="max-width: 85%;">
+    <div class="container">
       <div class="heading_container heading_center">
         <h2>
             كل المهام التى تم طلبها
@@ -15,7 +15,7 @@
       </div>
       <div class="row">
 
-        <table class="table table-striped" dir='rtl' style="text-align: center;">
+        <table class="table table-bordered" dir='rtl' style="text-align: center;">
             <thead>
               <tr>
                 <th scope="col">الترتيب</th>
@@ -49,19 +49,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan='8' style="font-size:large">لا يوجد اى مهام تم طلبها حتى الان</td>
-                </tr>
-
-                <tr>
-                    <td colspan="6">
-
-                        <div class="add_task_btn">
-                            <a href="{% url 'add_task' %}">
-                                ارسال مهمه؟    
-                            </a>
-                        </div>
-
-                    </td>
+                    <td colspan='5' style="font-size:large">لا يوجد اى مهام تم طلبها حتى الان</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -69,13 +57,11 @@
       </div>
 
     
-    {% if tasks %}
-        <div class="add_task_btn">
+        <div class="add_task_btn" style="margin-top: 15px;">
             <a href="{% url 'add_task' %}">
                 ارسال مهمه؟ 
             </a>
         </div> 
-    {% endif %}
     
 
     </div>
@@ -83,6 +69,46 @@
 
   <!-- end shop section -->
 
+
+  <style>
+    .container {
+            max-width: 85%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-radius: 1em;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        thead {
+        background-color: #D3D3D3;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            th, td {
+                max-width: none; /* Remove max-width on smaller screens */
+            }
+        }
+  </style>
 
 {% endblock content %}
   

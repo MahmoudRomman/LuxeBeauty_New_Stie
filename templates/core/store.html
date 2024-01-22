@@ -166,18 +166,7 @@
               </tr>
               {% empty %}
               <tr>
-                  <td colspan='15' style="font-size:large; text-align: center;">ليس لديك اى منتجات</td>
-              </tr>
-              <tr>
-                  <td colspan="15">
-
-                      <div class="add_products_to_store_btn">
-                          <a href="{% url 'add_item' %}">
-                               اضافة منتجات 
-                          </a>
-                      </div>
-
-                  </td>
+                  <td colspan='14' style="font-size:large; text-align: center;">ليس لديك اى منتجات</td>
               </tr>
             {% endfor %}
             </tbody>
@@ -256,13 +245,11 @@
 
       </div>
 
-      {% if page_obj %}
           <div class="add_products_to_store_btn">
               <a href="{% url 'add_item' %}">
               اضافة المزيد من المنتجات 
               </a>
           </div> 
-     {% endif %}
 
     </div>
 
@@ -311,11 +298,11 @@
             padding: 20px;
             box-sizing: border-box;
             table-layout: fixed;
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
-            table-layout: auto;
 
         }
 

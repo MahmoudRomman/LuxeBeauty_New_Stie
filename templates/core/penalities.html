@@ -7,7 +7,7 @@
   <!-- shop section -->
 
   <section class="shop_section layout_padding">
-    <div class="container" style="max-width: 85%;">
+    <div class="container">
       <div class="heading_container heading_center">
         <h2>
             كل الخصومات التى تم عملها
@@ -15,7 +15,7 @@
       </div>
       <div class="row">
 
-        <table class="table table-striped" dir='rtl' style="text-align: center;">
+        <table class="table table-bordered" dir='rtl' style="text-align: center;">
             <thead>
               <tr>
                 <th scope="col">الترتيب</th>
@@ -38,7 +38,7 @@
                     <td>{{ penality.name }}</td>
                     <td>{{penality.message}}</td>
                     <td>{{penality.days_num}}</td>
-                    <td style="width: 150px;">{{penality.date|date}} -- {{penality.date|time}}</td>
+                    <td style="width: 150px;">{{penality.date}}</td>
 
                     {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
                     <td style="width: 150px;">
@@ -51,33 +51,24 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan='8' style="font-size:large">لا يوجد اى خصومات</td>
-                </tr>
-
-                <tr>
-                    <td colspan="6">
-
-                        <div class="penality_btn">
-                            <a href="{% url 'add_penality' %}">
-                              عمل نموذج خصم    
-                            </a>
-                        </div>
-
-                    </td>
+                    <td colspan='6' style="font-size:larger">لا يوجد اى خصومات</td>
                 </tr>
                 {% endfor %}
+
+
+
+
+
             </tbody>
         </table>
       </div>
 
     
-    {% if penalities %}
-        <div class="penality_btn">
+        <div class="penality_btn" style="margin-top: 15px;">
             <a href="{% url 'add_penality' %}">
                 عمل نموذج خصم 
             </a>
         </div> 
-    {% endif %}
     
 
     </div>
@@ -85,6 +76,50 @@
 
   <!-- end shop section -->
 
+
+
+
+
+  <style>
+    
+    .container {
+            max-width: 85%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-radius: 1em;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead {
+        background-color: #D3D3D3;
+      }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+            th, td {
+              max-width: none; /* Remove max-width on smaller screens */
+          }
+        }
+  </style>
 
 {% endblock content %}
   

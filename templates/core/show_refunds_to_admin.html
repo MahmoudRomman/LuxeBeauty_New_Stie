@@ -70,7 +70,7 @@
     
               {% empty %}
               <tr>
-                <td colspan='18' style="font-size:medium">
+                <td colspan='17' style="font-size:larger">
                   لا يوجد لديك أى مرتجعات
                 </td>
               </tr>
@@ -217,7 +217,7 @@
             
             {% empty %}
             <tr>
-              <td colspan='12' style="font-size:large">لا يوجد أى مرتجعات</td>
+              <td colspan='11' style="font-size:large">لا يوجد أى مرتجعات</td>
             </tr>
             {% endfor %}
             <tr>
@@ -262,12 +262,21 @@
             padding: 20px;
             box-sizing: border-box;
             table-layout: fixed;
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
-            table-layout: fixed;
+
+            border-radius: 1em;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
         }
+        thead{
+        background-color: #D3D3D3 ;
+      }
+      
 
         th, td {
             padding: 8px;
@@ -277,6 +286,7 @@
             max-width: 300px; /* Set a max-width to prevent extremely long content from stretching the table */
             overflow: hidden;
             text-overflow: ellipsis;
+            
         }
 
 
