@@ -87,7 +87,6 @@ def welcome(request):
 
 
 
-
 def home(request):
     items = models.Item.objects.all().order_by('-date')[:8]
     today_gift = models.Offer.objects.all().order_by('-date')[0:1]
@@ -617,11 +616,16 @@ def make_bill(request):
             address = form.cleaned_data.get("address")
             customer_phone = form.cleaned_data.get("customer_phone")
             customer_name = form.cleaned_data.get("customer_name")
+            payment_method = form.cleaned_data.get("payment_method")
 
             check_customer_name = str(customer_name).split()
 
             if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
                 messages.warning(request, ".عفواً, يجب اختيار رقم العمل الخاص بك")
+                return JsonResponse({'status': 'error'})
+            
+            elif payment_method == "اختر طريقة الدفع":
+                messages.warning(request, ".يجب اختيار طريقة الدفع")
                 return JsonResponse({'status': 'error'})
             
             elif len(check_customer_name) <= 2:
@@ -648,6 +652,7 @@ def make_bill(request):
                                     customer_phone = customer_phone,
                                     customer_name = customer_name,
                                     account_name = account.account_name,
+                                    payment_method = payment_method,
 
                                     wig_type = order_item.item.wig_type,
                                     wig_long = order_item.item.wig_long,
@@ -684,7 +689,7 @@ def make_bill(request):
 
                             bill_info["marketer"] = str(account.marketer)
                             bill_info["account_name"] = str(account.account_name)
-
+                            bill_info["payment_method"] = str(payment_method)
 
                             bill_info["country"] = str(country)
                             bill_info["address"] = str(address)
@@ -1778,6 +1783,7 @@ def online_order(request):
             customer_phone = form.cleaned_data.get("customer_phone")
             customer_name = form.cleaned_data.get("customer_name")
             seller_phone_number = form.cleaned_data.get("seller_phone_number")
+            payment_method = form.cleaned_data.get("payment_method")
 
 
             wig_name = form.cleaned_data.get("wig_name")
@@ -1788,6 +1794,7 @@ def online_order(request):
             density = form.cleaned_data.get("density")
             price = form.cleaned_data.get("price")
             pieces_num = form.cleaned_data.get("pieces_num")
+            payment_method = form.cleaned_data.get("payment_method")
 
 
 
@@ -1798,7 +1805,9 @@ def online_order(request):
                 return JsonResponse({'status': 'error'})
             
             
-            
+            elif payment_method == "اختر طريقة الدفع":
+                messages.warning(request, ".يجب اختيار طريقة الدفع")
+                return JsonResponse({'status': 'error'})
 
             elif len(check_customer_name) <= 2:
                 messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
@@ -1829,15 +1838,13 @@ def online_order(request):
                             density = density,
                             price = price,
                             pieces_num = pieces_num,
+                            payment_method = payment_method,
+
                             account = account,
                             slug_code = slug_code,
                         )
 
                         new_bill.save()
-
-                        # # Incremeant the number of bills for this marketer account...
-                        # account.num_of_bills += pieces_num
-                        # account.save()
 
                         ## Send a mail to the admin for the new bill...
                         from django.core.mail import EmailMultiAlternatives
@@ -1863,6 +1870,7 @@ def online_order(request):
                             "seller_phone_number" : str(seller_phone.phone.phone),
                             "marketer" : str(account.marketer),
                             "account_name" : str(account.account_name),
+                            "payment_method" : str(payment_method),
                             "country" : country,
                             "address" : address,
                             "customer_name" : customer_name,
@@ -1936,6 +1944,7 @@ def item_refund(request, slug):
                     customer_phone = item.customer_phone,
                     customer_name = item.customer_name,
                     account_name = item.account.account_name,
+                    payment_method = item.payment_method,
 
                     wig_type = item.wig_type,
                     wig_long = item.wig_long,
@@ -1962,6 +1971,7 @@ def item_refund(request, slug):
                     customer_phone = item.customer_phone,
                     customer_name = item.customer_name,
                     account_name = item.account.account_name,
+                    payment_method = item.payment_method,
 
                     wig_type = item.wig_type,
                     wig_long = item.wig_long,
@@ -2052,8 +2062,6 @@ def user_refunds(request):
 
                     refunds_details.append({'phone': phone.phone,  'seller':account.seller , 'all_refunds_this_month': all_refunds_this_month})
 
-                    print("*" * 100)
-                    print(refunds_details)
                     all_refunds = 0
                     for cnt in range(len(refunds_details)):
                         all_refunds += refunds_details[cnt]['all_refunds_this_month']
@@ -2072,7 +2080,6 @@ def user_refunds(request):
 
     context = {
         'data' : data,
-        # 'all_refunds_this_month' : all_refunds_this_month,
         'is_seller' : is_seller,
         'refunds_details' : refunds_details,
         'all_refunds' : all_refunds,

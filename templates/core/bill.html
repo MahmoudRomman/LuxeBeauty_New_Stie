@@ -13,40 +13,48 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <form id="emailForm" method="POST" data-redirect-url="{% url 'chart_view' %}">
+                                <form id="emailForm" method="POST" data-redirect-url="{% url 'chart_view' %}"  dir="rtl">
                                     {% csrf_token %}
                                     <div class="row g-3">
                                         
-                                        <div class="col-12 col-sm-12" dir="rtl" >
+                                        <div class="col-12 col-sm-12">
                                             <div class="form-group">{{form.country}}</div>    
                                         </div>
             
         
-                                        <div class="col-12 col-sm-6" dir="rtl" style="margin-left: auto; margin-right: auto;">
+                                        <div class="col-12 col-sm-6">
         
                                             <div class="form-group">
                                                 {{form.customer_name}}
                                             </div>
                                         </div>
         
-                                        <div class="col-12 col-sm-6" dir="rtl" style="margin-left: auto; margin-right: auto">
+                                        <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 {{form.address}}
                                             </div>
                                         </div>
             
-                                        <div class="col-12 col-sm-6" dir="rtl" style="margin-left: auto; margin-right: auto;">
+                                        <div class="col-12 col-sm-4">
                                             <div class="form-group">
                                                 {{form.customer_phone}}
                                             </div>
                                         </div>
             
-                                        <div class="col-12 col-sm-6" dir="rtl" style="margin-left: auto; margin-right: auto;">
+                                        <div class="col-12 col-sm-4">
                                             <div class="form-group">
                                                 {{form.seller_phone_number}}
                                             </div>
                                         </div>
         
+
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group">
+                                                {{form.payment_method}}
+                                            </div>
+                                        </div>
+    
+                                        
                                         <div class="btn_bill_finish col-12">
                                             <input type="submit" value="حفظ الفاتورة" style="margin-bottom: 5px; margin-top: 15px;">
                                         </div>

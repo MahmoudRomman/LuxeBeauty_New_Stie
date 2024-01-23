@@ -358,6 +358,15 @@ class BillForm2(forms.Form):
             'style': 'border-color:wightblack; border-radius: 15px;',
         }))
 
+        self.fields["payment_method"] = forms.ChoiceField(
+            choices = models.payment_method,
+            required=True,
+            widget=forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'style': 'border-color:wightblack; border-radius: 15px;',
+        }))
+
 
 
 
@@ -617,7 +626,8 @@ class OnlineOrder(forms.Form):
         'class': 'form-control',
         'type' : 'radio',
         'placeholder': "اسم الباروكة",
-        'style': 'border-color:wightblack; border-radius: 10px;'
+        'style': 'border-color:wightblack; border-radius: 15px;',
+
         }))
 
 
@@ -627,7 +637,7 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'radio',
             'placeholder': "نوع الباروكة",
-            'style': 'border-color:wightblack; border-radius: 10px;'
+            'style': 'border-color:wightblack; border-radius: 15px;',
 
         }))
 
@@ -639,8 +649,7 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'radio',
             'placeholder': "طول الباروكة",
-            'style': 'border-color:wightblack; border-radius: 10px;'
-
+            'style': 'border-color:wightblack; border-radius: 15px;',
         }))
 
 
@@ -652,8 +661,7 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'radio',
             'placeholder': "نوع الفروة",
-            'style': 'border-color:wightblack; border-radius: 10px;'
-
+            'style': 'border-color:wightblack; border-radius: 15px;',
         }))
 
 
@@ -664,9 +672,7 @@ class OnlineOrder(forms.Form):
             widget=forms.Select(attrs={
             'class': 'form-control',
             'type' : 'radio',
-            'style': 'border-color:wightblack; border-radius: 10px;'
-
-
+            'style': 'border-color:wightblack; border-radius: 15px;',
         }))
 
 
@@ -677,9 +683,7 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'radio',
             'label' : 'select one',
-            'style': 'border-color:wightblack; border-radius: 10px;'
-
-            
+            'style': 'border-color:wightblack; border-radius: 15px;',
         }))
 
 
@@ -690,8 +694,7 @@ class OnlineOrder(forms.Form):
             'placeholder': "ادخل السعر",
             'min' : '500',
             'max' : '7000',
-            'style': 'border-color:wightblack; border-radius: 10px;'
-
+            'style': 'border-color:wightblack; border-radius: 15px;',
             }))
 
 
@@ -699,9 +702,17 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'number',
             'placeholder': "ادخل الكمية",
-            'style': 'border-color:wightblack; border-radius: 10px;'
-
+            'style': 'border-color:wightblack; border-radius: 15px;',
             }))
+        
+        self.fields["payment_method"] = forms.ChoiceField(
+            choices = models.payment_method,
+            required=True,
+            widget=forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'style': 'border-color:wightblack; border-radius: 15px;',
+        }))
 
 
 

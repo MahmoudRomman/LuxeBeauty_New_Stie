@@ -73,6 +73,10 @@
             <th scope="col">اسم العميل</th>
             <th scope="col">رقم هاتف العميل</th>
             <th scope="col">اسم الحساب</th>
+
+            <th scope="col">طريقة الدفع</th>
+
+
             <th scope="col">  التاريخ</th>
 
             <th scope="col">نوع الباروكه</th>
@@ -104,6 +108,8 @@
                 <td>{{bill.customer_name}}</td>
                 <td>{{bill.customer_phone}}</td>
                 <td>{{bill.account_name}}</td>
+                <td>{{bill.payment_method}}</td>
+
                 <td>{{bill.date|date}}</td>
 
 
@@ -119,7 +125,7 @@
               
               {% empty %}
               <tr>
-                <td colspan='17' style="font-size:larger">لا يوجد فواتير</td>
+                <td colspan='18' style="font-size:larger">لا يوجد فواتير</td>
               </tr>
               {% endfor %}
           {% elif page_obj %}
@@ -133,6 +139,8 @@
                 <td>{{bill.customer_name}}</td>
                 <td>{{bill.customer_phone}}</td>
                 <td>{{bill.account_name}}</td>
+                <td>{{bill.payment_method}}</td>
+
                 <td>{{bill.date|date}}</td>
 
 

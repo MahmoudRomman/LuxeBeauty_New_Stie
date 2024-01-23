@@ -100,6 +100,9 @@
           <th scope="col">اسم العميل</th>
           <th scope="col">هاتف العميل</th>
           <th scope="col">اسم الحساب</th>
+          <th scope="col">طريقة الدفع</th>
+
+
           <th scope="col">  التاريخ</th>
 
           <th scope="col">نوع الباروكه</th>
@@ -127,6 +130,9 @@
           <td>{{bill.customer_name}}</td>
           <td>{{bill.customer_phone}}</td>
           <td>{{bill.account_name}}</td>
+
+          <td>{{bill.payment_method}}</td>
+
           <td>{{bill.date|date}}</td>
 
 
@@ -151,7 +157,7 @@
 
         {% empty %}
         <tr>
-          <td colspan='17' style="font-size:medium">
+          <td colspan='18' style="font-size:medium">
             لا يوجد لديك أى بيانات
           </td>
         </tr>
@@ -159,7 +165,7 @@
 
         {% if page_obj %}
         <tr>
-            <td colspan="16" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
+            <td colspan="17" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
             <td><b>{{total_bills}}</b></td>
         </tr>
         {% endif %} 
@@ -397,6 +403,10 @@
 
         table {
             width: 100%;
+            border-radius: 1em;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
         thead {
@@ -407,6 +417,10 @@
             padding: 8px;
             text-align: center;
             word-wrap: break-word;
+
+            max-width: 300px; /* Set a max-width to prevent extremely long content from stretching the table */
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
 

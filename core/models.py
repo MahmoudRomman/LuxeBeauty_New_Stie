@@ -84,6 +84,17 @@ density = (
 )
 
 
+payment_method = (
+    ('اختر طريقة الدفع', 'اختر طريقة الدفع'),
+    ('tabby', 'tabby'),
+    ('tamara', 'tamara'),
+    ('Stripe', 'Stripe'),
+    ('PayTabs', 'PayTabs'),
+    ('Apple Pay', 'Apple Pay'),
+    ('Bank Account Pay', 'Bank Account Pay'),
+    ('Upon receipt', 'Upon receipt'),
+)
+
 
 
 class Item(models.Model):
@@ -198,6 +209,9 @@ class Bill2(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     account_name = models.CharField(max_length=150, null=True, blank=True)
 
+    # payment method
+    payment_method = models.CharField(max_length=150, choices=payment_method, null=False)
+
     #Item details
     wig_type = models.CharField(max_length=150, choices=wig_type, null=False)
     wig_long = models.CharField(max_length=150, choices=wig_long, null=False)
@@ -241,6 +255,9 @@ class Refund(models.Model):
     customer_phone = models.CharField(max_length=31)
     date = models.DateTimeField(auto_now_add=True)
     account_name = models.CharField(max_length=150, null=True, blank=True)
+
+    # payment method
+    payment_method = models.CharField(max_length=150, null=False)
 
     #Item details
     wig_type = models.CharField(max_length=150, choices=wig_type, null=False)

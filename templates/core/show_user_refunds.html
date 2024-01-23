@@ -23,13 +23,14 @@
             <thead style="text-align: center;">
               <tr style="text-align: center; font-size: large;">
                 <th scope="col">الترتيب</th>
-                <!-- <th scope="col">اسم البائع</th> -->
                 <th scope="col">هاتف البائع</th>
                 <th scope="col">الدولة</th>
                 <th scope="col">العنوان</th>
                 <th scope="col">اسم العميل</th>
                 <th scope="col">هاتف العميل</th>
                 <th scope="col">اسم الحساب</th>
+                <th scope="col">طريقة الدفع</th>
+
                 <th scope="col">  التاريخ</th>
     
                 <th scope="col">نوع الباروكه</th>
@@ -56,6 +57,8 @@
                 <td>{{item.customer_name}}</td>
                 <td>{{item.customer_phone}}</td>
                 <td>{{item.account_name}}</td>
+                <td>{{item.payment_method}}</td>
+
                 <td>{{item.date|date}}</td>
     
     
@@ -73,7 +76,7 @@
     
               {% empty %}
               <tr>
-                <td colspan='16' style="font-size:large">
+                <td colspan='17' style="font-size:large">
                   لا يوجد لديك أى مسترجعات
                 </td>
               </tr>
@@ -96,7 +99,7 @@
   <div class="row">
 
 
-    <h2 style="margin: auto; margin-bottom: 20px; margin-top: 60px;">
+    <h2 style="margin: auto; margin-bottom: 20px;">
         اجمالى عدد المسترجعات الخاصة بكل رقم
     </h2>
 

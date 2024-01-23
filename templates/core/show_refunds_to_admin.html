@@ -27,6 +27,8 @@
                 <th scope="col">اسم العميل</th>
                 <th scope="col">هاتف العميل</th>
                 <th scope="col">اسم الحساب</th>
+                <th scope="col">طريقة الدفع</th>
+
                 <th scope="col">  التاريخ</th>
     
                 <th scope="col">نوع الباروكه</th>
@@ -53,6 +55,8 @@
                 <td>{{item.customer_name}}</td>
                 <td>{{item.customer_phone}}</td>
                 <td>{{item.account_name}}</td>
+                <td>{{item.payment_method}}</td>
+
                 <td>{{item.date|date}}</td>
     
     
@@ -70,7 +74,7 @@
     
               {% empty %}
               <tr>
-                <td colspan='17' style="font-size:larger">
+                <td colspan='18' style="font-size:larger">
                   لا يوجد لديك أى مرتجعات
                 </td>
               </tr>
