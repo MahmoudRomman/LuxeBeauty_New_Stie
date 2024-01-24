@@ -69,6 +69,48 @@
           font-family: 'Almarai', sans-serif !important;
       }
 
+  .whatsapp-icon {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+
+    }
+
+  .whatsapp-icon a {
+    display: block;
+    background-color: #25d366; /* WhatsApp green color */
+    color: #fff;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 24px;
+    text-align: center;
+    text-decoration: none;
+  }
+
+
+  .whatsapp-icon:hover {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      width: 80px;
+      height: 80px;
+
+    }
+
+
+  .whatsapp-icon a:hover {
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 50px;
+    text-align: center;
+    text-decoration: none;
+  }
+
+
   </style>
 
 
@@ -103,6 +145,7 @@
 </head>
 
 <body>
+
   <div class="hero_area">
     <!-- header section strats -->
 
@@ -111,6 +154,12 @@
 
 
   </div>
+
+
+
+
+
+
   <!-- end hero area -->
 
 
@@ -131,9 +180,17 @@
 
 
 
+<div class="whatsapp-icon">
+  <a href="https://wa.me/+201223548005" target="_blank" title="Chat with us on WhatsApp">
+     <i class="fab fa-whatsapp"></i>
+  </a>
+</div>
+
 
 {% block content %}
     
+
+
 
 {% endblock content %}
     

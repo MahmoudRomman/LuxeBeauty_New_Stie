@@ -36,10 +36,9 @@
                 <th scope="col">نوع الفروة</th>
                 <th scope="col">اللون</th>
                 <th scope="col">الكثافة</th>
-    
-    
                 <th scope="col">عدد القطع</th>
-                <th scope="col">سعر القطعة</th>
+                <th scope="col">سعر المخزن</th>
+                <th scope="col">سعر البيع</th>
                 <th scope="col">السعر الكلى</th>
               </tr>
             </thead>
@@ -66,15 +65,14 @@
                 <td>{{item.wig_color}}</td>
                 <td>{{item.density}}</td>
                 <td>{{item.pieces_num}}</td>
-                <td>{{item.price}}</td>
-                <td>{{item.total_price}}</td>
-  
-                
+                <td>{{item.price}} ريال</td>
+                <td>{{item.selling_price}} ريال</td>
+                <td>{{item.calculate_total_price}}</td>
               </tr>
     
               {% empty %}
               <tr>
-                <td colspan='18' style="font-size:larger">
+                <td colspan='19' style="font-size:larger">
                   لا يوجد لديك أى مرتجعات
                 </td>
               </tr>
@@ -224,7 +222,7 @@
               <td colspan='11' style="font-size:large">لا يوجد أى مرتجعات</td>
             </tr>
             {% endfor %}
-            <tr>
+            <tr style="font-weight: bold;">
               <td colspan="5"><b>اجمالى عدد المرتجعات خلال هذا الشهر</b></td>
               
               {% if refunds_num_this_month %}

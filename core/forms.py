@@ -98,8 +98,8 @@ class ItemForm(forms.Form):
         'class': 'form-control',
         'type' : 'number',
         'placeholder': "ادخل السعر",
-        'min' : '400',
-        'max' : '7000',
+        'min' : '50',
+        'max' : '15000',
         'style': 'border-color:wightblack; border-radius: 10px;'
 
         }))
@@ -108,8 +108,9 @@ class ItemForm(forms.Form):
     discount_price = forms.FloatField(required=False, widget=forms.NumberInput(attrs={
         'class': 'form-control',
         'type' : 'number',
-        'placeholder': "ادخل سعر الخصم",
+        'placeholder': "ادخل سعر الخصم ان وُجد",
         'default' :  '0.00',
+        'min' : '10',
         'style': 'border-color:wightblack; border-radius: 10px;'
 
         }))
@@ -118,6 +119,7 @@ class ItemForm(forms.Form):
     quantity = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
         'class': 'form-control',
         'type' : 'number',
+        'min' : '1',
         'placeholder': "ادخل الكمية",
         'style': 'border-color:wightblack; border-radius: 10px;'
 
@@ -367,6 +369,15 @@ class BillForm2(forms.Form):
             'style': 'border-color:wightblack; border-radius: 15px;',
         }))
 
+        self.fields["selling_price"] = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type' : 'number',
+            'placeholder': "ادخل سعر البيع للقطعة الواحدة بالريال السعودى",
+            'min' : '0',
+            'max' : '15000',
+            'style': 'border-color:wightblack; border-radius: 15px;',
+            }))
+
 
 
 
@@ -395,9 +406,11 @@ class ItemRefundForm(forms.Form):
     pieces_num = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
         'class': 'form-control',
         'type' : 'number',
+        'min' : '0',
         'placeholder': "ادخل الكمية المراد استرجاعها بشرط ألا تزيد عن عدد القطع المُباعة" ,
         'style': 'border-color:wightblack; border-radius: 15px;',
         }))
+
 
 
 
@@ -713,6 +726,17 @@ class OnlineOrder(forms.Form):
             'type' : 'radio',
             'style': 'border-color:wightblack; border-radius: 15px;',
         }))
+    
+
+        self.fields["selling_price"] = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type' : 'number',
+            'placeholder': "ادخل سعر البيع للقطعة الواحدة بالريال السعودى",
+            'min' : '0',
+            'max' : '7000',
+            'style': 'border-color:wightblack; border-radius: 15px;',
+            }))
+
 
 
 

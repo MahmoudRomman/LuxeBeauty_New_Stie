@@ -30,18 +30,15 @@
                 <th scope="col">هاتف العميل</th>
                 <th scope="col">اسم الحساب</th>
                 <th scope="col">طريقة الدفع</th>
-
                 <th scope="col">  التاريخ</th>
-    
                 <th scope="col">نوع الباروكه</th>
                 <th scope="col">الطول</th>
                 <th scope="col">نوع الفروة</th>
                 <th scope="col">اللون</th>
                 <th scope="col">الكثافة</th>
-    
-    
                 <th scope="col">عدد القطع</th>
-                <th scope="col">سعر القطعة</th>
+                <th scope="col">سعر المخزن</th>
+                <th scope="col">سعر البيع</th>
                 <th scope="col">السعر الكلى</th>
               </tr>
             </thead>
@@ -50,7 +47,6 @@
               {% for item in data %}
               <tr style="font-size: small;">
                 <th scope="row" class="mt-1">{{forloop.counter}}</th>
-                <!-- <td>{{bill.seller}}</td> -->
                 <td>{{item.seller_phone_number}}</td>
                 <td>{{item.country}}</td>
                 <td>{{item.address}}</td>
@@ -58,25 +54,21 @@
                 <td>{{item.customer_phone}}</td>
                 <td>{{item.account_name}}</td>
                 <td>{{item.payment_method}}</td>
-
                 <td>{{item.date|date}}</td>
-    
-    
                 <td>{{item.wig_type}}</td>
                 <td>{{item.wig_long}}</td>
                 <td>{{item.scalp_type}}</td>
                 <td>{{item.wig_color}}</td>
                 <td>{{item.density}}</td>
                 <td>{{item.pieces_num}}</td>
-                <td>{{item.price}}</td>
-                <td>{{item.total_price}}</td>
-  
-                
+                <td>{{item.price}} ريال</td>
+                <td>{{item.selling_price}} ريال</td>
+                <td>{{item.calculate_total_price}}</td>
               </tr>
     
               {% empty %}
               <tr>
-                <td colspan='17' style="font-size:large">
+                <td colspan='18' style="font-size:large">
                   لا يوجد لديك أى مسترجعات
                 </td>
               </tr>
@@ -137,7 +129,7 @@
             {% endfor %}
               
 
-        <tr>
+        <tr style="font-weight: bold;">
             <td colspan="3" style="font-size:medium"><b>اجمالى عدد المُسرجعات الخاصة بك خلال هذا الشهر</b></td>
             <td><b>{{all_refunds}}</b></td>
         </tr> 
@@ -191,7 +183,7 @@
   
   
   
-            <tr>
+            <tr style="font-weight: bold;">
               <td colspan="3"><b>اجمالى المسترجعات</b></td>
               <td><b>{{all_refunds}}</b></td>
             </tr>

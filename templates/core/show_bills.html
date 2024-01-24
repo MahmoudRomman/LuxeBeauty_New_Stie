@@ -87,7 +87,9 @@
 
 
             <th scope="col">عدد القطع</th>
-            <th scope="col">سعر القطعة</th>
+            <th scope="col">سعر المخزن</th>
+            <th scope="col">سعر البيع</th>
+
             <th scope="col">السعر الكلى</th>
 
           </tr>
@@ -119,8 +121,9 @@
                 <td>{{bill.wig_color}}</td>
                 <td>{{bill.density}}</td>
                 <td>{{bill.pieces_num}}</td>
-                <td>{{bill.price}}</td>
-                <td>{{bill.total_price}}</td>
+                <td>{{bill.price}} SAR</td>
+                <td>{{bill.selling_price}} SAR</td>
+                <td>{{bill.calculate_total_price}}</td>
               </tr>
               
               {% empty %}
@@ -150,17 +153,19 @@
                 <td>{{bill.wig_color}}</td>
                 <td>{{bill.density}}</td>
                 <td>{{bill.pieces_num}}</td>
-                <td>{{bill.price}}</td>
-                <td>{{bill.total_price}}</td>
+                <td>{{bill.price}} ريال</td>
+                <td>{{bill.selling_price}} ريال</td>
+
+                <td>{{bill.calculate_total_price}}</td>
               </tr>
               {% empty %}
               <tr>
-                <td colspan='17' style="font-size:larger">لا يوجد فواتير</td>
+                <td colspan='18' style="font-size:larger">لا يوجد فواتير</td>
               </tr>
               {% endfor %}
           {% else %}
           <tr>
-            <td colspan='17' style="font-size:larger">لا يوجد فواتير</td>
+            <td colspan='18' style="font-size:larger">لا يوجد فواتير</td>
           </tr>
           {% endif %}
 
@@ -305,13 +310,26 @@
               <td colspan='12' style="font-size:large">لا يوجد فواتير</td>
             </tr>
             {% endfor %}
-            <tr>
+            <tr style="font-weight: bold;">
               <td colspan="5"><b>اجمالى عدد الفواتير خلال هذا الشهر</b></td>
               {% if bills_num_this_month %}
               <td><b>{{bills_num_this_month}}</b></td>
                 
               {% else %}
               <td><b>0</b></td>
+
+              {% endif %}
+            </tr>
+
+            
+
+            <tr style="font-weight: bold;">
+              <td colspan="5"><b>اجمالى الارباح هذا الشهر</b></td>
+              {% if total_price_this_month %}
+              <td><b>{{total_price_this_month}} ريال</b></td>
+                
+              {% else %}
+              <td><b>0 ريال</b></td>
 
               {% endif %}
             </tr>

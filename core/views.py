@@ -3,6 +3,8 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.template import context
 from django.conf import settings
@@ -88,8 +90,20 @@ def welcome(request):
 
 
 def home(request):
+    today = datetime.date.today()
+    year = today.year
+    month = today.month
+    this_day = today.day
     items = models.Item.objects.all().order_by('-date')[:8]
-    today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+    today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+
+
+
+
+
+
+
+
 
     context = {
         'items' : items,
@@ -617,6 +631,8 @@ def make_bill(request):
             customer_phone = form.cleaned_data.get("customer_phone")
             customer_name = form.cleaned_data.get("customer_name")
             payment_method = form.cleaned_data.get("payment_method")
+            selling_price = form.cleaned_data.get("selling_price")
+
 
             check_customer_name = str(customer_name).split()
 
@@ -660,6 +676,7 @@ def make_bill(request):
                                     wig_color = order_item.item.wig_color,
                                     density = order_item.item.density,
                                     price = order_item.item.price,
+                                    selling_price = selling_price,
                                     pieces_num = order_item.quantity,
                                     account = account,
                                     slug_code = slug_code,
@@ -690,6 +707,9 @@ def make_bill(request):
                             bill_info["marketer"] = str(account.marketer)
                             bill_info["account_name"] = str(account.account_name)
                             bill_info["payment_method"] = str(payment_method)
+                            bill_info["selling_price"] = str(selling_price)
+
+
 
                             bill_info["country"] = str(country)
                             bill_info["address"] = str(address)
@@ -794,6 +814,16 @@ def show_bills(request):
             bills_num_this_month = 0
 
 
+
+        total_price_this_month = 0
+        # Retrieve a Bill instance (for example, the first one)
+        bill_instance = models.Bill2.objects.filter(date__year = year, date__month = month)
+
+        for bill in bill_instance:
+            total_price_this_month += bill.calculate_total_price()
+        
+
+
         # To start activate filter if the POST method is exists(activate the form) with no pagination , if not activate the pagination...
         if request.method == "POST":
             form = forms.BillFilterForAdmin(request.POST)
@@ -827,7 +857,7 @@ def show_bills(request):
             'bills_num_this_month' : bills_num_this_month,
             'form' : form,
             'bills_per_account' : bills_per_account,
-
+            'total_price_this_month' : total_price_this_month,
             }
     else:
         context = {}
@@ -1795,6 +1825,8 @@ def online_order(request):
             price = form.cleaned_data.get("price")
             pieces_num = form.cleaned_data.get("pieces_num")
             payment_method = form.cleaned_data.get("payment_method")
+            selling_price = form.cleaned_data.get("selling_price")
+
 
 
 
@@ -1839,6 +1871,7 @@ def online_order(request):
                             price = price,
                             pieces_num = pieces_num,
                             payment_method = payment_method,
+                            selling_price = selling_price,
 
                             account = account,
                             slug_code = slug_code,
@@ -1871,11 +1904,11 @@ def online_order(request):
                             "marketer" : str(account.marketer),
                             "account_name" : str(account.account_name),
                             "payment_method" : str(payment_method),
+                            'selling_price' : str(selling_price),
                             "country" : country,
                             "address" : address,
                             "customer_name" : customer_name,
                             "customer_phone" : customer_phone,
-
                             'slug_code' : slug_code,
                         }
 
@@ -1935,34 +1968,7 @@ def item_refund(request, slug):
         if form.is_valid():
             item_refund_pieces_num = form.cleaned_data.get('pieces_num')
 
-            if item.pieces_num == item_refund_pieces_num:
-                new_refund = models.Refund.objects.create(
-                    seller = item.seller,
-                    seller_phone_number = item.seller_phone_number,
-                    country = item.country,
-                    address = item.address,
-                    customer_phone = item.customer_phone,
-                    customer_name = item.customer_name,
-                    account_name = item.account.account_name,
-                    payment_method = item.payment_method,
-
-                    wig_type = item.wig_type,
-                    wig_long = item.wig_long,
-                    scalp_type = item.scalp_type,
-                    wig_color = item.wig_color,
-                    density = item.density,
-                    price = item.price,
-                    pieces_num = item_refund_pieces_num,
-                    total_price = (item_refund_pieces_num * item.price),
-                    account = item.account,
-                )
-
-                new_refund.save()
-                item.delete()
-
-                messages.success(request, "تم استرجاع هذا المنتج بنجاح")
-                return redirect("chart_view")
-            elif item_refund_pieces_num < item.pieces_num:
+            if item_refund_pieces_num <= item.pieces_num:
                 new_refund = models.Refund.objects.create(
                     seller = item.seller,
                     seller_phone_number = item.seller_phone_number,
@@ -1986,12 +1992,59 @@ def item_refund(request, slug):
 
                 new_refund.save()
 
-                item.pieces_num = item.pieces_num - item_refund_pieces_num
-                item.save()
 
-                messages.success(request, "تم استرجاع الكمية المطلوبة لهذا المنتج بنجاح")
-                return redirect("chart_view")
-            
+                ## Send a mail to the admin for the new refund...
+
+                from datetime import datetime
+
+                merge_data = {
+                    "refund_user" : request.user,
+                    "date" : datetime.now(),
+                    "wig_name" : "باروكة شعر طبيعى",
+                    "wig_type" : item.wig_type,
+                    "wig_long" : item.wig_long,
+                    "scalp_type" : item.scalp_type,
+                    "wig_color" : item.wig_color,
+                    "density" : item.density,
+                    "pieces_num" : str(item_refund_pieces_num),
+                    "price" : item.price,
+
+                    "total_cost" : str(item.selling_price * item_refund_pieces_num),
+
+                    "seller" : str(request.user),
+                    "seller_phone_number" : str(item.seller_phone_number),
+                    "marketer" : str(item.account.marketer),
+                    "account_name" : str(item.account.account_name),
+                    "payment_method" : str(item.payment_method),
+                    'selling_price' : str(item.selling_price),
+                    "country" : item.country,
+                    "address" : item.address,
+                    "customer_name" : item.customer_name,
+                    "customer_phone" : item.customer_phone,
+                }
+
+                html_body = render_to_string("core/refund_mail.html", merge_data)
+                subject = "Refund From LuxeBeauty-IMS Site"
+                
+                msg = EmailMultiAlternatives(
+                    subject = subject,
+                    from_email= settings.EMAIL_HOST_USER,
+                    to=(settings.EMAIL_HOST_USER,),
+                    reply_to=(settings.EMAIL_HOST_USER,),
+                    )
+                
+                msg.attach_alternative(html_body, "text/html")
+                msg.send()
+
+                if item_refund_pieces_num < item.pieces_num:
+                    item.pieces_num = item.pieces_num - item_refund_pieces_num
+                    item.save()
+                    messages.success(request, "تم استرجاع الكمية المطلوبة لهذا المنتج بنجاح")
+                    return redirect("chart_view")
+                else:
+                    item.delete()
+                    messages.success(request, "تم استرجاع هذا المنتج بنجاح")
+                    return redirect("chart_view")
             else:
                 messages.warning(request, "عفواً, عدد القطع المراد استرجاعها تزيد عن عدد القطع المُباعة لهذا المنتج")
                 return redirect("item_refund", slug)
@@ -2225,10 +2278,6 @@ def edit_phone(request, slug):
 
 
 
-
-
-
-
 @login_required(login_url='user-login')
 def delete_phone(request, slug):
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
@@ -2272,11 +2321,6 @@ def add_phone_to_user(request):
             if form.is_valid():
                 name = form.cleaned_data.get("name")
                 phones = form.cleaned_data.get("phone")
-
-                print("*" * 100)
-                print("name = ", name)
-                for phone in phones:
-                    print(phone)
 
                 for phone in phones:
                     create_slug = create_slug_code()

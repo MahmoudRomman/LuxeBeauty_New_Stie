@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Template</title>
+    <title>New Bill</title>
     <style>
         /* Add your custom styles here */
 
@@ -51,7 +51,7 @@
     </header>
 
     <div>
-        <p>Dear LuxeBeauty Owner,</p>
+        <p>Dear LuxeBeauty-IMS Owner,</p>
 
         
         {% if order %}
@@ -77,8 +77,8 @@
                 <th scope="col" style="text-align: center">الترتيب</th>
                 <th scope="col" style="text-align: center">المنتج</th>
                 <th scope="col" style="text-align: center">الكمية</th>
-                <th scope="col" style="text-align: center">سعر الواحده</th>
-                <th scope="col" style="text-align: center">السعر الكلى</th>
+                <th scope="col" style="text-align: center">سعر المخزن</th>
+                <th scope="col" style="text-align: center">سعر البيع</th>
             </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -91,7 +91,10 @@
                 <td style="text-align: center">{{orderitem.item.name}} - {{orderitem.item.wig_type}} - طول {{orderitem.item.wig_long}} - فروة {{orderitem.item.scalp_type}} - لون {{orderitem.item.wig_color}} - كثافة {{orderitem.item.density}} </td>
                 <td style="text-align: center">{{orderitem.quantity}}</td>
                 <td style="text-align: center">{{orderitem.item.price}} ريال</td>
-                <td style="text-align: center">{{orderitem.get_final_price}} ريال</td>
+                <!-- <td style="text-align: center">{{orderitem.item.price}} ريال</td> -->
+                <td style="text-align: center">{{bill.selling_price}} ريال</td>
+
+
 
             </tr>
             {% endfor %}
@@ -101,7 +104,9 @@
                     <td style="text-align: center">{{wig_name}} - {{wig_type}} - طول {{wig_long}} - فروة {{scalp_type}} - لون {{wig_color}} - كثافة {{density}} </td>
                     <td style="text-align: center">{{pieces_num}}</td>
                     <td style="text-align: center">{{price}} ريال</td>
-                    <td style="text-align: center">{{total_cost}} ريال</td>
+                    <!-- <td style="text-align: center">{{total_cost}} ريال</td> -->
+                <td style="text-align: center">{{selling_price}} ريال</td>
+
                 </tr>
             {% endif %}
 
@@ -174,7 +179,7 @@
 
         <p style="text-align: center;">Thank you for reading!</p>
 
-        <p style="text-align: center;">Best regards,<br>LuxeBeauty Site</p>
+        <p style="text-align: center;">Best regards,<br>LuxeBeauty-IMS Site</p>
     </div>
 
 </body>

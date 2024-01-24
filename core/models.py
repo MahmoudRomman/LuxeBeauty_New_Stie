@@ -105,7 +105,7 @@ class Item(models.Model):
     wig_color = models.CharField(max_length=150, choices=wig_color, null=False)
     density = models.CharField(max_length=150, choices=density, null=False)
     
-    price = models.IntegerField(default=1500, validators=[MaxValueValidator(7000), MinValueValidator(400)])
+    price = models.IntegerField(default=1500, validators=[MaxValueValidator(15000), MinValueValidator(50)])
 
     # Added new...
     image = models.ImageField(default="no_product_img.png", upload_to="core_images", null=True, blank=True)
@@ -219,6 +219,9 @@ class Bill2(models.Model):
     wig_color = models.CharField(max_length=150, choices=wig_color, null=False)
     density = models.CharField(max_length=150, choices=density, null=False)
     price = models.IntegerField(default=1500)
+    # selling_price added Newlly...
+    selling_price = models.PositiveIntegerField(default=0)
+
     pieces_num = models.PositiveIntegerField(default=0)
     account = models.ForeignKey("Account", on_delete=models.CASCADE)
 
@@ -235,6 +238,10 @@ class Bill2(models.Model):
     def total_price(self):
         total = self.price * self.pieces_num
         return total
+    
+
+    def calculate_total_price(self):
+        return self.pieces_num * self.selling_price
     
 
 
@@ -266,6 +273,9 @@ class Refund(models.Model):
     wig_color = models.CharField(max_length=150, choices=wig_color, null=False)
     density = models.CharField(max_length=150, choices=density, null=False)
     price = models.IntegerField()
+
+    # selling_price added Newlly...
+    selling_price = models.PositiveIntegerField(default=0)
     pieces_num = models.PositiveIntegerField(default=0)
 
     total_price = models.IntegerField()
@@ -279,6 +289,10 @@ class Refund(models.Model):
 
     def __str__(self):
         return f"{self.seller}"
+    
+
+    def calculate_total_price(self):
+        return self.pieces_num * self.selling_price
     
     
 
@@ -296,7 +310,7 @@ class Coupon(models.Model):
 
 
 class Offer(models.Model):
-    Offer = models.CharField(max_length=500)
+    offer = models.CharField(max_length=500)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

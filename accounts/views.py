@@ -1,29 +1,21 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.contrib.auth.models import Permission
 from django.contrib.auth.models import User
 import importlib
 from . import forms
 from . import models
-
 from core import views as core_views
 from core import custom_permissions as core_custom_permissions
-
 from core import models as core_models
 from django.contrib import messages
-
-
 from django.views.decorators.cache import never_cache
 from django.views.decorators.clickjacking import xframe_options_deny
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist
-
-
 from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.urls import reverse_lazy
-
-
 
 
 # Create your views here.
@@ -48,18 +40,6 @@ from django.contrib.contenttypes.models import ContentType
 
 
 content_type = ContentType.objects.get_for_model(accounts_models.Profile)
-# existing_permissions = Permission.objects.filter(content_type=content_type, codename='can_make_order')
-
-# if not existing_permissions.exists():
-#     can_make_order_permission = Permission.objects.create(
-#         codename='can_make_order',
-#         name='Can Make Order',
-#         content_type=content_type,
-#     )
-
-
-
-
 
 
 
@@ -89,24 +69,7 @@ def register(request):
                 profile.job_type = job_type
                 profile.save()
 
-                # if job_type == "Seller":
-                #     user.user_permissions.add(core_views.can_make_order_permission)
-                #     user.save()
-
-                from django.contrib.auth.models import Permission
-
                 if job_type == "Seller":
-                    # try:
-                    #     custom_permission = Permission.objects.filter(codename='can_make_order', name='Can Make Order')
-
-                    #     user.user_permissions.add(custom_permission)
-                    #     user.save()
-                    # except ObjectDoesNotExist:
-                    #     custom_permissions.can_make_order_permission
-                    #     custom_permission = Permission.objects.get(codename='can_make_order', name='Can Make Order')
-                    #     user.user_permissions.add(custom_permission)
-                    #     user.save()
-
                     custom_permission = Permission.objects.filter(codename='can_make_order', name='Can Make Order')
                     if len(custom_permission):
                             custom_permission = Permission.objects.get(codename='can_make_order', name='Can Make Order')

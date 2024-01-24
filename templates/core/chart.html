@@ -113,7 +113,9 @@
 
 
           <th scope="col">عدد القطع</th>
-          <th scope="col">سعر القطعة</th>
+          <th scope="col">سعر المخزن</th>
+          <th scope="col">سعر البيع</th>
+
           <th scope="col">السعر الكلى</th>
           <th scope="col">استرجاع؟</th>
         </tr>
@@ -123,7 +125,6 @@
         {% for bill in page_obj %}
         <tr style="font-size: small;">
           <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
-          <!-- <td>{{bill.seller}}</td> -->
           <td>{{bill.seller_phone_number}}</td>
           <td>{{bill.country}}</td>
           <td>{{bill.address}}</td>
@@ -142,8 +143,10 @@
           <td>{{bill.wig_color}}</td>
           <td>{{bill.density}}</td>
           <td>{{bill.pieces_num}}</td>
-          <td>{{bill.price}}</td>
-          <td>{{bill.total_price}}</td>
+          <td>{{bill.price}} ريال</td>
+          <td>{{bill.selling_price}} ريال</td>
+
+          <td>{{bill.calculate_total_price}}</td>
 
 
           <td style="font-size: xx-large;">
@@ -157,15 +160,15 @@
 
         {% empty %}
         <tr>
-          <td colspan='18' style="font-size:medium">
+          <td colspan='19' style="font-size:medium">
             لا يوجد لديك أى بيانات
           </td>
         </tr>
         {% endfor %}
 
         {% if page_obj %}
-        <tr>
-            <td colspan="17" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
+        <tr style="font-weight: bold;">
+            <td colspan="18" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
             <td><b>{{total_bills}}</b></td>
         </tr>
         {% endif %} 
@@ -274,22 +277,22 @@
             {% endfor %}
               
 
-          <tr>
+          <tr style="font-weight: bold;">
             <td colspan="4"><b>خصوماتك خلال هذا الشهر</b></td>
             <td><b>{{total_penality}} EGP</b></td>
           </tr>
 
-          <tr>
+          <tr style="font-weight: bold;">
             <td colspan="4"><b>مكافأتك خلال هذا الشهر</b></td>
             <td><b>{{total_reward}} EGP</b></td>
           </tr>
 
-          <tr>
+          <tr style="font-weight: bold;">
             <td colspan="4"><b>الراتب الاساسى</b></td>
             <td><b>2000 EGP</b></td>
           </tr>
           
-          <tr>
+          <tr style="font-weight: bold;">
             <td colspan="4"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
             <td><b>{{final_salary}} EGP</b></td>
           </tr>
@@ -353,22 +356,22 @@
 
 
 
-          <tr>
+          <tr style="font-weight: bold;">
             <td colspan="4"><b>خصوماتك خلال هذا الشهر</b></td>
             <td><b>{{total_penality}} EGP</b></td>
           </tr>
 
-          <tr>
+          <tr style="font-weight: bold;">
             <td colspan="4"><b>مكافأتك خلال هذا الشهر</b></td>
             <td><b>{{total_reward}} EGP</b></td>
           </tr>
 
-          <tr>
+          <tr style="font-weight: bold;">
             <td colspan="4"><b>الراتب الاساسى</b></td>
             <td><b>2000 EGP</b></td>
           </tr>
           
-          <tr>
+          <tr style="font-weight: bold;">
             <td colspan="4"><b>مٌستحق الراتب خلال هذا الشهر</b></td>
             <td><b>{{final_salary}} EGP</b></td>
           </tr>
