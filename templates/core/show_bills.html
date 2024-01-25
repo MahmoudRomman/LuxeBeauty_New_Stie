@@ -15,6 +15,114 @@
 
 
 
+<!--Graphs-->
+<div class="container">
+  <div class="row my-5">
+      <div class="col-md-6">
+        <p style="text-align: center;">المنتجات الأكثر مبيعاً لديك </p>
+
+        <div class="bg-white">
+            <canvas id="myChart1" width="400" height="300"></canvas>
+            <script>
+                var ctx = document.getElementById('myChart1').getContext('2d');
+                var myChart1 = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for each_item in perfect_items %} '{{each_item.item_desc}}', {% endfor %}],
+                        datasets: [{
+                            label: 'عدد القطع المُباعة',
+                            data: [{% for each_item in perfect_items %} {{each_item.item_quantity}}, {% endfor %}],
+                            backgroundColor: [
+                            '#F63D3A',
+                                '#f16179',
+                                '#19A68C',
+                                '#FDA543',
+                                '#193B48',
+                            ],
+                            borderColor: [
+                            '#F63D3A',
+                                '#f16179',
+                                '#19A68C',
+                                '#FDA543',
+                                '#193B48',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <p style="text-align: center;">الحسابات الأكثر مبيعاً لديك خلال هذا الشهر</p>
+        <div class="bg-white">
+            <canvas id="myChart" width="400" height="300"></canvas>
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [{% for each_perfect in sorted_perfect_accounts %} '{{each_perfect.account_name}}', {% endfor %}],
+                        datasets: [{
+                            label: 'الحسابات الأكثر مبيعاً',
+                            data: [{% for each_perfect in sorted_perfect_accounts %} {{each_perfect.bills_count}}, {% endfor %}],
+                            backgroundColor: [
+                                '#F63D3A',
+                                '#f16179',
+                                '#19A68C',
+                                '#FDA543',
+                                '#193B48',
+                            ],
+                            borderColor: [
+                                '#F63D3A',
+                                '#f16179',
+                                '#19A68C',
+                                '#FDA543',
+                                '#193B48',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="container-xxl py-5">
   <div class="container">
@@ -403,6 +511,9 @@
             }
         }
     </style>
+
+
+
 
 {% endblock content %}
   

@@ -99,12 +99,6 @@ def home(request):
 
 
 
-
-
-
-
-
-
     context = {
         'items' : items,
 
@@ -129,9 +123,14 @@ def item_detail(request, slug):
 
 
 def have_offer(request):
+    today = datetime.date.today()
+    year = today.year
+    month = today.month
+    this_day = today.day
     limit = 0.00
     items = models.Item.objects.filter(discount_price__gt =limit)[:8]
-    today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+    today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+
 
     context = {
         'items' : items,
@@ -146,10 +145,15 @@ def have_offer(request):
 
 
 def new_arrived(request):
+    today = datetime.date.today()
+    year = today.year
+    month = today.month
+    this_day = today.day
+
     items = models.Item.objects.all().order_by('-date')[:4]
     new_arrived_items = models.Item.objects.all().order_by('-date')[:4]
-
-    today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+    today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+    
     context = {
         'items' : items,
         'new_arrived_items' : new_arrived_items,
@@ -164,8 +168,16 @@ def new_arrived(request):
 
 
 def best_seller(request):
+
+    today = datetime.date.today()
+    year = today.year
+    month = today.month
+    this_day = today.day
+
     items = models.Item.objects.all().order_by('-num_of_sales')[:4]
-    today_gift = models.Offer.objects.all().order_by('-date')[0:1]
+    today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+
+
 
     context = {
         'items' : items,
@@ -789,6 +801,33 @@ def show_bills(request):
         month = today.month
 
 
+        # Script to show to most perfect selling accounts in our organization...
+        social_accounts = models.Account.objects.all()
+        perfect_accounts = []
+
+        if len(social_accounts):
+            for account in social_accounts:
+                total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+                perfect_accounts.append({'account_name': account.account_name, 'bills_count': total_pieces})
+        else:
+            perfect_accounts = []
+
+        sorted_perfect_accounts = sorted(perfect_accounts[:5], key=lambda x: x['bills_count'], reverse=True)
+
+
+
+        most_selled_items = models.Item.objects.all().order_by('-num_of_sales')[:5]
+        perfect_items = []
+
+        for item in most_selled_items:
+            perfect_items.append({'item_desc': 
+                                     f"{item.name + ' - ' + item.wig_type + ' - ' + item.wig_long + ' - ' + item.scalp_type + ' - ' + ' كثافة ' + item.density }", 
+                                     'item_quantity': item.num_of_sales})
+
+
+
+        
+
         # Script to calculate the number of bills per account in this month...
         social_accounts = models.Account.objects.all()
         bills_per_account = []
@@ -858,6 +897,9 @@ def show_bills(request):
             'form' : form,
             'bills_per_account' : bills_per_account,
             'total_price_this_month' : total_price_this_month,
+
+            'sorted_perfect_accounts' : sorted_perfect_accounts,
+            'perfect_items' : perfect_items,
             }
     else:
         context = {}
