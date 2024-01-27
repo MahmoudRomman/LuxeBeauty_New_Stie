@@ -162,7 +162,7 @@
                     <a href="{% url 'delete_from_store' item.slug %}" class="trash-icon-style">
                       <i class="fa fa-trash" style="font-size: xx-large;"></i>
                     </a>
-              </td>
+                </td>
               </tr>
               {% empty %}
               <tr>
@@ -239,10 +239,6 @@
     
           </ul>
       </nav>
-
-
-
-
       </div>
 
           <div class="add_products_to_store_btn">
@@ -252,10 +248,12 @@
           </div> 
 
     </div>
-
   </section>
 
   <!-- end shop section -->
+
+
+
 
 
 
@@ -290,34 +288,31 @@
 
 
 
-
-
     .container {
-            max-width: 95%;
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-            table-layout: fixed;
-            overflow-x: auto;
+        max-width: 95%;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+        table-layout: fixed;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .container {
+            max-width: 100%;
         }
 
-        table {
-            width: 100%;
-
+        th, td {
+            max-width: none; 
         }
-
-
-
-        @media only screen and (max-width: 600px) {
-            .container {
-                max-width: 100%;
-            }
-
-            th, td {
-                max-width: none; /* Remove max-width on smaller screens */
-            }
-        }
+    }
 </style>
+
+
+
 {% endblock content %}
   
 

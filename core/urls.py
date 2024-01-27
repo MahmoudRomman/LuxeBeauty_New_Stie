@@ -26,9 +26,6 @@ urlpatterns = [
     path('delete_from_store/<slug>/', views.delete_from_store, name="delete_from_store"),
 
 
-    
-
-
     path('order_summary/', views.order_summary, name="order_summary"),
     path('add-to-cart/<slug>/', views.add_to_cart, name="add-to-cart"),
     path('remove_single_item_from_cart/<slug>/', views.remove_single_item_from_cart, name="remove_single_item_from_cart"),

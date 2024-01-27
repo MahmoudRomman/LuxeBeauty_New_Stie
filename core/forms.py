@@ -86,7 +86,7 @@ class ItemForm(forms.Form):
 
 
 
-    image = forms.ImageField(label_suffix="sdfsdf", widget=forms.FileInput(attrs={
+    image = forms.ImageField(required=True, widget=forms.FileInput(attrs={
         'class': 'form-control',
         'label_suffix': "Image",
         'style': 'border-color:wightblack; border-radius: 10px; height: 45px;'

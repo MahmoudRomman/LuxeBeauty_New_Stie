@@ -373,6 +373,9 @@ def delete_from_store(request, slug):
             return redirect("store")
         
         return render(request, 'core/delete_item_confirm.html')
+    
+
+    
     else:
         return redirect("not_have_permissions")
 

@@ -433,9 +433,9 @@ button {
 
 .center_buttons a {
   display: inline-block;
-  background-color: #db4566;
+  background-color: #4483a9;
   color: #ffffff;
-  border: 1px solid #db4566;
+  border: 1px solid #4483a9;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
@@ -457,7 +457,7 @@ button {
 
 .center_buttons a:hover {
   background-color: transparent;
-  color: #db4566;
+  color: #4483a9;
 }
 
 
@@ -564,9 +564,9 @@ button {
 .shop_section .show_all_products_btn a {
   display: inline-block;
   padding: 10px 40px;
-  background-color: #2471A3;
+  background-color: #a94461;
   color: #ffffff;
-  border: 1px solid #2471A3;
+  border: 1px solid #a94461;
   border-radius: 20px;
   -webkit-transition: all .3s;
   transition: all .3s;
@@ -580,7 +580,7 @@ button {
 
 .shop_section .show_all_products_btn a:hover {
   background-color: transparent;
-  color: #2471A3;
+  color: #a94461;
 }
 
 
@@ -925,9 +925,9 @@ button {
 .shop_section .add_to_cart_per_product a {
   display: inline-block;
   padding: 10px 40px;
-  background-color: #2471A3;
+  background-color: #a94461;
   color: #ffffff;
-  border: 1px solid #2471A3;
+  border: 1px solid #a94461;
   border-radius: 20px;
   -webkit-transition: all .3s;
   transition: all .3s;
@@ -940,7 +940,7 @@ button {
 
 .shop_section .add_to_cart_per_product a:hover {
   background-color: transparent;
-  color: #2471A3;
+  color: #a94461;
 }
 
 
@@ -2665,7 +2665,7 @@ button {
   display: inline-block;
   padding: 7px 30px;
   background-color: #ffffff;
-  color: #2471A3;
+  color: #4483a9;
   border: 1px solid #ffffff;
   border-radius: 5px;
   -webkit-transition: all .3s;
@@ -2723,7 +2723,7 @@ button {
 }
 
 .gift_section .box {
-  background-color: #2471A3;
+  background-color: #4483a9;
   border-radius: 15px;
   color: #ffffff;
 }
