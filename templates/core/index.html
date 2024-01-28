@@ -143,13 +143,6 @@
   <section class="shop_section layout_padding">
     <div class="container" style="max-width: 1400px;">
 
-
-      <!-- <div class="heading_container heading_center">
-        <h2 style="text-align: center;">
-           المنتجات المُضافه حديثاََ
-        </h2>
-      </div> -->
-
       <div class="center_buttons">
         
         <a name="shop_section" href="{%  url 'new_arrived' %}#shop_section">المُضافة حديثأ</a>
@@ -161,12 +154,6 @@
 
 
       <div class="row">
-
-        <!-- padding: 20px;
-        
-         -->
-
-
 
         {% for item in items.all %}
             <div class="col-xl-3 col-12 col-sm-6 col-lg-4" style="padding: 10px;">
@@ -373,7 +360,7 @@
         }
 
         .marquee-content {
-            animation: marquee 50s linear infinite;
+            animation: marquee 30s linear infinite;
             padding: 10px; /* Optional: Add padding for styling */
         }
 

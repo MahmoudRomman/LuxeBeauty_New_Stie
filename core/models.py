@@ -116,7 +116,7 @@ class Item(models.Model):
     discount_price = models.FloatField(default=0.00, blank=True, null=True)
     slug = models.SlugField()
 
-    num_of_sales = models.PositiveIntegerField(default=0)
+    num_of_sales = models.PositiveIntegerField(default=1)
     
 
 
