@@ -433,9 +433,9 @@ button {
 
 .center_buttons a {
   display: inline-block;
-  background-color: #4483a9;
+  background-color: #a94461;
   color: #ffffff;
-  border: 1px solid #4483a9;
+  border: 1px solid #a94461;
   border-radius: 5px;
   -webkit-transition: all .3s;
   transition: all .3s;
@@ -457,7 +457,7 @@ button {
 
 .center_buttons a:hover {
   background-color: transparent;
-  color: #4483a9;
+  color: #a94461;
 }
 
 

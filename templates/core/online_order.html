@@ -173,46 +173,62 @@
                                     </div>
     
     
-                                    <div class="col-12 col-sm-6">
+
+                                    
+
+
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">اسم الباروكة:</label>
+
                                         <div class="form-group">
                                             {{form.wig_name}}
                                         </div>
                                     </div>
     
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">نوع الباروكة:</label>
                                         <div class="form-group">
                                             {{form.wig_type}}
                                         </div>
                                     </div>
     
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">طول الباروكة:</label>
+
                                         <div class="form-group">
                                             {{form.wig_long}} 
                                         </div>
                                     </div>
     
     
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">نوع الفروة:</label>
+
                                         <div class="form-group">
                                             {{form.scalp_type}}
                                         </div>
                                     </div>
     
     
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">لون الباروكة:</label>
                                         <div class="form-group">
                                             {{form.wig_color}}
                                         </div>
                                     </div>
     
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">كثافة الباروكة:</label>
+
                                         <div class="form-group">
                                             {{form.density}}
                                         </div>
                                     </div>
     
     
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">سعر الباروكة:</label>
+
                                         <div class="form-group">
                                             {{form.price}}
                                         </div>
@@ -220,21 +236,27 @@
                                     
                                 
     
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">عدد القطع:</label>
+
                                         <div class="form-group">
                                             {{form.pieces_num}}
                                         </div>
                                     </div>
 
 
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">سعر البيع:</label>
+
                                         <div class="form-group">
                                             {{form.selling_price}}
                                         </div>
                                     </div>
 
 
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">طريقة الدفع:</label>
+
                                         <div class="form-group">
                                             {{form.payment_method}}
                                         </div>
@@ -248,25 +270,31 @@
                                     </div>
     
     
-                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; margin-bottom: -15px;">
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; margin-bottom: -15px; text-align: right;">
+                                        <label style="font-size: large;">اختر الدولة:</label>
+
                                         <div class="form-group">{{form.country}}</div>    
                                     </div>
     
                                     
-                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto">
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: large;">عنوان العميل:</label>
+
                                         <div class="form-group">
                                             {{form.address}}
                                         </div>
                                     </div>
     
-                                    <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto;">
+                                    <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: large;">هاتف العميل:</label>
                                         <div class="form-group">
                                             {{form.customer_phone}}
                                         </div>
                                     </div>
     
     
-                                    <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto;">
+                                    <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: large;">اسم العميل:</label>
                                         <div class="form-group">
                                             {{form.customer_name}}
                                         </div>
@@ -274,7 +302,9 @@
     
     
     
-                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto;">
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: large;">هاتف البائع:</label>
+
                                         <div class="form-group">
                                             {{form.seller_phone_number}}
                                         </div>
@@ -349,7 +379,11 @@
         const loaderWrapper = document.getElementById('loader-wrapper');
         const emailForm = document.getElementById('emailForm');
 
-        
+        const defaultValues = JSON.parse(localStorage.getItem("online_order_data")?? JSON.stringify("{}"));
+        Object.entries(defaultValues).forEach(([key, value]) => {
+            const el = document.querySelector(`[name="${key}"]`);
+            el.value = value;
+        })
 
         emailForm.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -359,6 +393,15 @@
 
             // Serialize form data
             const formData = new FormData(emailForm);
+
+            //saving form data to localstorage to pressist form values
+            const values = {};
+            formData.forEach((value, key) => {
+                if(key !== 'csrfmiddlewaretoken')
+                    values[key] = value;
+            });
+
+            localStorage.setItem("online_order_data", JSON.stringify(values))
 
             // Send a POST request using AJAX
             fetch('/online_order/', {
@@ -377,6 +420,7 @@
                     // Redirect to the specified URL on success
                     const redirectUrl = emailForm.getAttribute('data-redirect-url');
                     window.location.href = redirectUrl;
+                    localStorage.removeItem("online_order_data");
 
                 }else if (data.status === 'error') {
                     // Handle form validation errors (if any)
