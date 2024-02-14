@@ -1,71 +1,95 @@
-
 <!-- info section -->
 
-<section class="info_section  layout_padding2-top">
+<footer class="footer bg-dark info_section layout_padding2-top mt-6">
   <div class="social_container">
     <div class="social_box">
-      <a href="#" target="_blank" class="social-icon"><i class="fa fa-facebook"></i></a>
-      <a href="#" target="_blank" class="social-icon"><i class="fa fa-twitter"></i></a>
-      <a href="#" target="_blank" class="social-icon"><i class="fa fa-instagram"></i></a>
-      <a href="#" target="_blank" class="social-icon"><i class="fa fa-linkedin"></i></a>
-      <a href="#" target="_blank" class="social-icon"><i class="fa fa-tiktok"></i></a>
+      <a href="#" target="_blank" class="social-icon"
+        ><i class="fa fa-facebook"></i
+      ></a>
+      <a href="#" target="_blank" class="social-icon"
+        ><i class="fa fa-twitter"></i
+      ></a>
+      <a href="#" target="_blank" class="social-icon"
+        ><i class="fa fa-instagram"></i
+      ></a>
+      <a href="#" target="_blank" class="social-icon"
+        ><i class="fa fa-linkedin"></i
+      ></a>
+      <a href="#" target="_blank" class="social-icon"
+        ><i class="fa fa-tiktok"></i
+      ></a>
     </div>
   </div>
   <div class="info_container">
     <div class="container">
       <div class="row">
-        <div class="col-12 col-lg-6 col-xl-3" style="text-align: center;">
+        <div class="col-12 col-lg-6 col-xl-3" style="text-align: center">
           <h6>عن المتجر</h6>
-          <p>
-            .متجر لوكس بيوتى هو متجر لبيع البواريك داخل السعودية والوطن العربى وجميع دول العالم تحت مسمى معروف باسم لوكس بيوتى والشركة لديها فروع فى مختلف دول العالم العربى مثل السعودية, قطر والامارات
+          <p class="text-white-50 lh-lg">
+            .متجر لوكس بيوتى هو متجر لبيع البواريك داخل السعودية والوطن العربى
+            وجميع دول العالم تحت مسمى معروف باسم لوكس بيوتى والشركة لديها فروع
+            فى مختلف دول العالم العربى مثل السعودية, قطر والامارات
           </p>
         </div>
 
+        <div class="col-12 col-lg-6 col-xl-3" style="text-align: center">
+          <h5 class="text-white mb-4">روابط تنقل سريعة</h5>
+          <a class="btn btn-link text-white-50" href="{% url 'home' %}"
+            >الصفحة الرئيسية</a
+          >
+          <a class="btn btn-link text-white-50" href="{% url 'chart_view' %}"
+            >فواتيرى</a
+          >
+          <a class="btn btn-link text-white-50" href="{% url 'shop' %}"
+            >المتجر</a
+          >
+          <a class="btn btn-link text-white-50" href="{% url 'order_summary' %}"
+            >السلة</a
+          >
+        </div>
 
-
-        <div class="col-12 col-lg-6 col-xl-3" style="text-align: center;">
-          <h5 class="text-white">روابط تنقل سريعة</h5>
-          <a class="btn btn-link text-white-50" href="{% url 'home' %}">الصفحة الرئيسية</a>
-          <a class="btn btn-link text-white-50" href="{% url 'chart_view' %}">فواتيرى</a>
-          <a class="btn btn-link text-white-50" href="{% url 'shop' %}">المتجر</a>
-          <a class="btn btn-link text-white-50" href="{% url 'order_summary' %}">السلة</a>
-        </div> 
-
-
-
-        <div class="col-12 col-lg-6 col-xl-3" style="text-align: center;">
+        <div class="col-12 col-lg-6 col-xl-3" style="text-align: center">
           <h6>تحتاج مساعدة؟</h6>
-          <p>
-            يمكنك التواصل معنا عن طريق لينك واتساب المٌثبت أسفل الشاشه او عن طريق الايميل الخاص بخدمة العملاء أو عن طريق الخط الساخن رقم, 222222, شكرا لكم
+          <p class="text-white-50 lh-lg">
+            يمكنك التواصل معنا عن طريق لينك واتساب المٌثبت أسفل الشاشه او عن
+            طريق الايميل الخاص بخدمة العملاء أو عن طريق الخط الساخن رقم, 222222,
+            شكرا لكم
           </p>
         </div>
 
-        <div class="col-12 col-lg-6 col-xl-3" style="text-align: center;">
+        <div class="col-12 col-lg-6 col-xl-3 text-center info">
           <h6>تواصل معنا</h6>
           <div class="info_link-box">
-            <a href="https://www.google.com/maps/d/u/0/edit?mid=1w2rj0-2SWe12FCVviCOudD4hYKMdtGs&usp=sharing" target="_blank">
-              <i class="fa fa-map-marker" aria-hidden="true"></i>
-              <span> Cairo, Egypt </span>
-            </a>
+            <div class="info-link">
+              <a
+                href="https://www.google.com/maps/d/u/0/edit?mid=1w2rj0-2SWe12FCVviCOudD4hYKMdtGs&usp=sharing"
+                target="_blank"
+              >
+                <i class="fa fa-map-marker mr-2" aria-hidden="true"></i>
+                <span> Cairo, Egypt </span>
+              </a>
+            </div>
 
-            
-            <a href="">
-              <i class="fa fa-phone" aria-hidden="true"></i>
-              <span>+20 1223548005</span>
-            </a>
+            <div class="info-link">
+              <a href="">
+                <i class="fa fa-phone mr-2" aria-hidden="true"></i>
+                <span>+20 1223548005</span>
+              </a>
+            </div>
 
             <!-- <a href="mailto:mahmoud.sayyedahmed900@gmail.com?subject=Subject%20of%20the%20Email&body=Body%20of%20the%20Email"> -->
-            <a href="mailto:luxebeautyims@gmail.com">
-              
-              <i class="fa fa-envelope" aria-hidden="true"></i>
-              <span style="width: 93%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-inline: auto;"> luxebeautyims@gmail.com </span>
-            </a>
-
+            <div class="info-link">
+              <a href="mailto:luxebeautyims@gmail.com">
+                <i class="fa fa-envelope mr-2" aria-hidden="true"></i>
+                <span
+                >
+                  luxebeautyims@gmail.com
+                </span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
- 
-</section>
+</footer>

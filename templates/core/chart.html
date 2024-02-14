@@ -12,7 +12,7 @@
 <h1 class="text-center mb-5 wow fadeInUp mt-5" data-wow-delay="0.1s">احصائياتك هذا الشهر حتى الان</h1>
 
 
-<div style="width: 50%; margin: 0 auto; margin-bottom: 8%;">
+<div style="width: 80vw; height: 80vh; margin: 0 auto; margin-bottom: 2%;">
     <canvas id="myChart"></canvas>
 </div>
 
@@ -60,14 +60,14 @@
                 <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
                   {% csrf_token %}
                   <div class="row g-3">
-                      <div class="col-12 col-sm-2">
+                      <div class="col-md-8">
                           <div class="form-group">
                               {{seller_bill_filter_form.bill_search}}
                           </div>
                       </div>
 
-                      <div class="btn_bill_search col-12 col-sm-2" style="font-size: large;">
-                          <input type="submit" value="بحث">
+                      <div class="btn_bill_search col-sm-4 " style="font-size: large;">
+                          <input type="submit" value="بحث" class="btn btn-danger">
                       </div>
 
                   </div>
@@ -82,99 +82,109 @@
 
 
 
-<div class="container" style="margin-top: -70px;">
+<div class="container" style="margin-top: 20px;">
+  <h2 style="margin: auto; margin-bottom: 20px; text-align: center;">
+    تفصيل بيانات الفواتير الخاصة بك خلال هذا الشهر
+  </h2>
   <div class="row">
 
-    <h2 style="margin: auto; margin-bottom: 20px;">
-      تفصيل بيانات الفواتير الخاصة بك خلال هذا الشهر
-    </h2>
+    <div class="table-responsive">
+      <table class="table table-bordered" dir='rtl'>
+        <thead>
+          <tr style="font-size: large;">
+            <th scope="col">الترتيب</th>
+            <!-- <th scope="col">اسم البائع</th> -->
+            <th scope="col">هاتف البائع</th>
+            <th scope="col">الدولة</th>
+            <th scope="col">العنوان</th>
+            <th scope="col">اسم العميل</th>
+            <th scope="col">هاتف العميل</th>
+            <th scope="col">اسم الحساب</th>
+            <th scope="col">طريقة الدفع</th>
+  
+  
+            <th scope="col">  التاريخ</th>
+  
+            <th scope="col">نوع الباروكه</th>
+            <th scope="col">الطول</th>
+            <th scope="col">نوع الفروة</th>
+            <th scope="col">اللون</th>
+            <th scope="col">الكثافة</th>
+  
+  
+            <th scope="col">عدد القطع</th>
+            <th scope="col">سعر المخزن</th>
+            <th scope="col">سعر البيع</th>
+  
+            <th scope="col">السعر الكلى</th>
+            <th scope="col">الفاتورة</th>
 
-  <table class="table table-bordered" dir='rtl'>
-      <thead>
-        <tr style="font-size: large;">
-          <th scope="col">الترتيب</th>
-          <!-- <th scope="col">اسم البائع</th> -->
-          <th scope="col">هاتف البائع</th>
-          <th scope="col">الدولة</th>
-          <th scope="col">العنوان</th>
-          <th scope="col">اسم العميل</th>
-          <th scope="col">هاتف العميل</th>
-          <th scope="col">اسم الحساب</th>
-          <th scope="col">طريقة الدفع</th>
-
-
-          <th scope="col">  التاريخ</th>
-
-          <th scope="col">نوع الباروكه</th>
-          <th scope="col">الطول</th>
-          <th scope="col">نوع الفروة</th>
-          <th scope="col">اللون</th>
-          <th scope="col">الكثافة</th>
-
-
-          <th scope="col">عدد القطع</th>
-          <th scope="col">سعر المخزن</th>
-          <th scope="col">سعر البيع</th>
-
-          <th scope="col">السعر الكلى</th>
-          <th scope="col">استرجاع؟</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        {% for bill in page_obj %}
-        <tr style="font-size: small;">
-          <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
-          <td>{{bill.seller_phone_number}}</td>
-          <td>{{bill.country}}</td>
-          <td>{{bill.address}}</td>
-          <td>{{bill.customer_name}}</td>
-          <td>{{bill.customer_phone}}</td>
-          <td>{{bill.account_name}}</td>
-
-          <td>{{bill.payment_method}}</td>
-
-          <td>{{bill.date|date}}</td>
-
-
-          <td>{{bill.wig_type}}</td>
-          <td>{{bill.wig_long}}</td>
-          <td>{{bill.scalp_type}}</td>
-          <td>{{bill.wig_color}}</td>
-          <td>{{bill.density}}</td>
-          <td>{{bill.pieces_num}}</td>
-          <td>{{bill.price}} ريال</td>
-          <td>{{bill.selling_price}} ريال</td>
-
-          <td>{{bill.calculate_total_price}}</td>
-
-
-          <td style="font-size: xx-large;">
-            <a href="{% url 'item_refund' bill.slug_code %}" class="item_refund">
-              <i class="fa fa-undo" aria-hidden="true"></i>
-            </a>
-          </td>
-
+            <th scope="col">استرجاع؟</th>
+          </tr>
+        </thead>
+        <tbody>
           
-        </tr>
+          {% for bill in page_obj %}
+          <tr style="font-size: small;">
+            <th scope="row" class="mt-1">{{page_obj.start_index|add:forloop.counter0}}</th>
+            <td>{{bill.seller_phone_number}}</td>
+            <td>{{bill.country}}</td>
+            <td>{{bill.address}}</td>
+            <td>{{bill.customer_name}}</td>
+            <td>{{bill.customer_phone}}</td>
+            <td>{{bill.account_name}}</td>
+  
+            <td>{{bill.payment_method}}</td>
+  
+            <td>{{bill.date|date}}</td>
+  
+  
+            <td>{{bill.wig_type}}</td>
+            <td>{{bill.wig_long}}</td>
+            <td>{{bill.scalp_type}}</td>
+            <td>{{bill.wig_color}}</td>
+            <td>{{bill.density}}</td>
+            <td>{{bill.pieces_num}}</td>
+            <td>{{bill.price}} ريال</td>
+            <td>{{bill.selling_price}} ريال</td>
+  
+            <td>{{bill.calculate_total_price}}</td>
 
-        {% empty %}
-        <tr>
-          <td colspan='19' style="font-size:medium">
-            لا يوجد لديك أى بيانات
-          </td>
-        </tr>
-        {% endfor %}
+            <td style="font-size: xx-large;">
+              <a href="{% url 'download_bill_pdf' bill.id %}" class="item_refund">
+                <i class="fa-solid fa-download"></i>
+              </a>
+            </td>
+  
+            <td style="font-size: xx-large;">
+              <a href="{% url 'item_refund' bill.slug_code %}" class="item_refund">
+                <i class="fa fa-undo" aria-hidden="true"></i>
+              </a>
+            </td>
+  
+            
+          </tr>
+  
+          {% empty %}
+          <tr>
+            <td colspan='20' style="font-size:medium">
+              لا يوجد لديك أى بيانات
+            </td>
+          </tr>
+          {% endfor %}
+  
+          {% if page_obj %}
+          <tr style="font-weight: bold;">
+              <td colspan="19" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
+              <td><b>{{total_bills}}</b></td>
+          </tr>
+          {% endif %} 
+  
+        </tbody>
+    </table>
+    </div>
 
-        {% if page_obj %}
-        <tr style="font-weight: bold;">
-            <td colspan="18" style="font-size:medium"><b>اجمالى عدد الفواتير خلال الشهر من جميع الارقام الخاصه بك</b></td>
-            <td><b>{{total_bills}}</b></td>
-        </tr>
-        {% endif %} 
-
-      </tbody>
-  </table>
+  
   </div>
 </div>
 

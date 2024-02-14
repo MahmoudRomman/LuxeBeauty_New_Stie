@@ -57,3 +57,4 @@ document.addEventListener("DOMContentLoaded", function() {
         history.replaceState(null, null, '/home');
     }
 });
+

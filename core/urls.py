@@ -35,6 +35,7 @@ urlpatterns = [
     
     # path('bill2/', views.bill2.as_view(), name="bill2"),
     path('bill2/', views.make_bill, name="bill2"),
+    path('download-bill-pdf/<int:bill_id>/', views.download_bill_pdf, name='download_bill_pdf'),
 
 
     path('all_bills/', views.show_bills, name="all_bills"),
@@ -105,9 +106,13 @@ urlpatterns = [
 
     path("item-refund/<slug>/", views.item_refund, name="item_refund"),
     path("user-refunds", views.user_refunds, name="user_refunds"),
-    path("all-refunds/", views.show_all_refunds_to_admin, name="show_all_refunds_to_admin")
+    path("all-refunds/", views.show_all_refunds_to_admin, name="show_all_refunds_to_admin"),
 
 
+
+    # path('download_pdf/', views.download_pdf, name='download_pdf'),
+    # path('generate_order_summary/', views.generate_order_summary, name="generate_order_summary"),
+    # path('sendmail/', views.send_mail_to_all_users,name="send_mail_to_all_users"),
 
 
 ]

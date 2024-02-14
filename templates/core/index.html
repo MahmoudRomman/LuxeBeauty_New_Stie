@@ -141,102 +141,97 @@
   <!-- shop section -->
 
   <section class="shop_section layout_padding">
-    <div class="container" style="max-width: 1400px;">
-
+    <div class="container">
       <div class="center_buttons">
         
         <a name="shop_section" href="{%  url 'new_arrived' %}#shop_section">المُضافة حديثأ</a>
         <a name="shop_section" href="{%  url 'have_offer' %}#shop_section">لديها خَصم</a>
         <a name="shop_section" href="{%  url 'best_seller' %}#shop_section">الأكثر مبيعاً</a>
-        <!-- <a name="shop_section" href="{%  url 'home' %}#shop_section">كل المنتجات</a> -->
 
       </div>
 
+        <div class="container">
+          <div class="row">
 
-      <div class="row">
-
-        {% for item in items.all %}
-            <div class="col-xl-3 col-12 col-sm-6 col-lg-4" style="padding: 10px;">
-              <div class="box item_box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px; width: 100%">
-                
-                  <div class="img-box">
-                    <a href="{% url 'item_detail' item.slug %}">
+            {% for item in items.all %}
+                <div class="col-xl-3 col-12 col-sm-6 col-lg-4" style="padding: 10px;">
+                  <div class="box item_box" style="border: 1px solid #ccc; box-sizing: border-box; border-radius: 10px; width: 100%">
+                    
+                      <div class="img-box">
+                        <a href="{% url 'item_detail' item.slug %}">
+                          
+                          {% if item.quantity %}
+                          <img src="{{item.image.url}}" alt="">
+                          {% else %}
+                          <img src="{{item.image.url}}" style="filter: grayscale(100%);" alt="">
+                          {% endif %}
+                            
+                        </a>
+                      </div>
+    
+                      <div style="text-align: center;">
+                        <p class="lead">
+                          
+                        
+                        {% if item.quantity %}
+                            {% if item.discount_price %}
+                            <span class="mr-1"> <del>{{ item.price }} SAR</del> </span>
+                            <span>{{ item.price|sub:item.discount_price }} SAR</span>                        
+                            {% else %}
+                            <span>{{item.price}} SAR</span>
+                            {% endif %}
+                        {% else %}
+                           <span style="font-weight: bold;">منتج خارج المخزن</span>
+                        {% endif %}
+    
+                        </p>
+                      </div>
+    
+                      <div style="text-align: center; margin-top: 15px;">
+                        <p style="width: 93%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-inline: auto;">{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
+                      </div>
+                     {% if user.is_authenticated and user.is_superuser and user.is_staff %}
                       
-                      {% if item.quantity %}
-                      <img src="{{item.image.url}}" alt="">
-                      {% else %}
-                      <img src="{{item.image.url}}" style="filter: grayscale(100%);" alt="">
+                      <div class="add_to_cart_per_product">
+                        <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
+                      </div> 
+                      {% elif is_seller %}
+                        <div class="add_to_cart_per_product">
+                          <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
+                        </div> 
                       {% endif %}
                         
-                    </a>
-                  </div>
-
-                  <div style="text-align: center;">
-                    <p class="lead">
+    
+    
                       
-                    
-                    {% if item.quantity %}
-                        {% if item.discount_price %}
-                        <span class="mr-1"> <del>{{ item.price }} SAR</del> </span>
-                        <span>{{ item.price|sub:item.discount_price }} SAR</span>                        
-                        {% else %}
-                        <span>{{item.price}} SAR</span>
+                      {% if new_arrived %}
+                        {% if item in new_arrived_items %}
+                          <div class="new" style="text-align: center;">
+                            <span> وصل حديثاََ </span>
+                          </div>                    
                         {% endif %}
-                    {% else %}
-                       <span style="font-weight: bold;">منتج خارج المخزن</span>
-                    {% endif %}
-
-                    </p>
-                  </div>
-
-                  <div style="text-align: center; margin-top: 15px;">
-                    <p style="width: 93%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-inline: auto;">{{item.name}} - {{item.wig_type}} - طول {{item.wig_long}} - فروة {{item.scalp_type}} - لون {{item.wig_color}} - كثافة {{item.density}} </p>
-                  </div>
-                 {% if user.is_authenticated and user.is_superuser and user.is_staff %}
-                  
-                  <div class="add_to_cart_per_product">
-                    <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
-                  </div> 
-                  {% elif is_seller %}
-                    <div class="add_to_cart_per_product">
-                      <a href="{% url 'add-to-cart' item.slug %}">اضافة الى السلة</a>
-                    </div> 
-                  {% endif %}
-                    
-
-
-                  
-                  {% if new_arrived %}
-                    {% if item in new_arrived_items %}
-                      <div class="new" style="text-align: center;">
-                        <span> وصل حديثاََ </span>
+                      {% endif %}
+    
+    
+    
+                      
+                      {% if have_offer %}                    
+                      {% if item.discount_price  %}
+                      <div class="have_discount" style="text-align: center;">
+                        <span>خصم %{{item.discount_price|div:item.price|mul:100|floatformat:0}}</span>
                       </div>                    
-                    {% endif %}
-                  {% endif %}
+                      {% endif %}
+                      {% endif %}
+                  </div>
+                </div>
+            {% endfor %}
+    
+    
+          </div>
+    
+        </div>
 
-
-
-                  
-                  {% if have_offer %}                    
-                  {% if item.discount_price  %}
-                  <div class="have_discount" style="text-align: center;">
-                    <span>خصم %{{item.discount_price|div:item.price|mul:100|floatformat:0}}</span>
-                  </div>                    
-                  {% endif %}
-                  {% endif %}
-              </div>
-            </div>
-        {% endfor %}
-
-
-      </div>
-
-      <div class="show_all_products_btn">
-        <a href="{% url 'shop' %}">
-          عرض جميع المنتجات 
-        </a>
-      </div>
-    </div>
+    
   </section>
 
   <!-- end shop section -->
@@ -250,45 +245,43 @@
   <!-- end gift section -->
 
 
+
+  <!-- Hidden download link -->
+
+
+
   <section class="shop_section layout_padding">
     <div class="container" style="max-width: 1400px; margin-top: -50px;">
       <div class="heading_container heading_center">
         <h2 style="text-align: center;">الطٌرق المٌتاحة للدفع</h2>
       </div>
-      
+      <div class="container">
       <div class="photo-container">
-            <div class="photo" style="padding: 10px; border-radius: 10px;">
-                <div style="text-align: center; margin-top: 15px;">
+        <div class="row">
+          <div class="col-lg-3 col-md-4 col-sm-6">
+                <div style="text-align: center; margin-top: 15px; padding: 10px; border-radius: 10px; border: 1px solid #ddd;">
                   <img src="{% static 'images/apple.png' %}" style="height:90px;">
                 </div>
-            </div>
-      
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-6">
+              <div style="text-align: center; margin-top: 15px; padding: 10px; border-radius: 10px; border: 1px solid #ddd">
+                <img src="{% static 'images/tamara.png' %}" style="height:90px; width: 90%; text-align: center;">
+              </div>
 
-            <div class="photo" style="padding: 10px; border-radius: 10px;">
-                <div style="text-align: center; margin-top: 15px;">
-                  <img src="{% static 'images/tamara.png' %}" style="height:90px; text-align: center;">
-                </div>
-            </div>
-
-            <div class="photo" style="padding: 10px; border-radius: 10px;">
-                <div style="text-align: center; margin-top: 15px;">
-                  <img src="{% static 'images/tabby.png' %}" style="height:90px;">
-                </div>
-            </div>
-
-            <div class="photo" style="padding: 10px; border-radius: 10px;">
-                <div style="text-align: center; margin-top: 15px;">
-                  <img src="{% static 'images/stripe.jpg' %}" style="height:90px; text-align: center;">
-                </div>
-            </div>
-
-
-            <div class="photo" style="padding: 10px; border-radius: 10px;">
-                <div style="text-align: center; margin-top: 15px;">
-                  <img src="{% static 'images/paytab.png' %}" style="height:90px; text-align: center;">
-                </div>
-            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-6">
+              <div style="text-align: center; margin-top: 15px; padding: 10px; border-radius: 10px; border: 1px solid #ddd">
+                <img src="{% static 'images/tabby.png' %}" style="height:90px;">
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-6">
+              <div style="text-align: center; margin-top: 15px; padding: 10px; border-radius: 10px; border: 1px solid #ddd">
+                <img src="{% static 'images/stripe.jpg' %}" style="height:90px; text-align: center;">
+              </div>
+          </div>
+        </div>
     </div>
+  </div>
   </div>
   </section> 
 
@@ -308,7 +301,6 @@
     /* Define styles for hover state */
     .item_box:hover {
         transform: translateY(-20px); /* Move the div 5 pixels up on hover */
-        /* Add other styles for hover state */
         background-color: #f4f0ec;
     }
 
@@ -349,12 +341,8 @@
             width: 100%;
             overflow: hidden;
             white-space: nowrap;
-            /* border: 1px solid #ccc;  */
             background-color: #a94461; 
             color: #fff;
-            /* border-radius: 10px; */
-            /* margin-top: 5px; */
-            /* margin-bottom: 5px; */
             font-size: 20px;
         }
 
@@ -372,26 +360,12 @@
             }
         }
 
-        /* Responsive Styles */
-        /* @media screen and (max-width: 768px) {
-            .marquee-container {
-                width: 90%;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .marquee-container {
-                width: 100%;
-            }
-        } */
-
         @media only screen and (max-width: 600px) {
           .marquee-container {
                 width: 100%;
             }
     }
 </style>
-
 
 
 {% endblock content %}

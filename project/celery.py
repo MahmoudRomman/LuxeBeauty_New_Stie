@@ -1,10 +1,9 @@
 from __future__ import absolute_import,unicode_literals
 import os
 from celery import Celery
-from celery.schedules import crontab
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings") # your project name to get the settings file
-app = Celery("project") # celery application name
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
+app = Celery("project")
 
 #we are using asia/kolkata time so we are making it False
 app.conf.enable_utc=False
@@ -21,13 +20,16 @@ def debug_task(self):
 
 #celery beat settings
 app.conf.beat_schedule={
- 
+
 }
 
 
+from celery.schedules import crontab
 
-
-
-
-
-
+#celery beat settings
+app.conf.beat_schedule={
+    'send-mail-everyday-at-7':{
+        'task':'core.tasks.send_mail_func',
+        'schedule': crontab(hour=14, minute=20),
+    }
+}

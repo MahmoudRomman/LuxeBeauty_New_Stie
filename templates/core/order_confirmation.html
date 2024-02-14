@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <title>Order Confirmation</title>
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Protest+Guerrilla&family=Protest+Revolution&display=swap");
+
+    html {
+      direction: rtl;
+    }
+    body {
+      font-family: "Arial", sans-serif;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      height: 10px;
+      width: 80%;
+      margin: auto;
+      background-color: black;
+      margin-top: 30px;
+      display: block;
+    }
+
+    .spacing {
+      margin-top: 60px;
+      margin-bottom: 60px;
+    }
+
+    .desc {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .paid {
+      font-size: 3rem;
+      color: #12372a;
+      font-weight: bold;
+      font-family: "Protest Revolution", sans-serif;
+      border: 2px dashed #12372a;
+      width: fit-content;
+      padding: 0 30px;
+      transform: rotate(-10deg);
+    }
+
+    article p {
+      font-size: 12px;
+    }
+  </style>
+  <body>
+    <!--? Start Header -->
+    <header class="header mt-5 spacing">
+      <div class="container">
+        <div class="row text-center gap-5">
+          <!-- <div class="qr col-lg-4 col-md-12">QR</div> -->
+          <div class="logo col-lg-4 col-sm-12">
+            <figure class="figure">
+              <figcaption class="figure-caption">LUXEBEAUTY STORE</figcaption>
+            </figure>
+          </div>
+          <div
+            class="paid col-lg-4 col-md-12 mx-auto d-flex align-items-center justify-content-center"
+          >
+            <div>Paid</div>
+          </div>
+        </div>
+        <hr class="my-5" />
+      </div>
+    </header>
+    <!--? Start main content  -->
+    <article class="main">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <p class="p"><span class="fw-bold">رقم ملخص تأكيد الطلب : </span>{{order_code_num}}</p>
+            <p class="p"><span class="fw-bold">تاريخ الطلب : </span>{{ordered_date}}</p>
+            <p class="p"><span class="fw-bold">Order Status: </span>جديد</p>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <p class="p"><span class="fw-bold">طريقة الشحن : </span>شحن برى</p>
+            <p class="p"><span class="fw-bold"> عنوان الشحن : </span>{{country}} - {{address}}</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="mt-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <p class="p"><span class="fw-bold">customer name:  </span>{{customer_name}}</p>
+            <p class="p"><span class="fw-bold">customer phone: </span>{{customer_phone}}</p>
+            <p class="p"><span class="fw-bold">Email:  </span>not found
+            </p>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <p class="p"><span class="fw-bold">payment method: </span>{{payment_method}}</p>
+          </div>
+        </div>
+        <hr class="my-3" />
+      </div>
+    </article>
+
+    <!--? Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <p class="col-lg-10">
+            <span>Store Address</span> Ras Elkhima, United Arab Emarites
+          </p>
+          <p class="col-lg-2">Alsegel Altogary</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

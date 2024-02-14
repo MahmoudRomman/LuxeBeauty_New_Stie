@@ -19,6 +19,8 @@ from django_countries.fields import CountryField
 
 wig_name = (
     ('باروكة شعر طبيعى', 'باروكة شعر طبيعى'),
+    ('مقدمة باروكة شعر طبيعى', 'مقدمة باروكة شعر طبيعى'),
+
 )
 
 wig_type = (
@@ -26,12 +28,13 @@ wig_type = (
     ('جذور امامية', 'جذور امامية'),
     ('جذور كامله', 'جذور كامله'),
     ('جذور دائرية 360', 'جذور دائرية 360'),
-
+    ('لا شىء', 'لا شىء'),
 )
 
 
 wig_long = (
     ("طول الباروكة", "طول الباروكة"),
+    ('انش10', 'انش10'),
     ('انش12', 'انش12'),
     ('انش14', 'انش14'),
     ('انش16', 'انش16'),
@@ -47,17 +50,12 @@ wig_long = (
     ('انش36', 'انش36'),
     ('انش38', 'انش38'),
     ('انش40', 'انش40'),
-
-
-    # ('انش12', 'انش12'),
-
-
 )
 
 
 scalp_type = (
     ("اختر نوع الفروة", "اختر نوع الفروة"),
-    ('دانتيل', 'دانتيل'),
+    ('دانتيل سويسرى', 'دانتيل سويسرى'),
     ('حرير', 'حرير'),
 
 )
@@ -224,6 +222,8 @@ class Bill2(models.Model):
 
     pieces_num = models.PositiveIntegerField(default=0)
     account = models.ForeignKey("Account", on_delete=models.CASCADE)
+
+    bill_pdf = models.FileField(upload_to='bills_pdf_documents/', default='billl_default_pdf.pdf')
 
     slug_code = models.SlugField()
 
@@ -412,6 +412,8 @@ class BankAccount(models.Model):
 
 
 
+
+
 class Penality(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField(max_length=500)
@@ -473,3 +475,21 @@ class Tasks(models.Model):
             formatted_difference = f"{minutes} دقيقة"
 
         return formatted_difference
+    
+
+
+
+
+
+
+
+
+class AllBillsPDF(models.Model):
+    title = models.CharField(max_length=100)
+    bill_pdf = models.FileField(upload_to='monthly_bills_pdf/')
+    date = models.DateField(null=False, blank=False)
+    slug_code = models.SlugField()
+    
+    
+    def __str__(self):
+        return self.title

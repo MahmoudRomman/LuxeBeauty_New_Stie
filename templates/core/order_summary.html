@@ -8,144 +8,121 @@
         <!-- <div class="table-responsive text-nowrap"> -->
             <br>
             <h2 style="text-align:center" class="mt-5">محتويات الفاتورة</h2>
-            <table class="table" dir="rtl">
-                <thead style="text-align: center;">
-                <tr>
-                    <th scope="col">الترتيب</th>
-                    <th scope="col">اسم الصنف</th>
-                    <th scope="col">نوع الباروكه</th>
-                    <th scope="col">الطول</th>
-                    <th scope="col">نوع الفروة</th>
-                    <th scope="col">اللون</th>
-                    <th scope="col">الكثافة</th>
-                    <th scope="col">صورة المنتج</th>
-                    <th scope="col">السعر</th>
-                    <th scope="col">الكمية</th>
-                    <th scope="col">اجمالى سعر الكمية</th>
-                </tr>
-                </thead>
-                <tbody style="text-align: center;">
-                {% for order_item in object.items.all %}
-                <tr>
-
-
-                    <th scope="row">{{forloop.counter}}</th>
-                    <td>{{order_item.item.name}}</td>
-                    <td>{{order_item.item.wig_type}}</td>
-                    <td>{{order_item.item.wig_long}}</td>
-                    <td>{{order_item.item.scalp_type}}</td>
-                    <td>{{order_item.item.wig_color}}</td>
-                    <td>{{order_item.item.density}}</td>
-
-
-                    <td>
-                        <div class="dropdown">
-                        <img src="{{order_item.item.image.url}}" alt="Cinque Terre" width="50" height="50">
-                          <div class="dropdown-content">
-                            <img src="{{order_item.item.image.url}}" alt="Cinque Terre" width="300" height="200">
-                              <div class="desc">
-                                <p>{{order_item.item.name}} - {{order_item.item.wig_type}} - طول {{order_item.item.wig_long}} - فروة {{order_item.item.scalp_type}} - لون {{order_item.item.wig_color}} - كثافة {{order_item.item.density}} </p>
+            <div class="table-responsive">
+                <table class="table" dir="rtl">
+                    <thead style="text-align: center;">
+                    <tr>
+                        <th scope="col">الترتيب</th>
+                        <th scope="col">اسم الصنف</th>
+                        <th scope="col">نوع الباروكه</th>
+                        <th scope="col">الطول</th>
+                        <th scope="col">نوع الفروة</th>
+                        <th scope="col">اللون</th>
+                        <th scope="col">الكثافة</th>
+                        <th scope="col">صورة المنتج</th>
+                        <th scope="col">السعر</th>
+                        <th scope="col">الكمية</th>
+                        <th scope="col">اجمالى سعر الكمية</th>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                    {% for order_item in object.items.all %}
+                    <tr>
+    
+    
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{order_item.item.name}}</td>
+                        <td>{{order_item.item.wig_type}}</td>
+                        <td>{{order_item.item.wig_long}}</td>
+                        <td>{{order_item.item.scalp_type}}</td>
+                        <td>{{order_item.item.wig_color}}</td>
+                        <td>{{order_item.item.density}}</td>
+    
+    
+                        <td>
+                            <div class="dropdown">
+                            <img src="{{order_item.item.image.url}}" alt="Cinque Terre" width="50" height="50">
+                              <div class="dropdown-content">
+                                <img src="{{order_item.item.image.url}}" alt="Cinque Terre" width="300" height="200">
+                                  <div class="desc">
+                                    <p>{{order_item.item.name}} - {{order_item.item.wig_type}} - طول {{order_item.item.wig_long}} - فروة {{order_item.item.scalp_type}} - لون {{order_item.item.wig_color}} - كثافة {{order_item.item.density}} </p>
+                                  </div>
                               </div>
-                          </div>
-                        </div>
-                    </td>
-
-                    <td>{{ order_item.item.price }}</td>
-                    <td>
-             
-
-                        <a href="{% url 'add-to-cart' order_item.item.slug %}">
-                            <img width="20" height="20" src="https://img.icons8.com/android/24/plus.png" alt="plus"/ class="ml-2">
-                        </a>
-                        {{ order_item.quantity }}
-                        <a href="{% url 'remove_single_item_from_cart' order_item.item.slug %}">
-                            <img width="20" height="20" src="https://img.icons8.com/android/24/minus.png" alt="minus"/ class="mr-2">
-                        </a>
-        
-                    </td>
-
-                    <td>
-                    {% if order_item.item.discount_price %}
-                        SAR {{ order_item.get_total_discount_item_price }}
-                        <span class="badge badge-primary">وفرت SAR {{ order_item.get_amount_saved }}</span>
-                    {% else %}
-                        SAR {{ order_item.get_total_item_price }}
-                    {% endif %}
+                            </div>
+                        </td>
+    
+                        <td>{{ order_item.item.price }}</td>
+                        <td style="display: flex;">
+                 
+    
+                            <a href="{% url 'add-to-cart' order_item.item.slug %}">
+                                <img width="20" height="20" src="https://img.icons8.com/android/24/plus.png" alt="plus"/ class="ml-2">
+                            </a>
+                            {{ order_item.quantity }}
+                            <a href="{% url 'remove_single_item_from_cart' order_item.item.slug %}">
+                                <img width="20" height="20" src="https://img.icons8.com/android/24/minus.png" alt="minus"/ class="mr-2">
+                            </a>
+            
+                        </td>
+    
+                        <td>
+                        {% if order_item.item.discount_price %}
+                            SAR {{ order_item.get_total_discount_item_price }}
+                            <span class="badge badge-primary">وفرت SAR {{ order_item.get_amount_saved }}</span>
+                        {% else %}
+                            SAR {{ order_item.get_total_item_price }}
+                        {% endif %}
+    
+                        </td>
+                    </tr>
+    
+                    {% empty %}
+    
                     
-                    
-                    <!-- SAR{{ order_item.get_total_item_price }} -->
-
-                    </td>
-                </tr>
-
-                {% empty %}
-
-                
-                <tr>
-                    <td colspan='16' style="font-size:large">سلة المبيعات الخاصه بك فارغة</td>
-                </tr>
-                <tr>
-                    <td colspan="5">
-
-                    <div class="continue_shopping_for_order_summary float-right">
-                        <a href="{% url 'shop' %}">الاستمرار فى البيع</a>
-                    </div> 
-
-                    </td>
-                </tr>
-                {% endfor %}
-                
-                <!-- {% if object.coupon %}
-                <tr>
-                    <td colspan="4"><b>Coupon</b></td>
-                    <td><b>-SAR{{ object.coupon.amount }}</b></td>
-                </tr>
-                {% endif %}
-                
-                {% if object.get_total %}
-                <tr>
-                    <td colspan="4"><b>Order Total</b></td>
-                    <td><b>SAR{{ object.get_total }}</b></td>
-                </tr>
-                <tr>
-                    <td colspan="5">
-                    <a class='btn btn-warning float-right ml-2' href='/checkout/'>Proceed to checkout</a>
-                    <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
-                    </td>
-                </tr>
-                {% endif %} -->
-
-
-                
-                
-
-                {% if object.get_total %}
-                <tr>
-                    <td><b>اجمالى عدد القطع</b></td>
-                    <td colspan="6"><b>{{object.get_total_items}}</b></td>
-                    <td colspan="10"></td>
-                </tr>
-                <tr>
-                    <td><b>السعر الكلى</b></td>
-                    <td colspan="6"><b>SAR {{ object.get_total }}</b></td>
-                    <td colspan="12"></td>
-                </tr>
-                <tr>
-                    <td colspan="12">
+                    <tr>
+                        <td colspan='16' style="font-size:large">سلة المبيعات الخاصه بك فارغة</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+    
                         <div class="continue_shopping_for_order_summary float-right">
                             <a href="{% url 'shop' %}">الاستمرار فى البيع</a>
                         </div> 
-
-                        <div class="btn_go_to_bill float-right mr-2">
-                            <a href="{% url 'bill2' %}">الانتهاء من الفاتورة</a>
-                        </div> 
-
-                    </td>
-                </tr>
-                {% endif %} 
-
-                </tbody>
-            </table>
+    
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    
+                    
+    
+                    {% if object.get_total %}
+                    <tr>
+                        <td><b>اجمالى عدد القطع</b></td>
+                        <td colspan="6"><b>{{object.get_total_items}}</b></td>
+                        <td colspan="10"></td>
+                    </tr>
+                    <tr>
+                        <td><b>السعر الكلى</b></td>
+                        <td colspan="6"><b>SAR {{ object.get_total }}</b></td>
+                        <td colspan="12"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="12">
+                            <div class="continue_shopping_for_order_summary float-right">
+                                <a href="{% url 'shop' %}" class="btn btn-danger">الاستمرار فى البيع</a>
+                            </div> 
+    
+                            <div class="btn_go_to_bill float-right mr-2">
+                                <a href="{% url 'bill2' %}" class="btn btn-success">الانتهاء من الفاتورة</a>
+                            </div> 
+    
+                        </td>
+                    </tr>
+                    {% endif %} 
+    
+                    </tbody>
+                </table>
+            </div>
 
         <!-- </div> -->
     </div>

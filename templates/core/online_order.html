@@ -2,153 +2,6 @@
 
 {% block content %}
 
-    <!-- <div class="container-xxl py-5">
-        <div class="container">
-            <h2 class="text-center mb-5 mt-5 wow fadeInUp" data-wow-delay="0.1s">برجاء الانتهاء من اجراءات فاتورة الطلب الاونلاين</h2>
-            
-            <hr class="col-12 col-sm-10" style="margin-left: auto; margin-right: auto">
-            <br>
-            <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-                
-                <div class="tab-content">
-                    <div id="tab-1" class="tab-pane fade show p-0 active">
-
-
-
-                        <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
-                            {% csrf_token %}
-                            <div class="row g-3" style="row-gap: 13px;">
-
-                                <div class="col-12 col-sm-12" style="text-align: right;">
-                                    <h5>- ادخل تفاصيل الطلب</h5>
-                                </div>
-
-
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        {{form.wig_name}}
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        {{form.wig_type}}
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        {{form.wig_long}} 
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        {{form.scalp_type}}
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        {{form.wig_color}}
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        {{form.density}}
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        {{form.price}}
-                                    </div>
-                                </div>
-
-
-                            
-
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        {{form.pieces_num}}
-                                    </div>
-                                </div>
-
-        
-
-
-                                <div class="col-12 col-sm-12" style="text-align: right;">
-                                    <h5>- ادخل تفاصيل عنوان الشحن</h5>
-                                </div>
-
-
-                                <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; margin-bottom: -15px;">
-                                    <div class="form-group">{{form.country}}</div>    
-                                </div>
-
-                                
-                                <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto">
-                                    <div class="form-group">
-                                        {{form.address}}
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto;">
-                                    <div class="form-group">
-                                        {{form.customer_phone}}
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto;">
-                                    <div class="form-group">
-                                        {{form.customer_name}}
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto;">
-                                    <div class="form-group">
-                                        {{form.seller_phone_number}}
-                                    </div>
-                                </div>
-
-
-                                <div class="btn_online_bill_finish col-12">
-                                    <input type="submit" value="حفظ الفاتورة" style="font-size:large; margin-bottom: 5px;">
-                                </div>
-
-
-                            </div>
-                        </form>
-
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
- -->
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
 
 <div class="container" style="margin-top: 60px; margin-bottom: 60px; ">
     <div class="row">
@@ -372,18 +225,12 @@
 </style>
 
 
-
 <script>
     // emailsender/static/emailsender/js/email_send.js
     document.addEventListener('DOMContentLoaded', function () {
         const loaderWrapper = document.getElementById('loader-wrapper');
         const emailForm = document.getElementById('emailForm');
 
-        const defaultValues = JSON.parse(localStorage.getItem("online_order_data")?? JSON.stringify("{}"));
-        Object.entries(defaultValues).forEach(([key, value]) => {
-            const el = document.querySelector(`[name="${key}"]`);
-            el.value = value;
-        })
 
         emailForm.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -393,15 +240,6 @@
 
             // Serialize form data
             const formData = new FormData(emailForm);
-
-            //saving form data to localstorage to pressist form values
-            const values = {};
-            formData.forEach((value, key) => {
-                if(key !== 'csrfmiddlewaretoken')
-                    values[key] = value;
-            });
-
-            localStorage.setItem("online_order_data", JSON.stringify(values))
 
             // Send a POST request using AJAX
             fetch('/online_order/', {
@@ -420,13 +258,14 @@
                     // Redirect to the specified URL on success
                     const redirectUrl = emailForm.getAttribute('data-redirect-url');
                     window.location.href = redirectUrl;
-                    localStorage.removeItem("online_order_data");
 
-                }else if (data.status === 'error') {
+                } else if (data.status === 'error') {
+
                     // Handle form validation errors (if any)
                     console.error('Form validation errors:', data.errors);
-                    window.location.href = '/online_order/';
+                    window.location.href = '/online_order/';  
                 }
+
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -455,7 +294,6 @@
 </script>
 
 
-    
 
 
 {% endblock content %}

@@ -20,33 +20,33 @@
                   <form method="POST" action="." enctype="multipart/form-data" dir="rtl">
                       {% csrf_token %}
                       <div class="row g-3">
-                          <div class="col-12 col-sm-2">
+                          <div class="col-lg-2 col-md-6 col-sm-12">
                               <div class="form-group">
                                   {{form.wig_type}}
                               </div>
                           </div>
 
-                          <div class="col-12 col-sm-2">
+                          <div class="col-lg-2 col-md-6 col-sm-12">
                               <div class="form-group">
                                   {{form.wig_long}} 
                               </div>
                           </div>
 
 
-                          <div class="col-12 col-sm-2">
+                          <div class="col-lg-2 col-md-6 col-sm-12">
                               <div class="form-group">
                                   {{form.scalp_type}}
                               </div>
                           </div>
 
 
-                          <div class="col-12 col-sm-2">
+                          <div class="col-lg-2 col-md-6 col-sm-12">
                               <div class="form-group">
                                   {{form.wig_color}}
                               </div>
                           </div>
 
-                          <div class="col-12 col-sm-2">
+                          <div class="col-lg-2 col-md-6 col-sm-12">
                               <div class="form-group">
                                   {{form.density}}
                               </div>
@@ -54,8 +54,8 @@
 
 
 
-                          <div class="btn_store_search col-12 col-sm-2">
-                              <input type="submit" value="بحث">
+                          <div class="btn_store_search col-sm-12 col-lg-2">
+                              <input type="submit" value="بحث" class="btn btn-danger">
                           </div>
 
                       </div>
@@ -79,8 +79,8 @@
         </h2>
       </div>
       <div class="row">
-
-        <table class="table table-striped" dir='rtl'>
+        <div class="table-responsive">
+          <table class="table table-striped" dir='rtl'>
             <thead style="text-align: center;">
               <tr>
                 <th scope="col">الترتيب</th>
@@ -171,6 +171,7 @@
             {% endfor %}
             </tbody>
         </table>
+        </div>
 
               
         <nav aria-label="Page navigation example" style="margin: auto; margin-top: 10px;">
@@ -242,7 +243,7 @@
       </div>
 
           <div class="add_products_to_store_btn">
-              <a href="{% url 'add_item' %}">
+              <a href="{% url 'add_item' %}" class="btn btn-success">
               اضافة المزيد من المنتجات 
               </a>
           </div> 
