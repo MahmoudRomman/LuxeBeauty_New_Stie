@@ -114,5 +114,16 @@ urlpatterns = [
     # path('generate_order_summary/', views.generate_order_summary, name="generate_order_summary"),
     # path('sendmail/', views.send_mail_to_all_users,name="send_mail_to_all_users"),
 
+    path('show_final_report/', views.show_final_report, name="show_final_report"),
+    path('view_final_users_report_pdf/<slug_code>/', views.view_final_users_report_pdf, name="view_final_users_report_pdf"),
+    path('download_final_users_report_pdf/<slug_code>/', views.download_final_users_report_pdf, name='download_final_users_report_pdf'),
+
+
+    path('get_final_report/', views.get_final_report, name="get_final_report"),
+
+
+
+
+
 
 ]

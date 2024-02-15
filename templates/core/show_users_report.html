@@ -1,0 +1,232 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+
+
+
+
+
+{% block content %}
+
+<section class="shop_section layout_padding">
+  <div class="container">
+
+
+    <div class="heading_container heading_center">
+      <p style="text-align: center; font-weight: bold; font-size: 40px;">التقرير النهائى لجميع المستخدمين هذا الشهر</p>
+    </div>
+    <div class="row">
+
+
+        <table  border="1">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Phone/s</th>
+                <th scope="col">Account/s</th>
+                <th scope="col">Bill/s</th>
+                <th scope="col">Bill/s Salary</th>
+                <th scope="col">Penalities</th>
+                <th scope="col">Rewards</th>
+                <th scope="col">Final Salary</th>
+              </tr>
+            </thead>
+            <tbody>
+
+                
+                {% for user_report in users_report %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{user_report.user}}</td>
+                        
+
+                        
+                        {% if user_report.phones %}
+                        <td>{{ user_report.phones|join:" -- " }}</td>
+                        {% else %}
+                        <td>------</td>  
+                        {% endif %}
+                            
+
+
+
+                        
+                        {% if user_report.accounts %}
+                        <td>{{ user_report.accounts|join:" -- " }}</td>
+                        {% else %}
+                        <td>------</td>  
+                        {% endif %}
+                            
+
+
+
+                        
+                        {% if user_report.phones_bills %}
+                        <td>{{ user_report.phones_bills|join:" Bill -- " }} Bill</td>
+                        {% else %}
+                        <td>------</td>
+                        {% endif %}
+                            
+
+
+                        
+                        {% if user_report.bills_salary %}
+                        <td>{{ user_report.bills_salary|join:" EGP -- " }} EGP</td>
+                        {% else %}
+                        <td> 0 EGP </td> 
+                        {% endif %}
+
+
+                        <td>{{user_report.penalities}} EGP</td>
+                        <td>{{user_report.rewards}} EGP</td>
+                        <td>{{user_report.final_salary}} EGP</td>
+
+                    </tr>
+                {% endfor %}
+
+                <tr style="font-weight: bold;">
+                    <td colspan="8"><b>The company's total profits this month</b></td>
+                    {% if total_price_this_month %}
+                    <td><b>{{total_price_this_month}} SAR</b></td>
+                      
+                    {% else %}
+                    <td><b>0 SAR</b></td>
+      
+                    {% endif %}
+                </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<section class="shop_section layout_padding mt-3">
+    <div class="container">
+  
+  
+      <div class="heading_container heading_center">
+        <h2 class="has-text-centered is-size-3" style="text-align: center;">جميع تقارير المُستخدمين خلال الاشهر الماضية</h2>
+      </div>
+      <div class="row">
+  
+  
+        <table class="table table-bordered" dir='rtl'>
+          <thead style="text-align: center;">
+            <tr style="text-align: center; font-size: large;">
+              <th scope="col">الترتيب</th>
+              <th scope="col">اسم التقرير</th>
+              <th scope="col">تاريخ التقرير</th>
+              <th scope="col">قراءة التقرير</th>
+              <th scope="col">طباعة التقرير</th>
+            </tr>
+          </thead>
+          <tbody style="text-align: center;">
+              
+              {% for report in all_reports %}
+              <tr style="font-size: medium;">
+                <th scope="row" class="mt-1">{{forloop.counter}}</th>
+                <td>{{report.title}}</td>
+                <td>{{report.date}}</td>
+
+
+                <td style="font-size: xx-large;">
+                    <a href="{% url 'view_final_users_report_pdf' report.slug_code %}" class="item_refund">
+                      <i class="fa-solid fa-eye"></i>
+                    </a>
+                </td>
+
+                <td style="font-size: xx-large;">
+                    <a href="{% url 'download_final_users_report_pdf' report.slug_code %}" class="item_refund">
+                      <i class="fa-solid fa-download"></i>
+                    </a>
+                </td>
+              </tr>
+              
+              {% empty %}
+              <tr>
+                <td colspan='12' style="font-size:larger">لا يوجد أى تقارير الى الان</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  
+  
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  
+  
+  
+  </section>
+
+
+
+
+<style>
+    .container {
+            max-width: 95%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            table-layout: fixed;
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+            border-radius: 1em;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        
+
+        thead {
+        background-color: #D3D3D3;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+
+            max-width: 300px; /* Set a max-width to prevent extremely long content from stretching the table */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            th, td {
+                max-width: none; /* Remove max-width on smaller screens */
+            }
+        }
+</style>
+
+
+
+
+{% endblock content %}
+  

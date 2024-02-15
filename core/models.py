@@ -486,7 +486,7 @@ class Tasks(models.Model):
 
 class AllBillsPDF(models.Model):
     title = models.CharField(max_length=100)
-    bill_pdf = models.FileField(upload_to='monthly_bills_pdf/')
+    pdf_file = models.FileField(upload_to='monthly_bills_pdf/', default='billl_default_pdf.pdf')
     date = models.DateField(null=False, blank=False)
     slug_code = models.SlugField()
     

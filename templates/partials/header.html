@@ -162,17 +162,25 @@
                         {% endif %}
 
                         {% if user.is_authenticated and user.is_superuser and user.is_staff %}
-                            <a class="dropdown-item" href="{% url 'phone_and_account_manage' %}">الارقام والحسابات</a>    
+                            <a class="dropdown-item" href="{% url 'phone_and_account_manage' %}">
+                              الارقام والحسابات
+                            <i class="fa-solid fa-phone"></i>
+                            </a>    
                             
                             
                             
                             <a class="dropdown-item" href="{% url 'all_bills' %}">
-
                               {% if bills_count_for_admin > 0 %}
                               <span class="badge badge-danger">{{bills_count_for_admin}}</span>
                               {% endif %}
                               كل الفواتير
                               <i class="fa fa-money-bill"></i>
+                            </a>
+
+
+                            <a class="dropdown-item" href="{% url 'show_final_report' %}">
+                              تقرير المُستخدمين
+                              <i class="fas fa-file"></i>
                             </a>
 
 
