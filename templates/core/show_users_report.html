@@ -8,16 +8,15 @@
 
 {% block content %}
 
-<section class="shop_section layout_padding">
+<div class="heading_container heading_center mt-5">
+  <p style="text-align: center; font-weight: bold; font-size: 40px;">التقرير النهائى لجميع المستخدمين هذا الشهر</p>
+</div>
+
+
+
+<section class="shop_section layout_padding" style="margin-top: -40px;">
   <div class="container">
-
-
-    <div class="heading_container heading_center">
-      <p style="text-align: center; font-weight: bold; font-size: 40px;">التقرير النهائى لجميع المستخدمين هذا الشهر</p>
-    </div>
     <div class="row">
-
-
         <table  border="1">
             <thead>
               <tr>
@@ -44,22 +43,18 @@
                         
                         {% if user_report.phones %}
                         <td>{{ user_report.phones|join:" -- " }}</td>
+
                         {% else %}
                         <td>------</td>  
                         {% endif %}
                             
 
-
-
-                        
                         {% if user_report.accounts %}
                         <td>{{ user_report.accounts|join:" -- " }}</td>
                         {% else %}
                         <td>------</td>  
                         {% endif %}
                             
-
-
 
                         
                         {% if user_report.phones_bills %}
@@ -68,7 +63,6 @@
                         <td>------</td>
                         {% endif %}
                             
-
 
                         
                         {% if user_report.bills_salary %}
@@ -112,15 +106,15 @@
 
 
 
+<div class="heading_container heading_center">
+  <h2 class="has-text-centered is-size-3" style="text-align: center;">جميع تقارير المُستخدمين خلال الاشهر الماضية</h2>
+</div>
 
-
-<section class="shop_section layout_padding mt-3">
+<section class="shop_section layout_padding" style="margin-top: -40px;">
     <div class="container">
   
   
-      <div class="heading_container heading_center">
-        <h2 class="has-text-centered is-size-3" style="text-align: center;">جميع تقارير المُستخدمين خلال الاشهر الماضية</h2>
-      </div>
+
       <div class="row">
   
   

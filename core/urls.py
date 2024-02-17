@@ -119,7 +119,7 @@ urlpatterns = [
     path('download_final_users_report_pdf/<slug_code>/', views.download_final_users_report_pdf, name='download_final_users_report_pdf'),
 
 
-    path('get_final_report/', views.get_final_report, name="get_final_report"),
+    # path('get_final_report/', views.get_final_report, name="get_final_report"),
 
 
 

@@ -1,5 +1,3 @@
-{% load static %}
-
 <!DOCTYPE html>
 <!-- <html> -->
 <html lang="ar">
@@ -14,8 +12,6 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <!-- <link rel="shortcut icon" href="{% static 'images/wig.png' %}" type="image/x-icon"> -->
-  <link rel="shortcut icon" href="{% static 'images/favicon-5.png' %}" type="image/x-icon">
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,8 +22,6 @@
 
 
 
-  <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-  <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -44,15 +38,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-xxx" crossorigin="anonymous" />
 
 
-
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
-
-  <!-- Custom styles for this template -->
-  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
 
 
@@ -68,7 +53,7 @@
 
 
       .container {
-            max-width: 95%;
+            max-width: 100%;
             width: 100%;
             padding: 20px;
             box-sizing: border-box;
@@ -150,74 +135,45 @@
                     {% for user_report in users_report %}
                         <tr>
                             <th scope="row">{{forloop.counter}}</th>
-                            <td>{{user_report.user}}</td>
+                        <td>{{user_report.user}}</td>
+                        
+
+                        
+                        {% if user_report.phones %}
+                        <td>{{ user_report.phones|join:" -- " }}</td>
+
+                        {% else %}
+                        <td>------</td>  
+                        {% endif %}
                             
-    
+
+                        {% if user_report.accounts %}
+                        <td>{{ user_report.accounts|join:" -- " }}</td>
+                        {% else %}
+                        <td>------</td>  
+                        {% endif %}
                             
-                            {% if user_report.phones %}
-                            <td>
-                                {% for phone in user_report.phones %}
-                                    <span>{{phone}}</span>
-                                {% endfor %}
-                            </td>
-                            {% else %}
-                            <td>
-                                ------
-                            </td>  
-                            {% endif %}
-                                
-    
-    
-    
+
+                        
+                        {% if user_report.phones_bills %}
+                        <td>{{ user_report.phones_bills|join:" Bill -- " }} Bill</td>
+                        {% else %}
+                        <td>------</td>
+                        {% endif %}
                             
-                            {% if user_report.accounts %}
-                            <td>
-                                {% for account in user_report.accounts %}
-                                    <span>{{account}}</span>
-                                {% endfor %}
-                            </td>   
-                            {% else %}
-                            <td>
-                                ------
-                            </td>  
-                            {% endif %}
-                                
-    
-    
-    
-                            
-                            {% if user_report.phones_bills %}
-                            <td>
-                                {% for phone_bills in user_report.phones_bills %}
-                                    <span>{{phone_bills}}</span>
-                                {% endfor %}
-                            </td>
-                            {% else %}
-                            <td>
-                                ------
-                            </td>
-                            {% endif %}
-                                
-    
-    
-                            
-                            {% if user_report.bills_salary %}
-                            <td>
-                                {% for bill_salary in user_report.bills_salary %}
-                                    <span>{{bill_salary}} EGP</span>
-                                {% endfor %}
-                            </td>
-                            {% else %}
-                            <td>
-                                0 EGP
-                            </td> 
-                            {% endif %}
-    
-                            
-                            <td>{{user_report.penalities}} EGP</td>
-                            <td>{{user_report.rewards}} EGP</td>
-                            <td>{{user_report.final_salary}} EGP</td>
-    
+
+                        
+                        {% if user_report.bills_salary %}
+                        <td>{{ user_report.bills_salary|join:" EGP -- " }} EGP</td>
+                        {% else %}
+                        <td> 0 EGP </td> 
+                        {% endif %}
+
+
+                        <td>{{user_report.penalities}} EGP</td>
+                        <td>{{user_report.rewards}} EGP</td>
+                        <td>{{user_report.final_salary}} EGP</td>
+
                         </tr>
                     {% endfor %}
 
@@ -244,12 +200,6 @@
     
     </section>
 
-
-  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.js' %}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
-  </script>
-  <script src="{% static 'js/custom.js' %}"></script>
 </body>
 
 </html>
