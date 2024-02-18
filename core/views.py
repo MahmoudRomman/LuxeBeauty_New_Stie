@@ -137,135 +137,6 @@ def generate_pdf(request):
 
 
 
-# from django.utils import timezone
-# from django.shortcuts import get_object_or_404
-
-# def get_final_report(request):
-#     users_report = []
-
-#     all_users = User.objects.all()
-#     for each_user in all_users:
-#         phones = models.PhoneNumberr.objects.filter(user=each_user.id)
-#         user_phones = []
-#         user_accounts = []
-#         user_total_bills = []
-#         user_total_bills_cost = []
-
-#         final_salary = 2000
-
-
-#         for cnt in range(len(phones)):
-#             get_phone = models.Phones.objects.get(phone=str(phones[cnt].phone))
-
-#             user_phones.append(get_phone.phone)
-#             account_phone = models.Account.objects.get(phone=get_phone)
-#             user_accounts.append(account_phone.account_name)
-
-            
-#             my_bills_count = models.Bill2.objects.filter(seller_phone_number=get_phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-#             user_total_bills.append(my_bills_count)
-
-
-#             bills_salary = 0
-#             if my_bills_count <= 10:
-#                 bills_salary = 0
-#             elif my_bills_count > 10 and my_bills_count <20:
-#                 bills_salary = my_bills_count * 100
-#             elif my_bills_count >= 20 and my_bills_count < 30:
-#                 bills_salary = my_bills_count * 150
-#             elif my_bills_count >= 30:
-#                 bills_salary = my_bills_count * 200
-
-#             user_total_bills_cost.append(bills_salary)
-
-        
-
-
-#         # Calculate the penalities
-#         penalities = models.Penality.objects.filter(name=each_user.id, date__year=today.year, date__month=today.month)
-#         days = 0
-#         for penality in penalities:
-#             days += penality.days_num
-
-#         total_penality = (final_salary / 30) * days
-#         total_penality = round(total_penality, 0)
-
-
-#         # Calculate the rewards
-#         rewards = models.Reward.objects.filter(name=each_user.id, date__year=today.year, date__month=today.month)
-#         total_reward = 0
-#         for reward in rewards:
-#             total_reward += reward.price
-
-#         # final_salary = final_salary - total_penality + total_reward
-
-#         final_salary = (sum(user_total_bills_cost) - total_penality) + total_reward
-
-
-
-
-#         users_report.append({'user': each_user.username, 'phones': user_phones, 'accounts' : user_accounts, 'phones_bills' : user_total_bills, 'bills_salary': user_total_bills_cost, 'penalities' : total_penality, 'rewards' : total_reward, 'final_salary' : final_salary})
-
-
-#     total_price_this_month = 0
-#     # Retrieve a Bill instance (for example, the first one)
-#     bill_instance = models.Bill2.objects.filter(date__year = today.year, date__month = today.month)
-
-#     for bill in bill_instance:
-#         total_price_this_month += bill.calculate_total_price()
-
-
-#     context_dict = {
-#         'users_report' : users_report,
-#         'month' : today.month,
-#         'year' :  today.year,
-#         'total_price_this_month' : total_price_this_month,
-#     }
-
-
-#     # Check if a PDF file already exists for the current month
-#     existing_pdf = models.AllBillsPDF.objects.filter(date__year=today.year, date__month=today.month).first()
-
-#     # Generate PDF content
-#     pdf_content = html2pdf_order_summary("core/final_users_report.html", context_dict)
-
-
-#     # If a PDF file already exists, update its content
-#     if existing_pdf and pdf_content:
-#         existing_pdf.pdf_file.save(f"{existing_pdf.pdf_file}.pdf", BytesIO(pdf_content.getvalue()))
-#         return existing_pdf
-
-#     # If no PDF file exists, create a new one
-#     elif not existing_pdf and pdf_content:
-#         pdf_name = f"{today.month}/{today.year}__Report"
-#         if pdf_content:
-#             title = f"{today.month}/{today.year}__Report"
-#             date = timezone.now().date()
-#             slug_code = create_slug_code()  # Assuming create_slug_code is defined elsewhere
-
-#             # Create a new instance of AllBillsPDF and save the PDF content
-#             all_bills_pdf = models.AllBillsPDF.objects.create(
-#                 title=title,
-#                 date=date,
-#                 slug_code=slug_code
-#             )
-#             all_bills_pdf.pdf_file.save(f"{pdf_name}.pdf", BytesIO(pdf_content.getvalue()))
-
-#             return all_bills_pdf
-#         else:
-#             return None
-
-#     else:
-#         return None
-
-
-
-
-
-
-
-
-
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
@@ -419,6 +290,33 @@ def generate_pdf_and_save_to_model(template_name, context):
 
 
 
+# import os
+# from pytube import YouTube
+
+# def download_youtube_video(url, output_filename=None):
+#     try:
+#         yt = YouTube(url)
+#         stream = yt.streams.get_highest_resolution()
+#         if output_filename is None:
+#             output_filename = yt.title + ".mp4"  # Use video title as filename if not specified
+#         # output_path = os.path.join(os.path.expanduser("~"), "Downloads", output_filename)
+#         output_path = os.path.join(os.path.expanduser("~"), "Downloads")
+
+#         stream.download(output_path)
+#         print("Video downloaded successfully!")
+#     except Exception as e:
+#         print("Error:", e)
+
+
+# video_url = "https://youtube.com/shorts/461C7Ks8S9k?si=tA4PsvzF6L2Q5dM0"  # Example YouTube video URL
+
+
+
+
+
+
+
+
 def home(request):
     today = datetime.date.today()
     year = today.year
@@ -426,6 +324,13 @@ def home(request):
     this_day = today.day
     items = models.Item.objects.all().order_by('-date')[:8]
     today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+
+
+    # download_youtube_video(video_url)
+
+
+
+
 
 
     # context = generate_the_context()

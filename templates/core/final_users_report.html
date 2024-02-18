@@ -117,7 +117,7 @@
     
             <table  border="1">
                 <thead>
-                <tr>
+                  <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Phone/s</th>
@@ -127,7 +127,7 @@
                     <th scope="col">Penalities</th>
                     <th scope="col">Rewards</th>
                     <th scope="col">Final Salary</th>
-                </tr>
+                  </tr>
                 </thead>
                 <tbody>
     
@@ -135,48 +135,72 @@
                     {% for user_report in users_report %}
                         <tr>
                             <th scope="row">{{forloop.counter}}</th>
-                        <td>{{user_report.user}}</td>
-                        
-
-                        
-                        {% if user_report.phones %}
-                        <td>{{ user_report.phones|join:" -- " }}</td>
-
-                        {% else %}
-                        <td>------</td>  
-                        {% endif %}
+                            <td>{{user_report.user}}</td>
                             
-
-                        {% if user_report.accounts %}
-                        <td>{{ user_report.accounts|join:" -- " }}</td>
-                        {% else %}
-                        <td>------</td>  
-                        {% endif %}
+    
+                            {% if user_report.phones %}
+                              <td>
+                                  {% for phone in user_report.phones %}
+                                      {{ phone }} 
+                                      {% if not forloop.last %}
+                                          <hr style="border: 0; border: 1px solid #000;">
+                                      {% endif %}
+                                  {% endfor %}
+                              </td>
+                            {% else %}
+                                <td>------</td>
+                            {% endif %}
+    
+    
+                            {% if user_report.accounts %}
+                              <td>
+                                  {% for account in user_report.accounts %}
+                                      {{ account }} 
+                                      {% if not forloop.last %}
+                                          <hr style="border: 0; border: 1px solid #000;">
+                                      {% endif %}
+                                  {% endfor %}
+                              </td>
+                            {% else %}
+                                <td>------</td>
+                            {% endif %}
                             
-
-                        
-                        {% if user_report.phones_bills %}
-                        <td>{{ user_report.phones_bills|join:" Bill -- " }} Bill</td>
-                        {% else %}
-                        <td>------</td>
-                        {% endif %}
+    
+                            {% if user_report.phones_bills %}
+                                <td>
+                                    {% for phone_bill in user_report.phones_bills %}
+                                        {{ phone_bill }} Bill
+                                        {% if not forloop.last %}
+                                            <hr style="border: 0; border: 1px solid #000;">
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            {% else %}
+                                <td>------</td>
+                            {% endif %}
+    
+    
+                            {% if user_report.bills_salary %}
+                                <td>
+                                    {% for bill_salary in user_report.bills_salary %}
+                                        {{ bill_salary }} EGP
+                                        {% if not forloop.last %}
+                                            <hr style="border: 0; border: 1px solid #000;">
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            {% else %}
+                                <td>------</td>
+                            {% endif %}
                             
-
-                        
-                        {% if user_report.bills_salary %}
-                        <td>{{ user_report.bills_salary|join:" EGP -- " }} EGP</td>
-                        {% else %}
-                        <td> 0 EGP </td> 
-                        {% endif %}
-
-
-                        <td>{{user_report.penalities}} EGP</td>
-                        <td>{{user_report.rewards}} EGP</td>
-                        <td>{{user_report.final_salary}} EGP</td>
-
+    
+                            <td>{{user_report.penalities}} EGP</td>
+                            <td>{{user_report.rewards}} EGP</td>
+                            <td>{{user_report.final_salary}} EGP</td>
+    
                         </tr>
                     {% endfor %}
-
+    
                     <tr style="font-weight: bold;">
                         <td colspan="8"><b>The company's total profits this month</b></td>
                         {% if total_price_this_month %}
@@ -188,7 +212,7 @@
                         {% endif %}
                     </tr>
                 </tbody>
-            </table>
+              </table>
     
             </div>
         </div>
