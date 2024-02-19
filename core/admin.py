@@ -28,6 +28,7 @@ admin.site.register(models.Refund, RefundModelAdmin)
 
 admin.site.register(models.Coupon)
 admin.site.register(models.Offer)
+admin.site.register(models.Update)
 
 
 # admin.site.register(models.PhoneNumber)

@@ -317,6 +317,13 @@ class Offer(models.Model):
         return self.offer
     
 
+class Update(models.Model):
+    update = models.CharField(max_length=500)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.update
+
 
 class Phones(models.Model):
     phone = models.CharField(max_length=31)

@@ -35,7 +35,7 @@ urlpatterns = [
     
     # path('bill2/', views.bill2.as_view(), name="bill2"),
     path('bill2/', views.make_bill, name="bill2"),
-    path('download-bill-pdf/<int:bill_id>/', views.download_bill_pdf, name='download_bill_pdf'),
+    # path('download-bill-pdf/<int:bill_id>/', views.download_bill_pdf, name='download_bill_pdf'),
 
 
     path('all_bills/', views.show_bills, name="all_bills"),

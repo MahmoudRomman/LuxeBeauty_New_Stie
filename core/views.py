@@ -137,183 +137,6 @@ def generate_pdf(request):
 
 
 
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-
-def generate_the_context():
-    users_report = []
-
-    all_users = User.objects.all()
-    for each_user in all_users:
-        phones = models.PhoneNumberr.objects.filter(user=each_user.id)
-        user_phones = []
-        user_accounts = []
-        user_total_bills = []
-        user_total_bills_cost = []
-
-        final_salary = 2000
-
-
-        for cnt in range(len(phones)):
-            get_phone = models.Phones.objects.get(phone=str(phones[cnt].phone))
-
-            user_phones.append(get_phone.phone)
-            account_phone = models.Account.objects.get(phone=get_phone)
-            user_accounts.append(account_phone.account_name)
-
-            
-            my_bills_count = models.Bill2.objects.filter(seller_phone_number=get_phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-            user_total_bills.append(my_bills_count)
-
-
-            bills_salary = 0
-            if my_bills_count <= 10:
-                bills_salary = 0
-            elif my_bills_count > 10 and my_bills_count <20:
-                bills_salary = my_bills_count * 100
-            elif my_bills_count >= 20 and my_bills_count < 30:
-                bills_salary = my_bills_count * 150
-            elif my_bills_count >= 30:
-                bills_salary = my_bills_count * 200
-
-            user_total_bills_cost.append(bills_salary)
-
-        
-
-
-        # Calculate the penalities
-        penalities = models.Penality.objects.filter(name=each_user.id, date__year=today.year, date__month=today.month)
-        days = 0
-        for penality in penalities:
-            days += penality.days_num
-
-        total_penality = (final_salary / 30) * days
-        total_penality = round(total_penality, 0)
-
-
-        # Calculate the rewards
-        rewards = models.Reward.objects.filter(name=each_user.id, date__year=today.year, date__month=today.month)
-        total_reward = 0
-        for reward in rewards:
-            total_reward += reward.price
-
-        # final_salary = final_salary - total_penality + total_reward
-
-        final_salary = (sum(user_total_bills_cost) - total_penality) + total_reward
-
-
-
-
-        users_report.append({'user': each_user.username, 'phones': user_phones, 'accounts' : user_accounts, 'phones_bills' : user_total_bills, 'bills_salary': user_total_bills_cost, 'penalities' : total_penality, 'rewards' : total_reward, 'final_salary' : final_salary})
-
-
-    total_price_this_month = 0
-    # Retrieve a Bill instance (for example, the first one)
-    bill_instance = models.Bill2.objects.filter(date__year = today.year, date__month = today.month)
-
-    for bill in bill_instance:
-        total_price_this_month += bill.calculate_total_price()
-
-
-    context_dict = {
-        'users_report' : users_report,
-        'month' : today.month,
-        'year' :  today.year,
-        'total_price_this_month' : total_price_this_month,
-    }
-
-
-    return context_dict
-
-
-
-
-from io import BytesIO
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
-from django.utils import timezone
-from django.template.loader import get_template
-from xhtml2pdf import pisa
-from .models import AllBillsPDF
-
-def generate_pdf_and_save_to_model(template_name, context):
-    # Get the model instance based on the date
-    today = timezone.now()
-    existing_pdf = AllBillsPDF.objects.filter(
-        date__year=today.year,
-        date__month=today.month,
-        date__day=today.day
-    ).first()
-
-    # Render HTML template to PDF
-    template = get_template(template_name)
-
-    html_content = template.render(context)
-    pdf_content = BytesIO()
-    pisa.pisaDocument(BytesIO(html_content.encode("UTF-8")), pdf_content)
-
-    # Check if the model instance already exists
-    if existing_pdf:
-        # If the instance exists, update its content
-        file_path = existing_pdf.pdf_file.path
-        with default_storage.open(file_path, 'wb') as f:
-            f.write(pdf_content.getvalue())
-    else:
-
-
-        pdf_name = f"{today.month}/{today.year}__Report.pdf"
-
-        title = f"{today.month}/{today.year}__Report"
-        date = timezone.now().date()
-        slug_code = create_slug_code()  # Assuming create_slug_code is defined elsewhere
-
-
-        existing_pdf = AllBillsPDF(
-            title=title,
-            date=date,
-            slug_code=slug_code
-        )
-        existing_pdf.pdf_file.save(pdf_name, ContentFile(pdf_content.getvalue()))
-
-    # Optionally, you can save other fields of the model instance if needed
-    existing_pdf.save()
-
-    return existing_pdf
-
-
-
-
-
-
-
-
-
-
-
-# import os
-# from pytube import YouTube
-
-# def download_youtube_video(url, output_filename=None):
-#     try:
-#         yt = YouTube(url)
-#         stream = yt.streams.get_highest_resolution()
-#         if output_filename is None:
-#             output_filename = yt.title + ".mp4"  # Use video title as filename if not specified
-#         # output_path = os.path.join(os.path.expanduser("~"), "Downloads", output_filename)
-#         output_path = os.path.join(os.path.expanduser("~"), "Downloads")
-
-#         stream.download(output_path)
-#         print("Video downloaded successfully!")
-#     except Exception as e:
-#         print("Error:", e)
-
-
-# video_url = "https://youtube.com/shorts/461C7Ks8S9k?si=tA4PsvzF6L2Q5dM0"  # Example YouTube video URL
-
-
-
-
-
 
 
 
@@ -324,18 +147,7 @@ def home(request):
     this_day = today.day
     items = models.Item.objects.all().order_by('-date')[:8]
     today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
-
-
-    # download_youtube_video(video_url)
-
-
-
-
-
-
-    # context = generate_the_context()
-    # generate_pdf_and_save_to_model('core/final_users_report.html', context)
-
+    today_update = models.Update.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
 
 
 
@@ -380,6 +192,7 @@ def home(request):
         'have_offer' : False,
         'new_arrived' : False,
         'today_gift' : today_gift,
+        'today_update' : today_update,
 
     }
 
@@ -408,6 +221,8 @@ def have_offer(request):
     limit = 0.00
     # items = models.Item.objects.filter(discount_price__gt = limit)[:8]
     today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+    today_update = models.Update.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+
 
 
     # # Get the raw SQL query
@@ -455,6 +270,7 @@ def have_offer(request):
         'have_offer' : True,
         'new_arrived' : False,
         'today_gift' : today_gift,
+        'today_update' : today_update,
     }
     
     return render(request, 'core/index.html', context)
@@ -471,6 +287,8 @@ def new_arrived(request):
     items = models.Item.objects.all().order_by('-date')[:4]
     new_arrived_items = models.Item.objects.all().order_by('-date')[:4]
     today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+    today_update = models.Update.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+
     
     context = {
         'items' : items,
@@ -478,6 +296,7 @@ def new_arrived(request):
         'have_offer' : False,
         'new_arrived' : True,
         'today_gift' : today_gift,
+        'today_update' : today_update,
 
     }
     
@@ -494,6 +313,8 @@ def best_seller(request):
 
     items = models.Item.objects.all().order_by('-num_of_sales')[:4]
     today_gift = models.Offer.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+    today_update = models.Update.objects.filter(date__year = year, date__month = month, date__day = this_day).order_by('-date')[0:1]
+
 
 
 
@@ -502,6 +323,7 @@ def best_seller(request):
         'have_offer' : False,
         'new_arrived' : False,
         'today_gift' : today_gift,
+        'today_update' : today_update,
     }
     
     return render(request, 'core/index.html', context)
@@ -946,193 +768,6 @@ def order_summary(request):
 
 from django.http import QueryDict
 
-# @login_required(login_url='user-login')
-# @seller_required
-# def make_bill(request):
-#     if request.method == "POST":
-#         form = forms.BillForm2(request.user, request.POST)
-#         order = models.Order.objects.get(user=request.user, ordered=False)
-#         first_order_item = order.items.first()
-
-#         if form.is_valid():
-#             seller_phone_number = form.cleaned_data['seller_phone_number']
-#             country = form.cleaned_data["country"]
-#             address = form.cleaned_data.get("address")
-#             customer_phone = form.cleaned_data.get("customer_phone")
-#             customer_name = form.cleaned_data.get("customer_name")
-#             payment_method = form.cleaned_data.get("payment_method")
-#             selling_price = form.cleaned_data.get("selling_price")
-
-
-#             check_customer_name = str(customer_name).split()
-
-
-#             # order = models.Order.objects.get(user=request.user, ordered=False)
-#             if order.items.count() > 1:
-#                 messages.warning(request, ".عفواً, يجب ألا تحتوى سلة المبيعات الخاصة بك على أكثر من نوع منتج")
-#                 # return JsonResponse({'status': 'error'})
-#                 return redirect("order_summary")
-#             else:
-#                 if selling_price < first_order_item.item.price:
-#                     messages.warning(request, ".عفواً, سعر البيع يجب ألا يقل عن سعر المنتج داخل المخزن")
-#                 else:
-#                     if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
-#                         messages.warning(request, ".عفواً, يجب اختيار رقم العمل الخاص بك")
-#                         # return JsonResponse({'status': 'error'})
-
-                    
-#                     elif payment_method == "اختر طريقة الدفع":
-#                         messages.warning(request, ".يجب اختيار طريقة الدفع")
-#                         # return JsonResponse({'status': 'error'})
-                    
-#                     elif len(check_customer_name) <= 2:
-#                         messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
-#                         # return JsonResponse({'status': 'error'})
-                    
-                    
-
-#                     else:
-#                         try:
-#                             order = models.Order.objects.get(user=request.user, ordered=False)
-#                             try:
-#                                 phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
-#                                 bill_info = {}
-
-#                                 try:
-#                                     account = models.Account.objects.get(phone = phone.phone)
-
-#                                     for order_item in  order.items.all():
-
-
-#                                         slug_code = create_slug_code()
-#                                         new_bill2 = models.Bill2.objects.create(
-#                                             seller = request.user,
-#                                             seller_phone_number = str(phone.phone),
-#                                             country = country,
-#                                             address = address,
-#                                             customer_phone = customer_phone,
-#                                             customer_name = customer_name,
-#                                             account_name = account.account_name,
-#                                             payment_method = payment_method,
-
-#                                             wig_type = order_item.item.wig_type,
-#                                             wig_long = order_item.item.wig_long,
-#                                             scalp_type = order_item.item.scalp_type,
-#                                             wig_color = order_item.item.wig_color,
-#                                             density = order_item.item.density,
-#                                             price = order_item.item.price,
-#                                             selling_price = selling_price,
-#                                             pieces_num = order_item.quantity,
-#                                             account = account,
-#                                             slug_code = slug_code,
-#                                         )
-
-#                                         new_bill2.save()
-
-#                                     order_items = order.items.all()
-#                                     order_items.update(ordered = True)
-#                                     for item in order_items:
-#                                         item.save()
-
-#                                     # Change the status of the ordered query to True because the ordered is done successfully...
-#                                     order.ordered = True
-#                                     order.save()
-
-#                                     # To increment the number of sales per item...
-#                                     for order_item in order.items.all():
-#                                         order_item.item.num_of_sales = order_item.item.num_of_sales + order_item.quantity
-#                                         order_item.item.save()
-
-                                    
-#                                     bill_info["seller"] = str(request.user)
-
-#                                     seller_phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
-#                                     bill_info["seller_phone_number"] = str(seller_phone.phone.phone)
-
-#                                     bill_info["marketer"] = str(account.marketer)
-#                                     bill_info["account_name"] = str(account.account_name)
-#                                     bill_info["payment_method"] = str(payment_method)
-#                                     bill_info["selling_price"] = str(selling_price)
-
-
-
-#                                     bill_info["country"] = str(country)
-#                                     bill_info["address"] = str(address)
-#                                     bill_info["customer_name"] = str(customer_name)
-#                                     bill_info["customer_phone"] = str(customer_phone)
-
-
-
-
-                                    
-#                                     from datetime import datetime
-#                                     from django.core.mail import EmailMultiAlternatives
-#                                     from django.template.loader import render_to_string
-
-
-#                                     merge_data = {
-#                                         "bill_user" : request.user,
-#                                         "date" : datetime.now(),
-#                                         "order" : order,
-#                                         "bill" : bill_info,
-#                                     }
-
-#                                     html_body = render_to_string("core/bill_mail.html", merge_data)
-#                                     subject = "Bill From LuxeBeauty Site"
-                                    
-#                                     # email = request.user.email
-                                    
-
-#                                     msg = EmailMultiAlternatives(
-#                                         subject = subject,
-#                                         from_email= settings.EMAIL_HOST_USER,
-#                                         # to=(email,),
-#                                         to=(settings.EMAIL_HOST_USER,),
-#                                         reply_to=(settings.EMAIL_HOST_USER,),
-#                                         )
-                                    
-#                                     msg.attach_alternative(html_body, "text/html")
-#                                     # msg.send()
-
-
-                                    
-
-
-#                                     messages.success(request, ".تم حفظ الفاتورة بنجاح")
-#                                     # return JsonResponse({'status': 'success'})
-#                                     return redirect("chart_view")
-                                
-                                
-                                
-                                
-#                                 except ObjectDoesNotExist:
-#                                     messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
-#                                     # return JsonResponse({'status': 'error'})
-                                
-#                             except ObjectDoesNotExist:
-#                                 messages.warning(request, ".هناك خطأ فى ربط البيانات الخاصة بالرقم الذى قُمت باختياره, من فضلك تواصل مع أحد أعضاء الادارة")
-#                                 # return JsonResponse({'status': 'error'})
-
-#                         except ObjectDoesNotExist:
-#                             messages.warning(request, ".انتهت مدة الطلب المُحددة لديك, من فضلك أضف المنتجات الى السلة مرة أخرى")
-#                             return redirect("shop")
-#         else:
-#             messages.warning(request, ".هناك خطأ فى هذا المحتوى, من فضلك تواصل مع أحد أعضاء الادارة")
-#             # return JsonResponse({'status': 'error'})
-#     else:
-#         form = forms.BillForm2(request.user)
-
-
-#     context = {
-#         'form' : form,
-#     }
-#     return render(request, 'core/bill.html', context)
-
-
-
-
-
-
 from django.core.files.base import ContentFile
 
 
@@ -1265,12 +900,7 @@ def make_bill(request):
 
 
 
-from django.http import FileResponse
 
-def download_bill_pdf(request, bill_id):
-    bill = get_object_or_404(models.Bill2, id=bill_id)
-    bill_path = bill.bill_pdf.path
-    return FileResponse(open(bill_path, 'rb'), as_attachment=True)
 
 
 from django.db.models import Sum
@@ -1659,13 +1289,206 @@ def chart_data(request):
 
 
 
+
+
+
+
+
+
+
+
+# from django.utils import timezone
+# from django.shortcuts import get_object_or_404
+
+
+# To generate the context_dict that i uses to pass to the html template while rendering the pdf for the users_report....
+def generate_the_context():
+    users_report = []
+
+    all_users = User.objects.all()
+    for each_user in all_users:
+        phones = models.PhoneNumberr.objects.filter(user=each_user.id)
+        user_phones = []
+        user_accounts = []
+        user_total_bills = []
+        user_total_bills_cost = []
+
+        final_salary = 2000
+
+
+        for cnt in range(len(phones)):
+            get_phone = models.Phones.objects.get(phone=str(phones[cnt].phone))
+
+            user_phones.append(get_phone.phone)
+            account_phone = models.Account.objects.get(phone=get_phone)
+            user_accounts.append(account_phone.account_name)
+
+            
+            my_bills_count = models.Bill2.objects.filter(seller_phone_number=get_phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+            user_total_bills.append(my_bills_count)
+
+
+            bills_salary = 0
+            if my_bills_count < 10:
+                bills_salary = 0
+            elif my_bills_count >= 10 and my_bills_count <20:
+                bills_salary = my_bills_count * 100
+            elif my_bills_count >= 20 and my_bills_count < 30:
+                bills_salary = my_bills_count * 150
+            elif my_bills_count >= 30:
+                bills_salary = my_bills_count * 200
+
+            user_total_bills_cost.append(bills_salary)
+
+        
+
+
+        # Calculate the penalities
+        penalities = models.Penality.objects.filter(name=each_user.id, date__year=today.year, date__month=today.month)
+        days = 0
+        for penality in penalities:
+            days += penality.days_num
+
+        total_penality = (final_salary / 30) * days
+        total_penality = round(total_penality, 0)
+
+
+        # Calculate the rewards
+        rewards = models.Reward.objects.filter(name=each_user.id, date__year=today.year, date__month=today.month)
+        total_reward = 0
+        for reward in rewards:
+            total_reward += reward.price
+
+        # final_salary = final_salary - total_penality + total_reward
+
+        final_salary += (sum(user_total_bills_cost) - total_penality) + total_reward
+
+
+
+
+        users_report.append({'user': each_user.username, 'phones': user_phones, 'accounts' : user_accounts, 'phones_bills' : user_total_bills, 'bills_salary': user_total_bills_cost, 'penalities' : total_penality, 'rewards' : total_reward, 'final_salary' : final_salary})
+
+
+    total_price_this_month = 0
+    # Retrieve a Bill instance (for example, the first one)
+    bill_instance = models.Bill2.objects.filter(date__year = today.year, date__month = today.month)
+
+    for bill in bill_instance:
+        total_price_this_month += bill.calculate_total_price()
+
+
+    context_dict = {
+        'users_report' : users_report,
+        'month' : today.month,
+        'year' :  today.year,
+        'total_price_this_month' : total_price_this_month,
+    }
+
+
+    return context_dict
+
+
+
+
+from io import BytesIO
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.utils import timezone
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from .models import AllBillsPDF
+
+
+
+# My function that generates the pdf if not found and update on my current pdf if found, this function generates the pdf monthely...
+def generate_pdf_and_save_to_model(template_name, context):
+    # Get the model instance based on the date
+    # today = timezone.now()
+    existing_pdf = AllBillsPDF.objects.filter(
+        date__year=today.year,
+        date__month=today.month,
+        # date__day=today.day
+    ).first()
+
+    # Render HTML template to PDF
+    template = get_template(template_name)
+
+    html_content = template.render(context)
+    pdf_content = BytesIO()
+    pisa.pisaDocument(BytesIO(html_content.encode("UTF-8")), pdf_content)
+
+    # Check if the model instance already exists
+    if existing_pdf:
+        # If the instance exists, update its content
+        file_path = existing_pdf.pdf_file.path
+        with default_storage.open(file_path, 'wb') as f:
+            f.write(pdf_content.getvalue())
+    else:
+
+
+        pdf_name = f"{today.month}/{today.year}__Report.pdf"
+
+        title = f"{today.month}/{today.year}__Report"
+        date = timezone.now().date()
+        slug_code = create_slug_code()  # Assuming create_slug_code is defined elsewhere
+
+
+        existing_pdf = AllBillsPDF(
+            title=title,
+            date=date,
+            slug_code=slug_code
+        )
+        existing_pdf.pdf_file.save(pdf_name, ContentFile(pdf_content.getvalue()))
+
+    # Optionally, you can save other fields of the model instance if needed
+    existing_pdf.save()
+
+    return existing_pdf
+
+
+
+
+from django.http import FileResponse
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+import os
+
+def view_final_users_report_pdf(request, slug_code):
+    # report = get_object_or_404(models.AllBillsPDF, id=report_id)
+    report = models.AllBillsPDF.objects.get(slug_code = slug_code)
+    report_path = report.pdf_file.path
+
+    # Open the PDF file and read its content
+    with open(report_path, 'rb') as f:
+        pdf_content = f.read()
+
+    # Set the response content type
+    response = HttpResponse(pdf_content, content_type='application/pdf')
+
+    # Set the Content-Disposition header to 'inline' to display the PDF in the browser
+    response['Content-Disposition'] = 'inline; filename="{}"'.format(os.path.basename(report_path))
+
+    return response
+
+
+
+
+
+def download_final_users_report_pdf(request, slug_code):
+    report = models.AllBillsPDF.objects.get(slug_code=slug_code)
+
+    report_path = report.pdf_file.path
+    return FileResponse(open(report_path, 'rb'), as_attachment=True)
+
+
+
 # The following function is divide into permissions in the template...
 @login_required(login_url='user-login')
 def chart_view(request):
     user_profile = accounts_models.Profile.objects.get(staff=request.user)
     bills_and_phones_detials = []
 
-
+    # Calling the two function that extract and render the data from my final_user_report.html to a pdf file...
     context = generate_the_context()
     generate_pdf_and_save_to_model('core/final_users_report.html', context)
     
@@ -1702,10 +1525,10 @@ def chart_view(request):
                         my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
                     
                         bills_salary = 0
-                        if my_bills_count <= 10:
+                        if my_bills_count < 10:
                             bills_salary = 0
                             final_salary = final_salary
-                        elif my_bills_count > 10 and my_bills_count <20:
+                        elif my_bills_count >= 10 and my_bills_count <20:
                             bills_salary = my_bills_count * 100
                             final_salary += my_bills_count * 100
                         elif my_bills_count >= 20 and my_bills_count < 30:
@@ -1762,10 +1585,10 @@ def chart_view(request):
                         my_bills_count = models.Bill2.objects.filter(seller_phone_number=phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
                     
                         bills_salary = 0
-                        if my_bills_count <= 10:
+                        if my_bills_count < 10:
                             bills_salary = 0
                             final_salary = final_salary
-                        elif my_bills_count > 10 and my_bills_count <20:
+                        elif my_bills_count >= 10 and my_bills_count <20:
                             bills_salary = my_bills_count * 100
                             final_salary += my_bills_count * 100
                         elif my_bills_count >= 20 and my_bills_count < 30:
@@ -2172,6 +1995,185 @@ def user_done_task(request, slug):
 
 
 
+# @login_required(login_url='user-login')
+# @seller_required
+# def online_order(request):
+#     if request.method == "POST":
+#         form = forms.OnlineOrder(request.user, request.POST)
+#         if form.is_valid():
+#             country = form.cleaned_data.get("country")
+#             address = form.cleaned_data.get("address")
+#             customer_phone = form.cleaned_data.get("customer_phone")
+#             customer_name = form.cleaned_data.get("customer_name")
+#             seller_phone_number = form.cleaned_data.get("seller_phone_number")
+#             payment_method = form.cleaned_data.get("payment_method")
+
+
+#             wig_name = form.cleaned_data.get("wig_name")
+#             wig_type = form.cleaned_data.get("wig_type")
+#             wig_long = form.cleaned_data.get("wig_long")
+#             scalp_type = form.cleaned_data.get("scalp_type")
+#             wig_color = form.cleaned_data.get("wig_color")
+#             density = form.cleaned_data.get("density")
+#             price = form.cleaned_data.get("price")
+#             pieces_num = form.cleaned_data.get("pieces_num")
+#             payment_method = form.cleaned_data.get("payment_method")
+#             selling_price = form.cleaned_data.get("selling_price")
+
+
+
+
+#             check_customer_name = str(customer_name).split()
+
+#             if selling_price < price:
+#                 messages.warning(request, ".عفواً, سعر البيع يجب ألا يقل عن سعر المنتج داخل الطلب")
+#                 # return JsonResponse({'status': 'error'})
+
+#             elif seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
+#                 messages.warning(request, ".يجب اختيار رقم العمل الخاص بك")
+#                 # return JsonResponse({'status': 'error'})
+            
+            
+#             elif payment_method == "اختر طريقة الدفع":
+#                 messages.warning(request, ".يجب اختيار طريقة الدفع")
+#                 # return JsonResponse({'status': 'error'})
+
+#             elif len(check_customer_name) <= 2:
+#                 messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
+#                 # return JsonResponse({'status': 'error'})
+#             else:
+#                 try:
+#                     phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
+#                     try:
+#                         account = models.Account.objects.get(phone = phone.phone)
+
+#                         ## Create new instance for the bill and save it to the database in the bill model...
+#                         slug_code = create_slug_code()
+
+
+#                         new_bill = models.Bill2.objects.create(
+#                             seller = request.user,
+#                             seller_phone_number = str(phone.phone),
+#                             country = country,
+#                             address = address,
+#                             customer_phone = customer_phone,
+#                             customer_name = customer_name,
+#                             account_name = account.account_name,
+
+#                             wig_type = wig_type,
+#                             wig_long = wig_long,
+#                             scalp_type = scalp_type,
+#                             wig_color = wig_color,
+#                             density = density,
+#                             price = price,
+#                             pieces_num = pieces_num,
+#                             payment_method = payment_method,
+#                             selling_price = selling_price,
+
+#                             account = account,
+#                             slug_code = slug_code,
+#                         )
+
+#                         new_bill.save()
+
+#                         ## Send a mail to the admin for the new bill...
+#                         from django.core.mail import EmailMultiAlternatives
+#                         from django.template.loader import render_to_string
+#                         from datetime import datetime
+#                         seller_phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
+#                         total_cost = pieces_num * price
+#                         merge_data = {
+#                             "bill_user" : request.user,
+#                             "date" : datetime.now(),
+#                             "wig_name" : wig_name,
+#                             "wig_type" : wig_type,
+#                             "wig_long" : wig_long,
+#                             "scalp_type" : scalp_type,
+#                             "wig_color" : wig_color,
+#                             "density" : density,
+#                             "pieces_num" : pieces_num,
+#                             "price" : price,
+
+#                             "total_cost" : total_cost,
+
+#                             "seller" : str(request.user),
+#                             "seller_phone_number" : str(seller_phone.phone.phone),
+#                             "marketer" : str(account.marketer),
+#                             "account_name" : str(account.account_name),
+#                             "payment_method" : str(payment_method),
+#                             'selling_price' : str(selling_price),
+#                             "country" : country,
+#                             "address" : address,
+#                             "customer_name" : customer_name,
+#                             "customer_phone" : customer_phone,
+#                             'slug_code' : slug_code,
+#                         }
+
+#                         html_body = render_to_string("core/bill_mail.html", merge_data)
+#                         subject = "Bill From LuxeBeauty-IMS Site"
+                        
+#                         # email = request.user.email
+
+
+#                         msg = EmailMultiAlternatives(
+#                             subject = subject,
+#                             from_email= settings.EMAIL_HOST_USER,
+#                             to=(settings.EMAIL_HOST_USER,),
+#                             reply_to=(settings.EMAIL_HOST_USER,),
+#                             )
+                        
+#                         msg.attach_alternative(html_body, "text/html")
+#                         # msg.send()
+
+
+#                         messages.success(request, ".تم حفظ الفاتورة بنجاح")
+#                         # return redirect("chart_view")
+#                         return JsonResponse({'status': 'success'})
+
+#                     except ObjectDoesNotExist:
+#                         messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
+#                         # return JsonResponse({'status': 'error'})
+                    
+                    
+#                 except ObjectDoesNotExist:
+#                     messages.warning(request, ".هناك خطأ فى ربط البيانات الخاصة بالرقم الذى قُمت باختياره, من فضلك تواصل مع أحد أعضاء الادارة")
+#                     # return JsonResponse({'status': 'error'})
+#         else:
+#             messages.warning(request, ".هناك خطأ فى هذا المحتوى, من فضلك تواصل مع أحد أعضاء الادارة")
+#             # return JsonResponse({'status': 'error'})
+
+#     else:
+#         form = forms.OnlineOrder(request.user)
+
+#     context = {
+#         'form' : form,
+#     }
+
+#     return render(request, 'core/online_order.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required(login_url='user-login')
 @seller_required
 def online_order(request):
@@ -2198,22 +2200,19 @@ def online_order(request):
             selling_price = form.cleaned_data.get("selling_price")
 
 
-
-
             check_customer_name = str(customer_name).split()
 
-            if seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
+            if selling_price < price:
+                messages.warning(request, ".عفواً, سعر البيع يجب ألا يقل عن سعر المنتج داخل الطلب")
+
+            elif seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
                 messages.warning(request, ".يجب اختيار رقم العمل الخاص بك")
-                return JsonResponse({'status': 'error'})
-            
             
             elif payment_method == "اختر طريقة الدفع":
                 messages.warning(request, ".يجب اختيار طريقة الدفع")
-                return JsonResponse({'status': 'error'})
 
             elif len(check_customer_name) <= 2:
                 messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
-                return JsonResponse({'status': 'error'})
             else:
                 try:
                     phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
@@ -2222,7 +2221,6 @@ def online_order(request):
 
                         ## Create new instance for the bill and save it to the database in the bill model...
                         slug_code = create_slug_code()
-
 
                         new_bill = models.Bill2.objects.create(
                             seller = request.user,
@@ -2249,71 +2247,17 @@ def online_order(request):
 
                         new_bill.save()
 
-                        ## Send a mail to the admin for the new bill...
-                        from django.core.mail import EmailMultiAlternatives
-                        from django.template.loader import render_to_string
-                        from datetime import datetime
-                        seller_phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
-                        total_cost = pieces_num * price
-                        merge_data = {
-                            "bill_user" : request.user,
-                            "date" : datetime.now(),
-                            "wig_name" : wig_name,
-                            "wig_type" : wig_type,
-                            "wig_long" : wig_long,
-                            "scalp_type" : scalp_type,
-                            "wig_color" : wig_color,
-                            "density" : density,
-                            "pieces_num" : pieces_num,
-                            "price" : price,
-
-                            "total_cost" : total_cost,
-
-                            "seller" : str(request.user),
-                            "seller_phone_number" : str(seller_phone.phone.phone),
-                            "marketer" : str(account.marketer),
-                            "account_name" : str(account.account_name),
-                            "payment_method" : str(payment_method),
-                            'selling_price' : str(selling_price),
-                            "country" : country,
-                            "address" : address,
-                            "customer_name" : customer_name,
-                            "customer_phone" : customer_phone,
-                            'slug_code' : slug_code,
-                        }
-
-                        html_body = render_to_string("core/bill_mail.html", merge_data)
-                        subject = "Bill From LuxeBeauty-IMS Site"
-                        
-                        # email = request.user.email
-
-
-                        msg = EmailMultiAlternatives(
-                            subject = subject,
-                            from_email= settings.EMAIL_HOST_USER,
-                            to=(settings.EMAIL_HOST_USER,),
-                            reply_to=(settings.EMAIL_HOST_USER,),
-                            )
-                        
-                        msg.attach_alternative(html_body, "text/html")
-                        msg.send()
-
-
                         messages.success(request, ".تم حفظ الفاتورة بنجاح")
-                        # return redirect("chart_view")
-                        return JsonResponse({'status': 'success'})
+                        return redirect("chart_view")
 
                     except ObjectDoesNotExist:
                         messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
-                        return JsonResponse({'status': 'error'})
                     
                     
                 except ObjectDoesNotExist:
                     messages.warning(request, ".هناك خطأ فى ربط البيانات الخاصة بالرقم الذى قُمت باختياره, من فضلك تواصل مع أحد أعضاء الادارة")
-                    return JsonResponse({'status': 'error'})
         else:
             messages.warning(request, ".هناك خطأ فى هذا المحتوى, من فضلك تواصل مع أحد أعضاء الادارة")
-            return JsonResponse({'status': 'error'})
 
     else:
         form = forms.OnlineOrder(request.user)
@@ -2323,6 +2267,7 @@ def online_order(request):
     }
 
     return render(request, 'core/online_order.html', context)
+
 
 
 
@@ -2910,167 +2855,6 @@ def delete_user_account(request, slug):
         return redirect("not_have_permissions")
     
 
-
-
-
-
-# ## The following are the final report function....
-
-# def get_final_report(request):
-#     users_report = []
-
-#     all_users = User.objects.all()
-#     for each_user in all_users:
-#         phones = models.PhoneNumberr.objects.filter(user=each_user.id)
-#         user_phones = []
-#         user_accounts = []
-#         user_total_bills = []
-#         user_total_bills_cost = []
-
-#         final_salary = 2000
-
-
-#         for cnt in range(len(phones)):
-#             get_phone = models.Phones.objects.get(phone=str(phones[cnt].phone))
-
-#             user_phones.append(get_phone.phone)
-#             account_phone = models.Account.objects.get(phone=get_phone)
-#             user_accounts.append(account_phone.account_name)
-
-            
-#             my_bills_count = models.Bill2.objects.filter(seller_phone_number=get_phone.phone, date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-#             user_total_bills.append(my_bills_count)
-
-
-#             bills_salary = 0
-#             if my_bills_count <= 10:
-#                 bills_salary = 0
-#             elif my_bills_count > 10 and my_bills_count <20:
-#                 bills_salary = my_bills_count * 100
-#             elif my_bills_count >= 20 and my_bills_count < 30:
-#                 bills_salary = my_bills_count * 150
-#             elif my_bills_count >= 30:
-#                 bills_salary = my_bills_count * 200
-
-#             user_total_bills_cost.append(bills_salary)
-
-        
-
-
-#         # Calculate the penalities
-#         penalities = models.Penality.objects.filter(name=each_user.id, date__year=today.year, date__month=today.month)
-#         days = 0
-#         for penality in penalities:
-#             days += penality.days_num
-
-#         total_penality = (final_salary / 30) * days
-#         total_penality = round(total_penality, 0)
-
-
-#         # Calculate the rewards
-#         rewards = models.Reward.objects.filter(name=each_user.id, date__year=today.year, date__month=today.month)
-#         total_reward = 0
-#         for reward in rewards:
-#             total_reward += reward.price
-
-#         # final_salary = final_salary - total_penality + total_reward
-
-#         final_salary = (sum(user_total_bills_cost) - total_penality) + total_reward
-
-
-
-
-#         users_report.append({'user': each_user.username, 'phones': user_phones, 'accounts' : user_accounts, 'phones_bills' : user_total_bills, 'bills_salary': user_total_bills_cost, 'penalities' : total_penality, 'rewards' : total_reward, 'final_salary' : final_salary})
-
-
-#     total_price_this_month = 0
-#     # Retrieve a Bill instance (for example, the first one)
-#     bill_instance = models.Bill2.objects.filter(date__year = today.year, date__month = today.month)
-
-#     for bill in bill_instance:
-#         total_price_this_month += bill.calculate_total_price()
-
-
-#     context_dict = {
-#         'users_report' : users_report,
-#         'month' : today.month,
-#         'year' :  today.year,
-#         'total_price_this_month' : total_price_this_month,
-#     }
-
-
-#     # Check if a PDF file already exists for the current month
-#     existing_pdf = models.AllBillsPDF.objects.filter(date__year=today.year, date__month=today.month).first()
-
-#     # Generate PDF content
-#     pdf_content = html2pdf_order_summary("core/final_users_report.html", context_dict)
-
-
-#     # If a PDF file already exists, update its content
-#     if existing_pdf and pdf_content:
-#         existing_pdf.pdf_file.save(f"{existing_pdf.pdf_file}.pdf", BytesIO(pdf_content.getvalue()))
-#         return existing_pdf
-
-#     # If no PDF file exists, create a new one
-#     elif not existing_pdf and pdf_content:
-#         pdf_name = f"{today.month}/{today.year}__Report"
-#         if pdf_content:
-#             title = f"{today.month}/{today.year}__Report"
-#             date = timezone.now().date()
-#             slug_code = create_slug_code()  # Assuming create_slug_code is defined elsewhere
-
-#             # Create a new instance of AllBillsPDF and save the PDF content
-#             all_bills_pdf = models.AllBillsPDF.objects.create(
-#                 title=title,
-#                 date=date,
-#                 slug_code=slug_code
-#             )
-#             all_bills_pdf.pdf_file.save(f"{pdf_name}.pdf", BytesIO(pdf_content.getvalue()))
-
-#             return all_bills_pdf
-#         else:
-#             return None
-
-#     else:
-#         return None
-
-
-
-
-
-    
-
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-import os
-
-def view_final_users_report_pdf(request, slug_code):
-    # report = get_object_or_404(models.AllBillsPDF, id=report_id)
-    report = models.AllBillsPDF.objects.get(slug_code = slug_code)
-    report_path = report.pdf_file.path
-
-    # Open the PDF file and read its content
-    with open(report_path, 'rb') as f:
-        pdf_content = f.read()
-
-    # Set the response content type
-    response = HttpResponse(pdf_content, content_type='application/pdf')
-
-    # Set the Content-Disposition header to 'inline' to display the PDF in the browser
-    response['Content-Disposition'] = 'inline; filename="{}"'.format(os.path.basename(report_path))
-
-    return response
-
-
-
-
-
-def download_final_users_report_pdf(request, slug_code):
-    report = models.AllBillsPDF.objects.get(slug_code=slug_code)
-
-    report_path = report.pdf_file.path
-    return FileResponse(open(report_path, 'rb'), as_attachment=True)
-    
 
 
 

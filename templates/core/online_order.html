@@ -17,7 +17,7 @@
 
 
 
-                            <form form id="emailForm" method="POST" data-redirect-url="{% url 'chart_view' %}" enctype="multipart/form-data" dir="rtl">
+                            <form method="POST" enctype="multipart/form-data" dir="rtl">
                                 {% csrf_token %}
                                 <div class="row g-3" style="row-gap: 13px;">
     
@@ -223,75 +223,6 @@
     }
 
 </style>
-
-
-<script>
-    // emailsender/static/emailsender/js/email_send.js
-    document.addEventListener('DOMContentLoaded', function () {
-        const loaderWrapper = document.getElementById('loader-wrapper');
-        const emailForm = document.getElementById('emailForm');
-
-
-        emailForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            // Show the loader
-            loaderWrapper.style.display = 'flex';
-
-            // Serialize form data
-            const formData = new FormData(emailForm);
-
-            // Send a POST request using AJAX
-            fetch('/online_order/', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken') // Ensure CSRF token is included
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response
-                console.log(data);
-
-                if (data.status === 'success') {
-                    // Redirect to the specified URL on success
-                    const redirectUrl = emailForm.getAttribute('data-redirect-url');
-                    window.location.href = redirectUrl;
-
-                } else if (data.status === 'error') {
-
-                    // Handle form validation errors (if any)
-                    console.error('Form validation errors:', data.errors);
-                    window.location.href = '/online_order/';  
-                }
-
-            })
-            .catch(error => {
-                console.error('Error:', error);
-
-                // Hide the loader on error
-                loaderWrapper.style.display = 'none';
-            });
-        });
-
-        // Function to get CSRF token from cookies
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-    });
-</script>
 
 
 

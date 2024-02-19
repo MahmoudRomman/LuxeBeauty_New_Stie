@@ -20,6 +20,19 @@
     {% endif %}
 
 
+
+
+    {% if today_update %}
+      {% for update in today_update %}
+        <div class="marquee-container-update">
+          <div class="marquee-content-update">
+              {{update.update}}
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+
     <!-- slider section -->
 
 
@@ -362,6 +375,37 @@
 
         @media only screen and (max-width: 600px) {
           .marquee-container {
+                width: 100%;
+            }
+    }
+
+
+
+    .marquee-container-update {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background-color: #E59866; 
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .marquee-content-update {
+            animation: marquee 30s linear infinite;
+            padding: 10px; /* Optional: Add padding for styling */
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+          .marquee-container-update {
                 width: 100%;
             }
     }
