@@ -1304,6 +1304,8 @@ def chart_data(request):
 # To generate the context_dict that i uses to pass to the html template while rendering the pdf for the users_report....
 def generate_the_context():
     users_report = []
+    total_final_salaries = []
+
 
     all_users = User.objects.all()
     for each_user in all_users:
@@ -1349,8 +1351,7 @@ def generate_the_context():
         for penality in penalities:
             days += penality.days_num
 
-        total_penality = (final_salary / 30) * days
-        total_penality = round(total_penality, 0)
+
 
 
         # Calculate the rewards
@@ -1361,11 +1362,17 @@ def generate_the_context():
 
         # final_salary = final_salary - total_penality + total_reward
 
-        final_salary += (sum(user_total_bills_cost) - total_penality) + total_reward
+        final_salary += sum(user_total_bills_cost)
+        # final_salary = (final_salary + sum(user_total_bills_cost)) - total_penality + total_reward
+
+        total_penality = (final_salary / 30) * days
+        total_penality = round(total_penality, 0)
+
+        final_salary  = final_salary - total_penality
+        final_salary = final_salary + total_reward
 
 
-
-
+        total_final_salaries.append(int(final_salary))
         users_report.append({'user': each_user.username, 'phones': user_phones, 'accounts' : user_accounts, 'phones_bills' : user_total_bills, 'bills_salary': user_total_bills_cost, 'penalities' : total_penality, 'rewards' : total_reward, 'final_salary' : final_salary})
 
 
@@ -1376,9 +1383,10 @@ def generate_the_context():
     for bill in bill_instance:
         total_price_this_month += bill.calculate_total_price()
 
-
+    total_salaries = sum(total_final_salaries)
     context_dict = {
         'users_report' : users_report,
+        'total_salaries' : total_salaries,
         'month' : today.month,
         'year' :  today.year,
         'total_price_this_month' : total_price_this_month,
@@ -2861,6 +2869,7 @@ def delete_user_account(request, slug):
 
 def show_final_report(request):
     users_report = []
+    total_final_salaries = []
 
     all_users = User.objects.all()
     for each_user in all_users:
@@ -2921,6 +2930,7 @@ def show_final_report(request):
         # final_salary = final_salary - total_penality + total_reward
 
         final_salary += (sum(user_total_bills_cost) - total_penality) + total_reward
+        total_final_salaries.append(int(final_salary))
 
 
 
@@ -2936,11 +2946,13 @@ def show_final_report(request):
         total_price_this_month += bill.calculate_total_price()
 
     all_reports = models.AllBillsPDF.objects.all().order_by("date")
+    total_salaries = sum(total_final_salaries)
     context = {
         'users_report' : users_report,
         'month' : today.month,
         'year' :  today.year,
         'total_price_this_month' : total_price_this_month,
         'all_reports' : all_reports,
+        'total_salaries' : total_salaries,
     }
     return render(request, 'core/show_users_report.html', context)

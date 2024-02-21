@@ -102,6 +102,16 @@
 
                     </tr>
                 {% endfor %}
+                <tr style="font-weight: bold;">
+                  <td colspan="8"><b>All users salaries this month</b></td>
+                  {% if total_salaries %}
+                  <td><b>{{total_salaries}} EGP</b></td>
+                    
+                  {% else %}
+                  <td><b>0 EGP</b></td>
+    
+                  {% endif %}
+                </tr> 
 
                 <tr style="font-weight: bold;">
                     <td colspan="8"><b>The company's total profits this month</b></td>
@@ -112,7 +122,9 @@
                     <td><b>0 SAR</b></td>
       
                     {% endif %}
-                </tr>
+                </tr> 
+
+
             </tbody>
           </table>
 

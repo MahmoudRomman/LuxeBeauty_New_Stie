@@ -596,7 +596,7 @@ class OnlineOrder(forms.Form):
             widget = forms.Select(attrs={
             'class': 'form-control',
             'type' : 'radio',
-            'style': 'border-color:wightblack; border-radius: 15px;',   
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'seller_phone_number',         
         }))
 
@@ -607,7 +607,7 @@ class OnlineOrder(forms.Form):
                 'class': 'form-control',
                 'name' : 'country',
                 'type' : 'radio',
-                'style': 'border-color:wightblack; border-radius: 15px;',
+                'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
                 'name' : 'country',         
 
                 }))
@@ -617,7 +617,7 @@ class OnlineOrder(forms.Form):
             'type' : 'text',
             'size': "200",
             'placeholder': "ادخل العنوان",
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'address',         
 
         }))
@@ -628,7 +628,7 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'size': "31",
             'placeholder': "ادخل رقم هاتف العميل",
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'customer_phone',      
         }))
 
@@ -640,7 +640,7 @@ class OnlineOrder(forms.Form):
             'type' : 'text',
             'size': "200",
             'placeholder': "ادخل اسم العميل ثلاثى",
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'customer_name',         
 
         }))
@@ -652,9 +652,8 @@ class OnlineOrder(forms.Form):
         'class': 'form-control',
         'type' : 'radio',
         'placeholder': "اسم الباروكة",
-        'style': 'border-color:wightblack; border-radius: 15px;',
+        'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         'name' : 'wig_name',         
-
         }))
 
 
@@ -664,10 +663,8 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'radio',
             'placeholder': "نوع الباروكة",
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'wig_type',         
-
-
         }))
 
 
@@ -678,9 +675,8 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'radio',
             'placeholder': "طول الباروكة",
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'wig_long',         
-
         }))
 
 
@@ -692,9 +688,8 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'radio',
             'placeholder': "نوع الفروة",
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'scalp_type',         
-
         }))
 
 
@@ -705,9 +700,8 @@ class OnlineOrder(forms.Form):
             widget=forms.Select(attrs={
             'class': 'form-control',
             'type' : 'radio',
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'wig_color',         
-
         }))
 
 
@@ -718,9 +712,8 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'radio',
             'label' : 'select one',
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'density',         
-
         }))
 
 
@@ -731,9 +724,8 @@ class OnlineOrder(forms.Form):
             'placeholder': "ادخل السعر",
             'min' : '500',
             'max' : '7000',
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'price',         
-
             }))
 
 
@@ -741,9 +733,8 @@ class OnlineOrder(forms.Form):
             'class': 'form-control',
             'type' : 'number',
             'placeholder': "ادخل الكمية",
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'pieces_num',         
-
             }))
         
         self.fields["payment_method"] = forms.ChoiceField(
@@ -752,9 +743,8 @@ class OnlineOrder(forms.Form):
             widget=forms.Select(attrs={
             'class': 'form-control',
             'type' : 'radio',
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'payment_method',         
-
         }))
     
 
@@ -764,9 +754,8 @@ class OnlineOrder(forms.Form):
             'placeholder': "ادخل سعر البيع للقطعة الواحدة بالريال السعودى",
             'min' : '0',
             'max' : '7000',
-            'style': 'border-color:wightblack; border-radius: 15px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
             'name' : 'selling_price',         
-
             }))
 
 
@@ -799,7 +788,7 @@ class AddPhoneForm(forms.Form):
         'class' : 'form-control',
         'required' : True,
         'placeholder' : 'أدخل رقم الهاتف شامل مفتاح الدولة...',
-        'style': 'border-color:wightblack; border-radius: 10px;',  
+        'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         }))
     
 
@@ -809,7 +798,7 @@ class EditPhoneForm(forms.ModelForm):
         'class' : 'form-control',
         'required' : True,
         'placeholder' : 'أدخل رقم الهاتف شامل مفتاح الدولة...',
-        'style': 'border-color:wightblack; border-radius: 10px;',  
+        'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         }))
 
 
@@ -839,8 +828,8 @@ class AddPhoneNumberForUsersForm(forms.Form):
         empty_label="اختر أحد المستخدمين ...", 
         widget=forms.Select(attrs={
         'class': 'form-control',
-        'style': 'border-color:wightblack; border-radius: 10px;',  
-            }))
+        'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
+        }))
     
         
     
@@ -893,16 +882,16 @@ class CreateAccountForm(forms.Form):
         empty_label="اختر اسم المُسوق ...", 
         widget=forms.Select(attrs={
         'class': 'form-control',
-        'style': 'border-color:wightblack; border-radius: 10px;',  
-            }))
+        'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
+        }))
     
     seller = forms.ModelChoiceField(
         queryset=User.objects.all(), 
         empty_label="اختر اسم البائع ...", 
         widget=forms.Select(attrs={
         'class': 'form-control',
-        'style': 'border-color:wightblack; border-radius: 10px;',  
-            }))
+        'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
+        }))
     
     
     phone = forms.ModelChoiceField(
@@ -910,8 +899,8 @@ class CreateAccountForm(forms.Form):
         empty_label="اختر أحد أرقام الهواتف  ...", 
         widget=forms.Select(attrs={
         'class': 'form-control',
-        'style': 'border-color:wightblack; border-radius: 10px;',  
-            }))
+        'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
+        }))
 
 
 
@@ -920,23 +909,21 @@ class CreateAccountForm(forms.Form):
             'type' : 'text',
             'size': "200",
             'placeholder': "ادخل اسم الحساب",
-            'style': 'border-color:wightblack; border-radius: 10px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         }))
 
     tiktok_account_link = forms.URLField(widget=forms.URLInput(attrs={
             'class': 'form-control',
             'type' : 'url',
             'placeholder': "ادخل رابط حساب التيك توك",
-            'style': 'border-color:wightblack; border-radius: 10px;',
-
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         }))
     
     instagram_account_link = forms.URLField(widget=forms.URLInput(attrs={
             'class': 'form-control',
             'type' : 'url',
             'placeholder': "ادخل رابط حساب الانستجرام",
-            'style': 'border-color:wightblack; border-radius: 10px;',
-
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         }))
 
 
@@ -947,23 +934,21 @@ class EditAccountForm(forms.ModelForm):
             'type' : 'text',
             'size': "200",
             'placeholder': "ادخل اسم الحساب",
-            'style': 'border-color:wightblack; border-radius: 10px;',
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         }))
 
     tiktok_account_link = forms.URLField(widget=forms.URLInput(attrs={
             'class': 'form-control',
             'type' : 'url',
             'placeholder': "ادخل رابط حساب التيك توك",
-            'style': 'border-color:wightblack; border-radius: 10px;',
-
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         }))
     
     instagram_account_link = forms.URLField(widget=forms.URLInput(attrs={
             'class': 'form-control',
             'type' : 'url',
             'placeholder': "ادخل رابط حساب الانستجرام",
-            'style': 'border-color:wightblack; border-radius: 10px;',
-
+            'style': 'border-color:wightblack; border-radius: 10px; height:50px',  
         }))
     
     class Meta:
@@ -1049,3 +1034,190 @@ class BankAccountForm(forms.ModelForm):
 
     
     
+
+
+
+
+class EditBill(forms.Form):
+    def __init__(self, current_user, *args, **kwargs):
+        super(EditBill, self).__init__(*args, **kwargs)
+
+
+        # Query phone numbers for the current user
+        if current_user.is_authenticated:
+            user_phone_numbers = models.PhoneNumberr.objects.filter(user=current_user)
+            # Create phones choices based on the user phones
+            phone_number_choices = []
+            phone_number_choices.append((str("ادخل رقم هاتف العمل الخاص بك"), str("ادخل رقم هاتف العمل الخاص بك")))
+            for phone_number in user_phone_numbers:
+                phone_number_choices.append((phone_number.id, str(phone_number.phone)))   
+        else:
+            phone_number_choices = []              
+
+
+
+        self.fields["seller_phone_number"] = forms.ChoiceField(
+            choices = phone_number_choices,
+            required = True,
+            widget = forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'seller_phone_number',         
+        }))
+
+
+
+        self.fields["country"] = CountryField(blank_label="(اختر الدولة)").formfield(
+            widget=CountrySelectWidget(attrs={
+                'class': 'form-control',
+                'name' : 'country',
+                'type' : 'radio',
+                'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+                'name' : 'country',         
+        }))
+    
+        self.fields["address"] = forms.CharField(required=True, widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'type' : 'text',
+            'size': "200",
+            'placeholder': "ادخل العنوان",
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'address',         
+        }))
+
+
+
+        self.fields["customer_phone"] = forms.CharField(required=True, widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'size': "31",
+            'placeholder': "ادخل رقم هاتف العميل",
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'customer_phone',      
+        }))
+
+
+
+
+        self.fields["customer_name"] = forms.CharField(required=True, widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'type' : 'text',
+            'size': "200",
+            'placeholder': "ادخل اسم العميل ثلاثى",
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'customer_name',         
+        }))
+
+
+        self.fields["wig_name"] = forms.ChoiceField(
+        choices=models.wig_name,
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+        'type' : 'radio',
+        'placeholder': "اسم الباروكة",
+        'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+        'name' : 'wig_name',         
+        }))
+
+
+        self.fields["wig_type"] = forms.ChoiceField(
+            choices=models.wig_type,
+            widget=forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'placeholder': "نوع الباروكة",
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'wig_type',         
+        }))
+
+
+        self.fields["wig_long"] = forms.ChoiceField(
+            choices=models.wig_long,
+            widget=forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'placeholder': "طول الباروكة",
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'wig_long',         
+        }))
+
+
+
+        self.fields["scalp_type"] = forms.ChoiceField(
+            choices=models.scalp_type,
+            required=True,
+            widget=forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'placeholder': "نوع الفروة",
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'scalp_type',         
+        }))
+
+
+
+        self.fields["wig_color"] = forms.ChoiceField(
+            choices=models.wig_color,
+            required=True,
+            widget=forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'wig_color',         
+        }))
+
+
+        self.fields["density"] = forms.ChoiceField(
+            choices=models.density,
+            required=True,
+            widget=forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'label' : 'select one',
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'density',         
+        }))
+
+
+
+        self.fields["price"] = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type' : 'number',
+            'placeholder': "ادخل السعر",
+            'min' : '500',
+            'max' : '7000',
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'price',         
+            }))
+
+
+        self.fields["pieces_num"] = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type' : 'number',
+            'placeholder': "ادخل الكمية",
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'pieces_num',         
+        }))
+        
+        self.fields["payment_method"] = forms.ChoiceField(
+            choices = models.payment_method,
+            required=True,
+            widget=forms.Select(attrs={
+            'class': 'form-control',
+            'type' : 'radio',
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'payment_method',         
+        }))
+    
+
+        self.fields["selling_price"] = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type' : 'number',
+            'placeholder': "ادخل سعر البيع للقطعة الواحدة بالريال السعودى",
+            'min' : '0',
+            'max' : '7000',
+            'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
+            'name' : 'selling_price',         
+        }))
+
+

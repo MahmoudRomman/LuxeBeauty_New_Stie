@@ -1,12 +1,3 @@
-// to get current year
-function getYear() {
-    var currentDate = new Date();
-    var currentYear = currentDate.getFullYear();
-    document.querySelector("#displayYear").innerHTML = currentYear;
-}
-
-getYear();
-
 // owl carousel 
 
 $('.owl-carousel').owlCarousel({
@@ -43,18 +34,18 @@ window.onpopstate = function () {
 
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Check if the user is authenticated using Django's template variable
-    if (request.user.is_authenticated){
-        var isAuthenticated = "true";
-    } else {
-        var isAuthenticated = "false";
-    }
+// document.addEventListener("DOMContentLoaded", function() {
+//     // Check if the user is authenticated using Django's template variable
+//     if (request.user.is_authenticated){
+//         var isAuthenticated = "true";
+//     } else {
+//         var isAuthenticated = "false";
+//     }
 
-    // Redirect to the home page if the user is already authenticated
-    if (isAuthenticated) {
-        // Replace the current history entry with the home page
-        history.replaceState(null, null, '/home');
-    }
-});
+//     // Redirect to the home page if the user is already authenticated
+//     if (isAuthenticated) {
+//         // Replace the current history entry with the home page
+//         history.replaceState(null, null, '/home');
+//     }
+// });
 
