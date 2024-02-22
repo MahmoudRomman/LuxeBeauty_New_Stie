@@ -1,0 +1,215 @@
+{% extends "partials/base.html" %}
+
+{% block content %}
+
+
+<div class="container" style="margin-top: 60px; margin-bottom: 60px; ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="border bg-white p-3" style="border-radius: 1rem">
+                <h1 class="has-text-centered mb-5 mt-3 is-size-3" style="text-align: center;">تعديل فاتورة</h1>
+
+
+                <hr>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+
+                            <form method="POST" enctype="multipart/form-data" dir="rtl" action=".">
+                                {% csrf_token %}
+                                <div class="row g-3" style="row-gap: 13px;">
+    
+                                    <div class="col-12 col-sm-12" style="text-align: right;">
+                                        <h5>- تعديل تفاصيل الطلب</h5>
+                                    </div>
+    
+    
+
+                                    
+
+
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">اسم الباروكة:</label>
+
+                                        <div class="form-group">
+                                            {{form.wig_name}}
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">نوع الباروكة:</label>
+                                        <div class="form-group">
+                                            {{form.wig_type}}
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">طول الباروكة:</label>
+
+                                        <div class="form-group">
+                                            {{form.wig_long}} 
+                                        </div>
+                                    </div>
+    
+    
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">نوع الفروة:</label>
+
+                                        <div class="form-group">
+                                            {{form.scalp_type}}
+                                        </div>
+                                    </div>
+    
+    
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">لون الباروكة:</label>
+                                        <div class="form-group">
+                                            {{form.wig_color}}
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">كثافة الباروكة:</label>
+
+                                        <div class="form-group">
+                                            {{form.density}}
+                                        </div>
+                                    </div>
+    
+    
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">سعر الباروكة:</label>
+
+                                        <div class="form-group">
+                                            {{form.price}}
+                                        </div>
+                                    </div>
+                                    
+                                
+    
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">عدد القطع:</label>
+
+                                        <div class="form-group">
+                                            {{form.pieces_num}}
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">سعر البيع:</label>
+
+                                        <div class="form-group">
+                                            {{form.selling_price}}
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-12 col-sm-6" style="text-align: right;">
+                                        <label style="font-size: large;">طريقة الدفع:</label>
+
+                                        <div class="form-group">
+                                            {{form.payment_method}}
+                                        </div>
+                                    </div>
+    
+            
+    
+    
+                                    <div class="col-12 col-sm-12" style="text-align: right;">
+                                        <h5>- تعديل تفاصيل عنوان الشحن</h5>
+                                    </div>
+    
+    
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; margin-bottom: -15px; text-align: right;">
+                                        <label style="font-size: large;">اختر الدولة:</label>
+
+                                        <div class="form-group">{{form.country}}</div>    
+                                    </div>
+    
+                                    
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: large;">عنوان العميل:</label>
+
+                                        <div class="form-group">
+                                            {{form.address}}
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: large;">هاتف العميل:</label>
+                                        <div class="form-group">
+                                            {{form.customer_phone}}
+                                        </div>
+                                    </div>
+    
+    
+                                    <div class="col-12 col-sm-6" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: large;">اسم العميل:</label>
+                                        <div class="form-group">
+                                            {{form.customer_name}}
+                                        </div>
+                                    </div>
+    
+    
+    
+                                    <div class="col-12 col-sm-12" style="margin-left: auto; margin-right: auto; text-align: right;">
+                                        <label style="font-size: large;">هاتف البائع:</label>
+
+                                        <div class="form-group">
+                                            {{form.seller_phone_number}}
+                                        </div>
+                                    </div>
+    
+    
+                                    <div class="btn_online_bill_finish col-12">
+                                        <input type="submit" value="حفظ الفاتورة">
+                                    </div>
+    
+    
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div> 
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

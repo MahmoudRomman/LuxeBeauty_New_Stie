@@ -83,6 +83,8 @@ urlpatterns = [
 
     # path('online_order/', views.OnlineOrder.as_view(), name='online_order'),
     path('online_order/', views.online_order, name='online_order'),
+    path('bill_edit/<slug>/', views.bill_edit, name='bill_edit'),
+
 
     path('phone_and_account_manage/', views.manage_phone_and_account, name='phone_and_account_manage'),
 

@@ -2224,6 +2224,10 @@ def online_order(request):
             else:
                 try:
                     phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
+
+                    print("*" * 100)
+                    print(phone)
+                    print(seller_phone_number)
                     try:
                         account = models.Account.objects.get(phone = phone.phone)
 
@@ -2277,6 +2281,104 @@ def online_order(request):
     return render(request, 'core/online_order.html', context)
 
 
+
+
+
+
+@login_required(login_url='user-login')
+@seller_required
+def bill_edit(request, slug):
+    bill = get_object_or_404(models.Bill2, slug_code=slug)
+    if request.method == "POST":
+        form = forms.EditBill(request.user, request.POST, instance=bill)
+        if form.is_valid():
+            country = form.cleaned_data.get("country")
+            address = form.cleaned_data.get("address")
+            customer_phone = form.cleaned_data.get("customer_phone")
+            customer_name = form.cleaned_data.get("customer_name")
+            seller_phone_number = form.cleaned_data.get("seller_phone_number")
+            payment_method = form.cleaned_data.get("payment_method")
+
+
+            wig_name = form.cleaned_data.get("wig_name")
+            wig_type = form.cleaned_data.get("wig_type")
+            wig_long = form.cleaned_data.get("wig_long")
+            scalp_type = form.cleaned_data.get("scalp_type")
+            wig_color = form.cleaned_data.get("wig_color")
+            density = form.cleaned_data.get("density")
+            price = form.cleaned_data.get("price")
+            pieces_num = form.cleaned_data.get("pieces_num")
+            payment_method = form.cleaned_data.get("payment_method")
+            selling_price = form.cleaned_data.get("selling_price")
+
+
+            check_customer_name = str(customer_name).split()
+
+            if selling_price < price:
+                messages.warning(request, ".عفواً, سعر البيع يجب ألا يقل عن سعر المنتج داخل الطلب")
+
+            elif seller_phone_number == "ادخل رقم هاتف العمل الخاص بك":
+                messages.warning(request, ".يجب اختيار رقم العمل الخاص بك")
+            
+            elif payment_method == "اختر طريقة الدفع":
+                messages.warning(request, ".يجب اختيار طريقة الدفع")
+
+            elif len(check_customer_name) <= 2:
+                messages.warning(request, ".عفواً, اسم العميل يجب ان يتكون من ثلاث كلمات على الاقل")
+            else:
+                try:
+                    phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
+
+                    print("*" * 100)
+                    print(phone)
+                    print(seller_phone_number)
+                    try:
+                        account = models.Account.objects.get(phone = phone.phone)
+
+                        bill.seller = request.user
+                        bill.seller_phone_number = str(phone.phone)
+                        bill.country = country
+                        bill.address = address
+                        bill.customer_phone = customer_phone
+                        bill.customer_name = customer_name
+                        bill.account_name = account.account_name
+
+                        bill.wig_type = wig_type
+                        bill.wig_long = wig_long
+                        bill.scalp_type = scalp_type
+                        bill.wig_color = wig_color
+                        bill.density = density
+                        bill.price = price
+                        bill.pieces_num = pieces_num
+                        bill.payment_method = payment_method
+                        bill.selling_price = selling_price
+
+                        bill.account = account
+                        bill.slug_code = slug
+
+                        bill.save()
+
+                        messages.success(request, ".تم حفظ الفاتورة بنجاح")
+                        return redirect("chart_view")
+
+                    except ObjectDoesNotExist:
+                        messages.warning(request, ".عفواً, لا يوجد مُسوق لرقم البائع الذى قٌمت باختياره")
+                    
+                    
+                except ObjectDoesNotExist:
+                    messages.warning(request, ".هناك خطأ فى ربط البيانات الخاصة بالرقم الذى قُمت باختياره, من فضلك تواصل مع أحد أعضاء الادارة")
+        else:
+            messages.warning(request, ".هناك خطأ فى هذا المحتوى, من فضلك تواصل مع أحد أعضاء الادارة")
+
+    else:
+        form = forms.EditBill(request.user, instance=bill)
+
+
+    context = {
+        'form' : form,
+    }
+
+    return render(request, "core/bill_edit.html", context)
 
 
 

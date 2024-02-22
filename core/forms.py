@@ -1038,21 +1038,25 @@ class BankAccountForm(forms.ModelForm):
 
 
 
-class EditBill(forms.Form):
+class EditBill(forms.ModelForm):
+    class Meta:
+        model = models.Bill2
+        fields = '__all__'
+        
     def __init__(self, current_user, *args, **kwargs):
         super(EditBill, self).__init__(*args, **kwargs)
 
 
         # Query phone numbers for the current user
-        if current_user.is_authenticated:
-            user_phone_numbers = models.PhoneNumberr.objects.filter(user=current_user)
-            # Create phones choices based on the user phones
-            phone_number_choices = []
-            phone_number_choices.append((str("ادخل رقم هاتف العمل الخاص بك"), str("ادخل رقم هاتف العمل الخاص بك")))
-            for phone_number in user_phone_numbers:
-                phone_number_choices.append((phone_number.id, str(phone_number.phone)))   
-        else:
-            phone_number_choices = []              
+        user_phone_numbers = models.PhoneNumberr.objects.filter(user=current_user)
+        # Create phones choices based on the user phones
+        phone_number_choices = []
+        phone_number_choices.append((str("ادخل رقم هاتف العمل الخاص بك"), str("ادخل رقم هاتف العمل الخاص بك")))
+        for phone_number in user_phone_numbers:
+            # phone_number_choices.append((str(phone_number.phone), str(phone_number.phone)))   
+            phone_number_choices.append((str(phone_number.phone), str(phone_number.phone)))   
+
+              
 
 
 
@@ -1076,6 +1080,7 @@ class EditBill(forms.Form):
                 'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
                 'name' : 'country',         
         }))
+        
     
         self.fields["address"] = forms.CharField(required=True, widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -1087,7 +1092,6 @@ class EditBill(forms.Form):
         }))
 
 
-
         self.fields["customer_phone"] = forms.CharField(required=True, widget=forms.TextInput(attrs={
             'class': 'form-control',
             'size': "31",
@@ -1095,8 +1099,6 @@ class EditBill(forms.Form):
             'style': 'border-color:wightblack; border-radius: 10px; height: 50PX',
             'name' : 'customer_phone',      
         }))
-
-
 
 
         self.fields["customer_name"] = forms.CharField(required=True, widget=forms.TextInput(attrs={
