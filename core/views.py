@@ -2342,7 +2342,8 @@ def bill_edit(request, slug):
                         bill.customer_phone = customer_phone
                         bill.customer_name = customer_name
                         bill.account_name = account.account_name
-
+                        
+                        bill.wig_name = wig_name
                         bill.wig_type = wig_type
                         bill.wig_long = wig_long
                         bill.scalp_type = scalp_type

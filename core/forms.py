@@ -1041,20 +1041,23 @@ class BankAccountForm(forms.ModelForm):
 class EditBill(forms.ModelForm):
     class Meta:
         model = models.Bill2
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['seller_phone_number', 'country', 'address', 'customer_phone', 'customer_name', 'wig_name','wig_type', 
+                  'wig_long', 'scalp_type', 'wig_color', 'density', 'price', 'pieces_num', 'payment_method','selling_price']
         
     def __init__(self, current_user, *args, **kwargs):
         super(EditBill, self).__init__(*args, **kwargs)
 
-
         # Query phone numbers for the current user
         user_phone_numbers = models.PhoneNumberr.objects.filter(user=current_user)
-        # Create phones choices based on the user phones
+
+        # Create choices for the form based on user phone numbers
+
+
         phone_number_choices = []
         phone_number_choices.append((str("ادخل رقم هاتف العمل الخاص بك"), str("ادخل رقم هاتف العمل الخاص بك")))
         for phone_number in user_phone_numbers:
-            # phone_number_choices.append((str(phone_number.phone), str(phone_number.phone)))   
-            phone_number_choices.append((str(phone_number.phone), str(phone_number.phone)))   
+            phone_number_choices.append((phone_number.id, str(phone_number.phone)))    
 
               
 

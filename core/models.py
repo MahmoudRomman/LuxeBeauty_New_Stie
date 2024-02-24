@@ -211,6 +211,7 @@ class Bill2(models.Model):
     payment_method = models.CharField(max_length=150, choices=payment_method, null=False)
 
     #Item details
+    wig_name = models.CharField(max_length=150, choices=wig_name, null=False)
     wig_type = models.CharField(max_length=150, choices=wig_type, null=False)
     wig_long = models.CharField(max_length=150, choices=wig_long, null=False)
     scalp_type = models.CharField(max_length=150, choices=scalp_type, null=False)
