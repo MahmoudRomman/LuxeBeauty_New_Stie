@@ -59,7 +59,9 @@
 
                 
                 {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                <th scope="col">تعديل؟</th>    
                 <th scope="col">حذف؟</th>                
+
                 {% endif %}
                   
               </tr>
@@ -75,27 +77,53 @@
                     <td>{{ link_data.link_name }}</td>
                     <td>{{ link_data.amount }}</td>
                     <td>{{ link_data.date|date }}</td>
-                    <td class="payment_link_copy_style">
-                        <span 
-                        class="copy-info" data-info="{{link_data.USD_link}}" 
-                        style="font-size: xx-large;" onclick="copyInfo(this)">&#x1F4CB;
-                        </span>
-                    </td>
 
+                    
+                    {% if link_data.USD_link %}
+                    <td class="payment_link_copy_style">
+                      <span 
+                      class="copy-info" data-info="{{link_data.USD_link}}" 
+                      style="font-size: xx-large;" onclick="copyInfo(this)">&#x1F4CB;
+                      </span>
+                    </td>
+                    {% else %}
+                    <td>لا يوجد</td>
+                    {% endif %}
+                      
+
+                    
+                    {% if link_data.SAR_link %}
                     <td>
                       <span 
                       class="copy-info" data-info="{{link_data.SAR_link}}" 
                       style="font-size: xx-large;" onclick="copyInfo(this)">&#x1F4CB;
                       </span>
                     </td>
-
+                    {% else %}
+                    <td>لا يوجد</td>
+                    {% endif %}
+                      
+                    
+                    {% if link_data.AED_link %}
                     <td class="payment_link_copy_style">
                       <span 
                       class="copy-info" data-info="{{link_data.AED_link}}" 
                       style="font-size: xx-large;" onclick="copyInfo(this)">&#x1F4CB;
                       </span>
                     </td>
+                    {% else %}
+                    <td>لا يوجد</td>
+                    {% endif %}
+                      
+
+
                     {% if user.is_authenticated and user.is_staff and user.is_superuser %}    
+                    <td>
+                      <a href="{% url 'edit_payment_link' link_data.slug_link %}" class="trash-icon-style">
+                        <i class="fa fa-edit" style="font-size: xx-large;"></i>
+                      </a>
+                    </td> 
+
                     <td>
                         <a href="{% url 'delete_payment_link' link_data.slug_link %}" class="trash-icon-style">
                           <i class="fa fa-trash" style="font-size: xx-large;"></i>
@@ -110,7 +138,7 @@
                 {% if user.is_authenticated and user.is_staff and user.is_superuser %}
 
                 <tr>
-                  <td colspan='8' style="font-size:larger">ليس لديك اى روابط دفع</td>
+                  <td colspan='9' style="font-size:larger">ليس لديك اى روابط دفع</td>
                 </tr>
                 {% else %}
                 

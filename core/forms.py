@@ -265,7 +265,7 @@ class AddLinkForm(forms.Form):
         }))
 
 
-        SAR_link = forms.URLField(widget=forms.URLInput(attrs={
+        SAR_link = forms.URLField(required=False, widget=forms.URLInput(attrs={
             'class': 'form-control',
             'type' : 'url',
             'placeholder': "رابط الدفع بالريال السعودى",
@@ -274,7 +274,7 @@ class AddLinkForm(forms.Form):
         }))
 
 
-        AED_link = forms.URLField(widget=forms.URLInput(attrs={
+        AED_link = forms.URLField(required=False, widget=forms.URLInput(attrs={
             'class': 'form-control',
             'type' : 'url',
             'placeholder': "رابط الدفع بالرهك الاماراتى",
@@ -282,13 +282,64 @@ class AddLinkForm(forms.Form):
 
         }))
 
-        USD_link = forms.URLField(widget=forms.URLInput(attrs={
+        USD_link = forms.URLField(required=False, widget=forms.URLInput(attrs={
             'class': 'form-control',
             'type' : 'url',
             'placeholder': "رابط الدفع بالدولار الامريكى",
             'style': 'border-color:wightblack; border-radius: 10px;',
 
         }))
+
+
+
+
+class EditLinkForm(forms.ModelForm):
+        
+        link_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'type' : 'text',
+        'size': "150",
+        'placeholder': "Stripe اسم لينك الدفع, مثال",
+        'style': 'border-color:wightblack; border-radius: 10px;',
+
+        }))
+
+        amount = forms.IntegerField(widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type' : 'number',
+            'placeholder': "ادخل قيمة رابط الدفع",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+
+        }))
+
+
+        SAR_link = forms.URLField(required=False, widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'type' : 'url',
+            'placeholder': "رابط الدفع بالريال السعودى",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+
+        }))
+
+
+        AED_link = forms.URLField(required=False, widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'type' : 'url',
+            'placeholder': "رابط الدفع بالرهم الاماراتى",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+
+        }))
+
+        USD_link = forms.URLField(required=False, widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'type' : 'url',
+            'placeholder': "رابط الدفع بالدولار الامريكى",
+            'style': 'border-color:wightblack; border-radius: 10px;',
+
+        }))
+        class Meta:
+            model = models.AddLink
+            fields = ['link_name', 'amount', 'SAR_link', 'USD_link', 'AED_link']
 
 
 

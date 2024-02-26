@@ -1088,6 +1088,44 @@ def add_payment_link(request):
 
 
 
+@login_required(login_url='user-login')
+def edit_payment_link(request, slug):
+    link = get_object_or_404(models.AddLink, slug_link=slug)
+    link = get_object_or_404(models.AddLink, slug_link=slug)
+
+    if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
+        if request.method == "POST":
+            form = forms.EditLinkForm(request.POST, request.FILES, instance=link)
+            if form.is_valid():
+                link_name = form.cleaned_data.get("link_name")
+                amount = form.cleaned_data.get("amount")
+                SAR_link = form.cleaned_data.get("SAR_link")
+                AED_link = form.cleaned_data.get("AED_link")
+                USD_link = form.cleaned_data.get("USD_link")
+
+                link.link_name = link_name
+                link.amount = amount
+                link.SAR_link = SAR_link
+                link.AED_link = AED_link
+                link.USD_link = USD_link
+                link.save()
+
+                messages.success(request, "تم تعديل هذا الرابط بنجاح")
+                return redirect("show_payments")
+        else:
+            form = forms.EditLinkForm(instance=link)
+
+        context = {
+            'form' : form,
+        }
+    else:        
+        context = {}
+        return redirect("not_have_permissions")
+
+    return render(request, 'core/edit_payment_link.html', context)
+
+
+
 
 @login_required(login_url='user-login')
 def delete_payment_link(request, slug):
@@ -2243,6 +2281,7 @@ def online_order(request):
                             customer_name = customer_name,
                             account_name = account.account_name,
 
+                            wig_name = wig_name,
                             wig_type = wig_type,
                             wig_long = wig_long,
                             scalp_type = scalp_type,
