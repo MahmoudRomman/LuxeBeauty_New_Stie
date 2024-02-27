@@ -1092,7 +1092,6 @@ class BankAccountForm(forms.ModelForm):
 class EditBill(forms.ModelForm):
     class Meta:
         model = models.Bill2
-        # fields = '__all__'
         fields = ['seller_phone_number', 'country', 'address', 'customer_phone', 'customer_name', 'wig_name','wig_type', 
                   'wig_long', 'scalp_type', 'wig_color', 'density', 'price', 'pieces_num', 'payment_method','selling_price']
         

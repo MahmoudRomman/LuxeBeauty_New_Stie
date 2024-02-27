@@ -39,11 +39,13 @@
 
 
 
-  <section class="shop_section layout_padding" style="margin-top: -8%;">
+  <h2 class="has-text-centered is-size-3" style=" text-align: center; font-weight: bold;">
+    روابط الدفع المتاحة
+  </h2>
+
+  <section class="shop_section layout_padding" style="margin-top: -4%;">
     <div class="container">
-      <div class="heading_container heading_center">
-        <h2 class="has-text-centered is-size-3" style="text-align: center;">روابط الدفع المتاحة</h2>
-      </div>
+
       <div class="row">
 
         <table class="table table-bordered" dir='rtl' style="text-align: center; font-size: large;">
@@ -155,19 +157,21 @@
       </div>
 
     
-    {% if user.is_authenticated and user.is_staff and user.is_superuser %}
-        <div class="add_more_payments_link_btn" style="margin-top: 15px;">
-            <a href="{% url 'add_new_payment_link' %}">
-            اضافة المزيد من الروابط 
-            </a>
-        </div> 
-    {% endif %}
+
 
 
 
 
     </div>
   </section>
+
+  {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+  <div class="add_more_payments_link_btn" style="margin-top: -30px; margin-bottom: 20px;">
+      <a href="{% url 'add_new_payment_link' %}">
+      اضافة المزيد من الروابط 
+      </a>
+  </div> 
+  {% endif %}
 
   <!-- end shop section -->
 

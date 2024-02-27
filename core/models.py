@@ -243,7 +243,6 @@ class Bill2(models.Model):
 
     def calculate_total_price(self):
         return self.pieces_num * self.selling_price
-    
 
 
 
@@ -501,3 +500,4 @@ class AllBillsPDF(models.Model):
     
     def __str__(self):
         return self.title
+    

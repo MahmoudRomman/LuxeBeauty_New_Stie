@@ -10,7 +10,6 @@ from django.template import context
 from django.conf import settings
 from django.template.loader import render_to_string, get_template
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic.edit import CreateView
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -25,14 +24,13 @@ from django.utils import timezone
 import string
 import random
 from django.contrib.auth.models import User
-from django.views.decorators.http import require_POST
 from django.db import connection
 from io import BytesIO
+from django.db.models import Sum
+from django.core.files.base import ContentFile
 # from .pdf import html2pdf_order_summary
 
 from .pdf import html2pdf_order_summary, generate_pdf_and_save_to_model
-
-
 
 
 
@@ -305,7 +303,6 @@ def new_arrived(request):
 
 
 def best_seller(request):
-
     today = datetime.date.today()
     year = today.year
     month = today.month
@@ -715,8 +712,6 @@ def remove_from_cart(request, slug):
 
 
 
-
-
 @login_required(login_url='user-login')
 @seller_required
 def order_summary(request):
@@ -761,14 +756,6 @@ def order_summary(request):
     except ObjectDoesNotExist:
         messages.warning(request, ".ليس لديك طلب شراء مٌفعل, من فضلك أضف أحد المنتجات الى السلة أولاً")
         return redirect("shop")
-
-
-
-   
-
-from django.http import QueryDict
-
-from django.core.files.base import ContentFile
 
 
 
@@ -843,7 +830,8 @@ def make_bill(request):
                                             customer_name = customer_name,
                                             account_name = account.account_name,
                                             payment_method = payment_method,
-
+                                            
+                                            wig_name = order_item.item.name,
                                             wig_type = order_item.item.wig_type,
                                             wig_long = order_item.item.wig_long,
                                             scalp_type = order_item.item.scalp_type,
@@ -855,7 +843,6 @@ def make_bill(request):
                                             account = account,
                                             slug_code = slug_code,
                                         )
-
                                         new_bill2.save()
 
                                     order_items = order.items.all()
@@ -902,9 +889,6 @@ def make_bill(request):
 
 
 
-
-from django.db.models import Sum
-
 @login_required(login_url='user-login')
 @seller_required
 def show_bills(request):
@@ -916,18 +900,6 @@ def show_bills(request):
 
         # Script to show to most perfect selling accounts in our organization...
         social_accounts = models.Account.objects.all()
-        perfect_accounts = []
-
-        if len(social_accounts):
-            for account in social_accounts:
-                total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
-                perfect_accounts.append({'account_name': account.account_name, 'bills_count': total_pieces})
-        else:
-            perfect_accounts = []
-
-        sorted_perfect_accounts = sorted(perfect_accounts[:5], key=lambda x: x['bills_count'], reverse=True)
-
-
 
         most_selled_items = models.Item.objects.all().order_by('-num_of_sales')[:5]
         perfect_items = []
@@ -949,6 +921,9 @@ def show_bills(request):
             for account in social_accounts:
                 total_pieces = models.Bill2.objects.filter(account=account, date__year = year, date__month = month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
                 bills_per_account.append({'seller': account.seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phone.phone, 'bills_count': total_pieces})
+                
+                # To order the bills_per_account dict depending on the bills_count...
+                bills_per_account = sorted(bills_per_account, key=lambda x: x['bills_count'], reverse=True)
         else:
             bills_per_account = []
 
@@ -1011,7 +986,7 @@ def show_bills(request):
             'bills_per_account' : bills_per_account,
             'total_price_this_month' : total_price_this_month,
 
-            'sorted_perfect_accounts' : sorted_perfect_accounts,
+            'sorted_perfect_accounts' : bills_per_account,
             'perfect_items' : perfect_items,
             }
     else:
@@ -1090,7 +1065,6 @@ def add_payment_link(request):
 
 @login_required(login_url='user-login')
 def edit_payment_link(request, slug):
-    link = get_object_or_404(models.AddLink, slug_link=slug)
     link = get_object_or_404(models.AddLink, slug_link=slug)
 
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
@@ -2367,10 +2341,6 @@ def bill_edit(request, slug):
             else:
                 try:
                     phone = models.PhoneNumberr.objects.get(id=seller_phone_number)
-
-                    print("*" * 100)
-                    print(phone)
-                    print(seller_phone_number)
                     try:
                         account = models.Account.objects.get(phone = phone.phone)
 
@@ -2548,22 +2518,19 @@ def user_refunds(request):
                         all_refunds_this_month += each_refund.pieces_num
 
 
-
                     refunds_details.append({'phone': phone.phone,  'marketer':account.marketer , 'all_refunds_this_month': all_refunds_this_month})
 
                     all_refunds = 0
                     for cnt in range(len(refunds_details)):
                         all_refunds += refunds_details[cnt]['all_refunds_this_month']
 
-                
                 except ObjectDoesNotExist:
                     messages.warning(request, "عفواً, ليس لديك مُسوق بعد, من فضلك تواصل مع أحد أعضاء الادارة")
                     return redirect("home")
         else:
             messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
             return redirect("home")
-    
-        
+
     else:
         is_seller = False
         data = 0
@@ -2584,9 +2551,6 @@ def user_refunds(request):
                     for cnt in range(len(refunds_details)):
                         all_refunds += refunds_details[cnt]['all_refunds_this_month']
 
-
-
-
                 except ObjectDoesNotExist:
                     messages.warning(request, "عفواً, ليس لديك حساب تسويقى مُفعل بعد, من فضلك تواصل مع أحد أعضاء الادارة")
                     return redirect("home")
@@ -2594,8 +2558,7 @@ def user_refunds(request):
         else:
             messages.warning(request, "عفواً, ليس لديك أرقام هواتف بعد, من فضلك تواصل مع أحد أعضاء الادارة")
             return redirect("home")
-
-
+        
     context = {
         'data' : data,
         'is_seller' : is_seller,
@@ -2628,9 +2591,6 @@ def show_all_refunds_to_admin(request):
                 refunds_per_account.append({'seller': account.seller.username, 'marketer': account.marketer.username, 'account_name': account.account_name, 'phonenumber': account.phone.phone, 'refunds_count': total_pieces})
         else:
             refunds_per_account = []
-
-
-
 
 
         # To calculate the total number of refunds...
@@ -2711,7 +2671,6 @@ def edit_phone(request, slug):
         phone = models.Phones.objects.get(slug_link=slug)
         phones = models.Phones.objects.all().order_by('date')
 
-
         if request.method == "POST":
             form = forms.EditPhoneForm(request.POST, instance=phone)
             if form.is_valid():
@@ -2761,7 +2720,7 @@ def delete_phone(request, slug):
 
 
 # This function used to show all phones and also to add more phones to the database...
-    # I'll stop this function in this version and only admin can edit this functionality, to be activated later...
+# I'll stop this function in this version and only admin can edit this functionality, to be activated later...
 @login_required(login_url='user-login')
 def show_all_user_phones(request):
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
@@ -2817,7 +2776,6 @@ def add_phone_to_user(request):
 def edit_user_phone(request, slug):
     if request.user.is_authenticated and request.user.is_staff and request.user.is_superuser:
         phonenumber = models.PhoneNumberr.objects.get(slug_link=slug)
-
 
         if request.method == "POST":
             form = forms.ActualEditPhoneNumberForUsersForm(request.POST)
