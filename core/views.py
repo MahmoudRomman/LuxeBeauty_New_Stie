@@ -149,38 +149,15 @@ def home(request):
 
 
 
-    # all_users = User.objects.all()
-    # print(all_users)
-    # print()
-    # for each_user in all_users:
-    #     print(each_user.username)
+    all_items_this_year = models.Item.objects.filter(date__year = year)
+    print("*" * 100)
+    print(all_items_this_year)
 
 
-
-
-    # sql_query = """
-    # SELECT * 
-    # FROM core_offer
-    # WHERE YEAR(date) = %s AND MONTH(date) = %s AND DAY(date) = %s
-    # ORDER BY date DESC
-    # LIMIT 1
-    # """
-
-    # # Execute the query
-    # with connection.cursor() as cursor:
-    #     cursor.execute(sql_query, [year, month, this_day])
-    #     result = cursor.fetchone()
-
-    # if result:
-    #     result = list(result)[1:]
-    #     today_gift = []
-    #     today_gift.append({'offer' : result[0]})
-    #     print(today_gift)
-    # else:
-    #     today_gift = 0
-
-
-
+    day_gift = models.Offer.objects.filter(date__year = today.year).order_by('-date')[0:1]
+    
+    print("*" * 100)
+    print(day_gift)
 
 
 
@@ -189,7 +166,7 @@ def home(request):
 
         'have_offer' : False,
         'new_arrived' : False,
-        'today_gift' : today_gift,
+        'today_gift' : day_gift,
         'today_update' : today_update,
 
     }
@@ -1395,13 +1372,22 @@ def generate_the_context():
     for bill in bill_instance:
         total_price_this_month += bill.calculate_total_price()
 
+
+    all_bills_count = models.Bill2.objects.filter(date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+    mahmoud_elsayyed_salary = (all_bills_count * 30) + 5000
+
     total_salaries = sum(total_final_salaries)
+    total_salaries += mahmoud_elsayyed_salary
+    
     context_dict = {
         'users_report' : users_report,
         'total_salaries' : total_salaries,
         'month' : today.month,
         'year' :  today.year,
         'total_price_this_month' : total_price_this_month,
+
+        'all_bills_count' : all_bills_count,
+        'mahmoud_elsayyed_salary' : mahmoud_elsayyed_salary,
     }
 
 
@@ -3046,7 +3032,12 @@ def show_final_report(request):
         total_price_this_month += bill.calculate_total_price()
 
     all_reports = models.AllBillsPDF.objects.all().order_by("date")
+    all_bills_count = models.Bill2.objects.filter(date__year=today.year, date__month=today.month).aggregate(Sum('pieces_num'))['pieces_num__sum'] or 0
+
+    mahmoud_elsayyed_salary = (all_bills_count * 30) + 5000
+
     total_salaries = sum(total_final_salaries)
+    total_salaries += mahmoud_elsayyed_salary
     context = {
         'users_report' : users_report,
         'month' : today.month,
@@ -3054,5 +3045,8 @@ def show_final_report(request):
         'total_price_this_month' : total_price_this_month,
         'all_reports' : all_reports,
         'total_salaries' : total_salaries,
+
+        'all_bills_count' : all_bills_count,
+        'mahmoud_elsayyed_salary' : mahmoud_elsayyed_salary,
     }
     return render(request, 'core/show_users_report.html', context)

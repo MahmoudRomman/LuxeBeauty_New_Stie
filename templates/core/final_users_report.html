@@ -201,6 +201,30 @@
                         </tr>
                     {% endfor %}
     
+
+                    <tr style="font-weight: bold;">
+                        <td colspan="8"><b>Mahmoud Sayyed Ahmed Salary This Month</b></td>
+                        {% if mahmoud_elsayyed_salary %}
+                        <td><b>{{mahmoud_elsayyed_salary}} EGP</b></td>
+                          
+                        {% else %}
+                        <td><b>0 EGP</b></td>
+          
+                        {% endif %}
+                    </tr> 
+      
+      
+                    <tr style="font-weight: bold;">
+                        <td colspan="8"><b>All bills this month</b></td>
+                        {% if all_bills_count %}
+                        <td><b>{{all_bills_count}} Bill</b></td>
+                            
+                        {% else %}
+                        <td><b>0 Bill</b></td>
+            
+                        {% endif %}
+                    </tr> 
+                      
                     <tr style="font-weight: bold;">
                         <td colspan="8"><b>All users salaries this month</b></td>
                         {% if total_salaries %}
